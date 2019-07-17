@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import ApplicationLayout from './Components/Layout/ApplicationLayout';
 import LoginPage from './Components/Auth/LoginPage';
 import Signup from './Components/Auth/Signup';
-import EmptyPage from './Components/EmptyPage';
+import Calendar from './Components/Calendar';
 import PatientPage from './Components/Patients/PatientPage';
 
 const isLoggedIn = () => {
@@ -16,7 +16,7 @@ const isLoggedIn = () => {
 };
 
 const appRoutes = [
-  { path: '/', component: EmptyPage, exact: true },
+  { path: '/', component: Calendar, exact: true },
   {
     path: '/patients',
     component: PatientPage
