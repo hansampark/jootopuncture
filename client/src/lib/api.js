@@ -4,8 +4,15 @@
 import fetch from 'isomorphic-fetch';
 import decode from 'jwt-decode';
 import { ApiError } from './errors';
-const API_URL = 'http://localhost:5000/api' || process.env.API_HOST;
+
+const API_URL = 'https://jootopuncture.herokuapp.com/api';
+const URL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000/api'
+    : API_URL;
+
 console.log('[process.env]', process.env);
+console.log('[URL]', URL);
 
 const handleHTTPError = async res => {
   if (res.status < 200 || res.status >= 300) {
@@ -49,7 +56,7 @@ export default {
       }),
       credentials: 'same-origin'
     };
-    const response = await fetch(`${API_URL}/login`, req);
+    const response = await fetch(`${URL}/login`, req);
     console.log('[login response]', response);
 
     const data = await response.json();
@@ -106,9 +113,7 @@ export default {
       credentials: 'same-origin'
     };
 
-    const response = await fetch(`${API_URL}/logout`, req).then(
-      handleHTTPError
-    );
+    const response = await fetch(`${URL}/logout`, req).then(handleHTTPError);
 
     const { data, session } = await response.json();
 
@@ -144,7 +149,7 @@ export default {
       req.body = JSON.stringify(params);
     }
 
-    const response = await fetch(`${API_URL}${endpoint}`, req).then(
+    const response = await fetch(`${URL}${endpoint}`, req).then(
       handleHTTPError
     );
 
