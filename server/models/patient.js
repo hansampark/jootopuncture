@@ -11,10 +11,16 @@ const patientSchema = new Schema({
     type: String,
     required: true
   },
-  email: {
+  middleName: String,
+  email: String,
+  dob: String,
+  phone: String,
+  sex: {
     type: String,
-    required: true
-  }
+    enum: ['Male', 'Female', 'Other']
+  },
+  appointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }],
+  charts: [{ type: Schema.Types.ObjectId, ref: 'Chart' }]
 });
 
 module.exports = mongoose.model('Patient', patientSchema);
