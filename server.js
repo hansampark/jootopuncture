@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -28,7 +29,7 @@ const port = PORT || 5000;
 server.use(helmet());
 
 server.use(bodyParser.json());
-// server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.urlencoded({ extended: true }));
 
 // Resolve CORS error
 // server.use((req, res, next) => {
@@ -59,6 +60,14 @@ server.use((error, req, res, next) => {
   }
   res.status(statusCode).json({ message, data });
 });
+
+if (process.env.NODE_ENV === 'production') {
+  server.use(express.static(path.join(__dirname, 'client/build')));
+
+  server.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+}
 
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true })
