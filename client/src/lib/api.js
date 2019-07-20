@@ -4,7 +4,8 @@
 import fetch from 'isomorphic-fetch';
 import decode from 'jwt-decode';
 import { ApiError } from './errors';
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'http://localhost:5000/api' || process.env.API_HOST;
+console.log('[process.env]', process.env);
 
 const handleHTTPError = async res => {
   if (res.status < 200 || res.status >= 300) {
