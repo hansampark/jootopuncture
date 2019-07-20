@@ -1,5 +1,4 @@
 // import React, { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
 // import { withRouter } from 'react-router-dom';
 // import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
 // import { ThemeProvider } from '@material-ui/styles';
@@ -36,23 +35,12 @@
 // export default withRouter(BaseLayout);
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Redirect, withRouter } from 'react-router-dom';
 import api from '../../lib/api';
 
 const theme = {};
 
 class BaseLayout extends React.Component {
-  static childContextTypes = {
-    theme: PropTypes.objectOf
-  };
-
-  getChildContext() {
-    return {
-      theme
-    };
-  }
-
   constructor(props) {
     super(props);
 
