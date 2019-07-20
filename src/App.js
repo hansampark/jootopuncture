@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import configureStore from './store/configureStore';
+import BaseLayout from './Components/Layout/BaseLayout';
 import routes from './routes';
 
 import './App.css';
@@ -13,11 +14,13 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <Switch>
-            {routes.map((route, i) => (
-              <Route {...route} key={i} />
-            ))}
-          </Switch>
+          <BaseLayout>
+            <Switch>
+              {routes.map((route, i) => (
+                <Route {...route} key={i} />
+              ))}
+            </Switch>
+          </BaseLayout>
         </Router>
       </Provider>
     );

@@ -77,7 +77,12 @@ const useStyles = makeStyles(theme => ({
     }
   },
   list: {
-    width: 250
+    [theme.breakpoints.down('xs')]: {
+      width: 200
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: 250
+    }
   }
 }));
 
@@ -108,12 +113,16 @@ const NavBar = props => {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        <ListItem button key="Users">
-          <ListItemText primary="Users" />>
-        </ListItem>
-
         <ListItem button key="Patients">
           <Link to="/patients">Patients</Link>
+        </ListItem>
+
+        <ListItem button key="PatientList">
+          <Link to="/patientList">Patient List</Link>
+        </ListItem>
+
+        <ListItem button key="Users">
+          <ListItemText primary="Users" />>
         </ListItem>
         <ListItem button key="Logout">
           <Button
@@ -144,7 +153,7 @@ const NavBar = props => {
           </IconButton>
 
           <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+            {'Jootopuncture'}
           </Typography>
 
           <div>

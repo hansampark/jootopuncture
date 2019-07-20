@@ -4,6 +4,7 @@ import ApplicationLayout from './Components/Layout/ApplicationLayout';
 import LoginPage from './Components/Auth/LoginPage';
 import Signup from './Components/Auth/Signup';
 import Calendar from './Components/Calendar';
+import PatientListPage from './Components/Patients/PatientListPage';
 import PatientPage from './Components/Patients/PatientPage';
 
 const isLoggedIn = () => {
@@ -20,6 +21,10 @@ const appRoutes = [
   {
     path: '/patients',
     component: PatientPage
+  },
+  {
+    path: '/patientList',
+    component: PatientListPage
   }
 ];
 

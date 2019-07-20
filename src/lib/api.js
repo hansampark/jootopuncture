@@ -5,7 +5,6 @@ import fetch from 'isomorphic-fetch';
 import decode from 'jwt-decode';
 import { ApiError } from './errors';
 const API_URL = 'http://localhost:5000/api';
-console.log('[process.env]', process.env);
 
 const handleHTTPError = async res => {
   if (res.status < 200 || res.status >= 300) {
@@ -93,12 +92,10 @@ export default {
   getConfirm() {
     // Using jwt-decode npm package to decode the token
     let answer = decode(this.getToken());
-    console.log('Recieved answer!');
     return answer;
   },
 
   async logout() {
-    console.log('[api logout]');
     const req = {
       method: 'DELETE',
       headers: {
@@ -150,7 +147,7 @@ export default {
       handleHTTPError
     );
 
-    const { data, session } = await response.json();
+    const data = await response.json();
 
     return data;
   },

@@ -3,7 +3,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Paper, Grid } from '@material-ui/core';
 // import api from '../../lib/api';
 // import { logout } from '../../actions';
 import NavBar from './NavBar';
@@ -35,7 +35,7 @@ export default class ApplicationLayout extends React.Component {
 
     return (
       <Container>
-        <Grid container spacing={3} direction="column">
+        <Grid container direction="column">
           <Grid item lg="auto">
             <NavBar onClick={this.handleLogout} />
           </Grid>

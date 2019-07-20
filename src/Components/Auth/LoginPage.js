@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import {
+  Grid,
   Container,
   Paper,
   TextField,
@@ -46,7 +47,21 @@ const useStyles = makeStyles(theme => ({
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 350
+    // Using media query for responsiveness
+    // Breakpoint definistions
+    // xs => 0-600px, sm => 600px-960px, md => 960px-1280px, lg => 1280px-1920px
+    [theme.breakpoints.down('xs')]: {
+      width: 250
+    },
+    [theme.breakpoints.between('sm', 'md')]: {
+      width: 300
+    },
+    [theme.breakpoints.up('md')]: {
+      width: 350
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: 400
+    }
   },
   button: {
     margin: theme.spacing(10)
@@ -95,7 +110,7 @@ function LoginPage(props) {
   };
 
   return (
-    <Container>
+    <Grid item>
       <Center>
         <Paper className={classes.root}>
           <Typography align="center" variant="h4" component="h1">
@@ -144,6 +159,7 @@ function LoginPage(props) {
 
             <Button
               variant="contained"
+              type="submit"
               color="primary"
               className={classes.button}
               onClick={e => handleLogin(e, values)}
@@ -153,7 +169,7 @@ function LoginPage(props) {
           </form>
         </Paper>
       </Center>
-    </Container>
+    </Grid>
   );
 
   async function handleLogin(e, values) {
