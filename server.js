@@ -13,13 +13,12 @@ const {
   MONGO_USER,
   MONGO_PASSWORD,
   MONGO_DEFAULT_DATABASE,
-  PORT
+  PORT,
+  HOST
 } = process.env;
 
-// const MONGODB_URI = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0-1cth2.mongodb.net/${MONGO_DEFAULT_DATABASE}`;
-const MONGODB_URI = `mongodb+srv://hansam:doublet9@cluster0-1cth2.mongodb.net/joo-acupuncture`;
+const MONGODB_URI = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0-1cth2.mongodb.net/${MONGO_DEFAULT_DATABASE}`;
 
-console.log('[MONGODB_URI]', MONGODB_URI);
 // const store = new MongoDBStore({
 //   uri: MONGODB_URI,
 //   collection: 'sessions'
@@ -27,6 +26,7 @@ console.log('[MONGODB_URI]', MONGODB_URI);
 
 const server = express();
 const port = PORT || 5000;
+const host = HOST || '0.0.0.0';
 
 server.use(helmet());
 
@@ -74,7 +74,7 @@ if (process.env.NODE_ENV === 'production') {
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
-    server.listen(port, () => console.log(`Listening on port ${port}`));
+    server.listen(port, host, () => console.log(`Listening on port ${port}`));
     console.log('[connection has been established successfully]');
   })
   .catch(err => {

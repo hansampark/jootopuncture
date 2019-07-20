@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
@@ -13,20 +12,6 @@ import {
 import api from '../../lib/api';
 import { EMAIL_REGEX } from '../../lib/validators';
 
-const Center = styled.div`
-  /*
-   * Veritcally center content but if content is taller than viewport,
-   * align it to top so content doesn't crop
-   */
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: auto;
-  min-height: min-content;
-`;
-
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3, 2),
@@ -35,6 +20,15 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     flexDirection: 'column',
     margin: '0 auto'
+  },
+  center: {
+    width: '100%',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'auto',
+    minHeight: 'min-content'
   },
   container: {
     display: 'flex',
@@ -111,7 +105,7 @@ function LoginPage(props) {
 
   return (
     <Grid item>
-      <Center>
+      <div className={classes.center}>
         <Paper className={classes.root}>
           <Typography align="center" variant="h4" component="h1">
             Login
@@ -168,7 +162,7 @@ function LoginPage(props) {
             </Button>
           </form>
         </Paper>
-      </Center>
+      </div>
     </Grid>
   );
 

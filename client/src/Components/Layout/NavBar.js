@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import {
   AppBar,
   Toolbar,
@@ -16,17 +15,13 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import { Menu } from '@material-ui/icons';
 import api from '../../lib/api';
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: white;
-  && {
-    margin-left: 15px;
-  }
-`;
-
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'white'
   },
 
   menuButton: {
@@ -157,13 +152,22 @@ const NavBar = props => {
           </Typography>
 
           <div>
-            <StyledLink to="/login" onClick={toggleDrawer('left', false)}>
+            <Link
+              className={classes.link}
+              style={{ marginRight: 15 }}
+              to="/login"
+              onClick={toggleDrawer('left', false)}
+            >
               {'Login'}
-            </StyledLink>
+            </Link>
 
-            <StyledLink to="/signup" onClick={toggleDrawer('left', false)}>
+            <Link
+              className={classes.link}
+              to="/signup"
+              onClick={toggleDrawer('left', false)}
+            >
               {'Sign up'}
-            </StyledLink>
+            </Link>
           </div>
         </Toolbar>
       </AppBar>

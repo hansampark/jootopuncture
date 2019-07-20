@@ -1,7 +1,5 @@
 import React from 'react';
 // import { withRouter } from 'react-router-dom';
-// import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
 // import api from '../../lib/api';
@@ -23,9 +21,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Container = styled.div`
-  flex-grow: 1;
-`;
+const styles = {
+  container: {
+    flexGrow: 1
+  }
+};
 
 // const classes = useStyles();  ??
 
@@ -34,7 +34,7 @@ export default class ApplicationLayout extends React.Component {
     const { children } = this.props;
 
     return (
-      <Container>
+      <div style={styles.container}>
         <Grid container direction="column">
           <Grid item lg="auto">
             <NavBar onClick={this.handleLogout} />
@@ -43,7 +43,7 @@ export default class ApplicationLayout extends React.Component {
             {children}
           </Grid>
         </Grid>
-      </Container>
+      </div>
     );
   }
 

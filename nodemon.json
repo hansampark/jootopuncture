@@ -4,6 +4,7 @@
     "MONGO_PASSWORD": "doublet9",
     "MONGO_DEFAULT_DATABASE": "joo-acupuncture",
     "API_BASE_URL": "/api",
-    "API_URL": "http://localhost:5000"
+    "API_URL": "http://localhost:5000",
+    "HOST": "localhost'"
   }
 }
