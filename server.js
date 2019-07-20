@@ -16,12 +16,14 @@ const {
   PORT
 } = process.env;
 
-const MONGODB_URI = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0-1cth2.mongodb.net/${MONGO_DEFAULT_DATABASE}`;
+// const MONGODB_URI = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0-1cth2.mongodb.net/${MONGO_DEFAULT_DATABASE}`;
+const MONGODB_URI = `mongodb+srv://hansam:doublet9@cluster0-1cth2.mongodb.net/joo-acupuncture`;
 
-const store = new MongoDBStore({
-  uri: MONGODB_URI,
-  collection: 'sessions'
-});
+console.log('[MONGODB_URI]', MONGODB_URI);
+// const store = new MongoDBStore({
+//   uri: MONGODB_URI,
+//   collection: 'sessions'
+// });
 
 const server = express();
 const port = PORT || 5000;
