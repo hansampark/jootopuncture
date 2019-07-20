@@ -19,12 +19,16 @@ router.get('/', auth, async (req, res, next) => {
 });
 
 router.post('/', auth, async (req, res, next) => {
-  const { firstName, lastName, email } = req.body;
+  const { firstName, lastName, middleName, email, dob, phone, sex } = req.body;
 
   const patient = new Patient({
     firstName,
     lastName,
-    email
+    middleName,
+    email,
+    dob,
+    phone,
+    sex
   });
 
   try {
