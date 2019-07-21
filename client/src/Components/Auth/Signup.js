@@ -128,7 +128,7 @@ export default function Signup(props) {
   return (
     <Grid item>
       <div className={classes.root}>
-        <Paper className={classes.root}>
+        <Paper className={classes.container}>
           <div>
             <Typography
               color="primary"
