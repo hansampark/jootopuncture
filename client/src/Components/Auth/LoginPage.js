@@ -11,6 +11,7 @@ import {
   CircularProgress
 } from '@material-ui/core';
 import api from '../../lib/api';
+import { lowerCase } from '../../lib/strings';
 import { EMAIL_REGEX } from '../../lib/validators';
 
 const useStyles = makeStyles(theme => ({
@@ -187,10 +188,10 @@ function LoginPage(props) {
 
   async function handleLogin(e, values) {
     e.preventDefault();
-
+    const { email, password } = values;
     const validationErrors = validate({
-      email: values.email,
-      password: values.password
+      email,
+      password
     });
 
     if (validationErrors) {
@@ -201,12 +202,9 @@ function LoginPage(props) {
       setErrors(null);
 
       try {
-        await api
-          .login({ email: values.email, password: values.password })
-          .then(() => {
-            props.history.push('/');
-          });
+        await api.login({ email: lowerCase(email), password });
         setLoading(false);
+        props.history.push('/');
       } catch (err) {
         setErrors(err);
         setLoading(false);

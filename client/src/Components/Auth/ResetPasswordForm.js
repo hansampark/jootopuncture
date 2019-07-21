@@ -10,6 +10,7 @@ import {
   CircularProgress
 } from '@material-ui/core';
 import api from '../../lib/api';
+import { lowerCase } from '../../lib/strings';
 import { EMAIL_REGEX, PASSWORD_REGEX } from '../../lib/validators';
 
 const useStyles = makeStyles(theme => ({
@@ -223,7 +224,7 @@ function LoginPage(props) {
       setErrors(null);
 
       try {
-        await api.put('/reset', { email, password });
+        await api.put('/reset', { email: lowerCase(email), password });
 
         setLoading(false);
         props.history.push('/login');
