@@ -36,16 +36,14 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    [theme.breakpoints.down('xs')]: {
-      width: 300
-    },
-    [theme.breakpoints.between('sm', 'md')]: {
-      width: 500
-    }
+    width: '100%'
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
+    // Using media query for responsiveness
+    // Breakpoint definistions
+    // xs => 0-600px, sm => 600px-960px, md => 960px-1280px, lg => 1280px-1920px
     [theme.breakpoints.down('xs')]: {
       width: 250
     },
@@ -61,24 +59,15 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(10),
-    width: 100
+    width: 200
   },
-
   progress: {
     color: '#ffffff'
   }
 }));
 
-const validate = ({ firstName, lastName, email, password, confirm }) => {
+const validate = ({ email, password, confirm }) => {
   const errors = {};
-
-  if (firstName.length === 0) {
-    errors.firstName = 'First name is required.';
-  }
-
-  if (lastName.length === 0) {
-    errors.lastName = 'Last name is required.';
-  }
 
   if (email) {
     if (!EMAIL_REGEX.test(email)) {
@@ -105,18 +94,19 @@ const validate = ({ firstName, lastName, email, password, confirm }) => {
     }
   }
 
-  return Object.keys(errors).length > 0 ? errors : null;
+  return errors.email || errors.password || errors.confirm ? errors : null;
 };
 
-export default function Signup(props) {
+// TODO: redesign LoginPage
+
+function LoginPage(props) {
   const classes = useStyles();
   const [values, setValues] = useState({
-    firstName: '',
-    lastName: '',
     email: '',
     password: '',
     confirm: ''
   });
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(null);
 
@@ -128,7 +118,7 @@ export default function Signup(props) {
   return (
     <Grid item>
       <div className={classes.root}>
-        <Paper className={classes.root}>
+        <Paper className={classes.container}>
           <div>
             <Typography
               color="primary"
@@ -140,37 +130,11 @@ export default function Signup(props) {
               {'Jootopuncture'}
             </Typography>
             <Typography align="center" variant="h4" component="h3">
-              {'Sign up'}
+              {'Reset Password'}
             </Typography>
           </div>
 
-          <form className={classes.container}>
-            <FormGroup>
-              <TextField
-                id="firstName"
-                label="First Name"
-                className={classes.textField}
-                value={values.firstName}
-                error={errors && (!!errors.firstName || !!errors.message)}
-                helperText={errors && errors.firstName}
-                onChange={handleValueChange('firstName')}
-                autoFocus
-                margin="normal"
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <TextField
-                id="lastName"
-                label="Last Name"
-                className={classes.textField}
-                value={values.lastName}
-                error={errors && (!!errors.lastName || !!errors.message)}
-                helperText={errors && errors.lastName}
-                onChange={handleValueChange('lastName')}
-                margin="normal"
-              />
-            </FormGroup>
+          <form className={classes.form}>
             <FormGroup>
               <TextField
                 id="email"
@@ -180,6 +144,7 @@ export default function Signup(props) {
                 error={errors && (!!errors.email || !!errors.message)}
                 helperText={errors && errors.email}
                 onChange={handleValueChange('email')}
+                autoFocus
                 margin="normal"
               />
             </FormGroup>
@@ -201,7 +166,7 @@ export default function Signup(props) {
             <FormGroup>
               <TextField
                 id="confirm"
-                label="Confirm Password"
+                label="ConfirmPassword"
                 type="password"
                 className={classes.textField}
                 value={values.confirm}
@@ -220,10 +185,10 @@ export default function Signup(props) {
 
             <Button
               variant="contained"
+              type="submit"
               color="primary"
               className={classes.button}
-              disabled={!!errors}
-              onClick={e => handleLogin(e, values)}
+              onClick={e => handleResetPassword(e, values)}
             >
               {loading ? (
                 <CircularProgress
@@ -231,7 +196,7 @@ export default function Signup(props) {
                   className={classes.progress}
                 />
               ) : (
-                'Sign up'
+                'Reset Password'
               )}
             </Button>
           </form>
@@ -240,13 +205,11 @@ export default function Signup(props) {
     </Grid>
   );
 
-  async function handleLogin(e, values) {
+  async function handleResetPassword(e, values) {
     e.preventDefault();
-    const { firstName, lastName, email, password, confirm } = values;
+    const { email, password, confirm } = values;
 
     const validationErrors = validate({
-      firstName,
-      lastName,
       email,
       password,
       confirm
@@ -258,15 +221,18 @@ export default function Signup(props) {
     } else {
       setLoading(true);
       setErrors(null);
+
       try {
-        await api.post('/signup', { firstName, lastName, email, password });
+        await api.put('/reset', { email, password });
+
         setLoading(false);
         props.history.push('/login');
       } catch (err) {
-        setLoading(false);
-
         setErrors(err);
+        setLoading(false);
       }
     }
   }
 }
+
+export default LoginPage;
