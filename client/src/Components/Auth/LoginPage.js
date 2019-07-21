@@ -2,26 +2,18 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
-  Container,
   Paper,
   TextField,
   FormGroup,
   Typography,
-  Button
+  Button,
+  CircularProgress
 } from '@material-ui/core';
 import api from '../../lib/api';
 import { EMAIL_REGEX } from '../../lib/validators';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(3, 2),
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    margin: '0 auto'
-  },
-  center: {
     width: '100%',
     height: '100vh',
     display: 'flex',
@@ -31,6 +23,14 @@ const useStyles = makeStyles(theme => ({
     minHeight: 'min-content'
   },
   container: {
+    padding: theme.spacing(3, 2),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    margin: '0 auto'
+  },
+  form: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
@@ -58,13 +58,11 @@ const useStyles = makeStyles(theme => ({
     }
   },
   button: {
-    margin: theme.spacing(10)
+    margin: theme.spacing(10),
+    width: 100
   },
-  dense: {
-    marginTop: 19
-  },
-  menu: {
-    width: 200
+  progress: {
+    color: '#ffffff'
   }
 }));
 
@@ -105,13 +103,24 @@ function LoginPage(props) {
 
   return (
     <Grid item>
-      <div className={classes.center}>
-        <Paper className={classes.root}>
-          <Typography align="center" variant="h4" component="h1">
-            Login
-          </Typography>
+      <div className={classes.root}>
+        <Paper className={classes.container}>
+          <div>
+            <Typography
+              color="primary"
+              align="center"
+              variant="h3"
+              component="h3"
+              style={{ marginBottom: 10 }}
+            >
+              {'Jootopuncture'}
+            </Typography>
+            <Typography align="center" variant="h4" component="h3">
+              {'Login'}
+            </Typography>
+          </div>
 
-          <form className={classes.container}>
+          <form className={classes.form}>
             <FormGroup>
               <TextField
                 id="email"
@@ -158,7 +167,14 @@ function LoginPage(props) {
               className={classes.button}
               onClick={e => handleLogin(e, values)}
             >
-              Login
+              {loading ? (
+                <CircularProgress
+                  style={{ width: 24, height: 24 }}
+                  className={classes.progress}
+                />
+              ) : (
+                'Login'
+              )}
             </Button>
           </form>
         </Paper>
