@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
@@ -11,7 +10,7 @@ import {
   CircularProgress
 } from '@material-ui/core';
 import api from '../../lib/api';
-import { EMAIL_REGEX } from '../../lib/validators';
+import { EMAIL_REGEX, PASSWORD_REGEX } from '../../lib/validators';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,16 +58,15 @@ const useStyles = makeStyles(theme => ({
     }
   },
   button: {
-    marginTop: theme.spacing(10),
-    marginBottom: theme.spacing(5),
-    width: 100
+    margin: theme.spacing(10),
+    width: 200
   },
   progress: {
     color: '#ffffff'
   }
 }));
 
-const validate = ({ email, password }) => {
+const validate = ({ email, password, confirm }) => {
   const errors = {};
 
   if (email) {
@@ -80,11 +78,23 @@ const validate = ({ email, password }) => {
     errors.email = 'Email is required.';
   }
 
-  if (password.length === 0) {
+  if (password) {
+    if (!PASSWORD_REGEX.test(password)) {
+      errors.password =
+        'Password must be 8-20 characters and contain one uppercase letter, one lowercase letter, one number, and one special character (` ~ ! @ # $ % ^ & * ( ) _ - + = { } [ ]  | : ; " \' < > , . ? /).';
+    }
+  } else {
     errors.password = 'Password is required.';
   }
 
-  return errors.email || errors.password ? errors : null;
+  if (confirm) {
+    if (confirm !== password) {
+      errors.confirm =
+        'New password do not match. Please re-enter fields above.';
+    }
+  }
+
+  return errors.email || errors.password || errors.confirm ? errors : null;
 };
 
 // TODO: redesign LoginPage
@@ -93,7 +103,8 @@ function LoginPage(props) {
   const classes = useStyles();
   const [values, setValues] = useState({
     email: '',
-    password: ''
+    password: '',
+    confirm: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -119,7 +130,7 @@ function LoginPage(props) {
               {'Jootopuncture'}
             </Typography>
             <Typography align="center" variant="h4" component="h3">
-              {'Login'}
+              {'Reset Password'}
             </Typography>
           </div>
 
@@ -152,6 +163,20 @@ function LoginPage(props) {
               />
             </FormGroup>
 
+            <FormGroup>
+              <TextField
+                id="confirm"
+                label="ConfirmPassword"
+                type="password"
+                className={classes.textField}
+                value={values.confirm}
+                error={errors && (!!errors.confirm || !!errors.message)}
+                helperText={errors && errors.confirm}
+                onChange={handleValueChange('confirm')}
+                margin="normal"
+              />
+            </FormGroup>
+
             {errors && errors.message && (
               <Typography color="secondary" align="center" component="div">
                 {errors.message}
@@ -162,9 +187,8 @@ function LoginPage(props) {
               variant="contained"
               type="submit"
               color="primary"
-              disabled={!!errors}
               className={classes.button}
-              onClick={e => handleLogin(e, values)}
+              onClick={e => handleResetPassword(e, values)}
             >
               {loading ? (
                 <CircularProgress
@@ -172,25 +196,23 @@ function LoginPage(props) {
                   className={classes.progress}
                 />
               ) : (
-                'Login'
+                'Reset Password'
               )}
             </Button>
-
-            <div style={{ textAlign: 'right', width: '100%' }}>
-              <Link to="/reset">{'Reset Password'}</Link>
-            </div>
           </form>
         </Paper>
       </div>
     </Grid>
   );
 
-  async function handleLogin(e, values) {
+  async function handleResetPassword(e, values) {
     e.preventDefault();
+    const { email, password, confirm } = values;
 
     const validationErrors = validate({
-      email: values.email,
-      password: values.password
+      email,
+      password,
+      confirm
     });
 
     if (validationErrors) {
@@ -201,12 +223,10 @@ function LoginPage(props) {
       setErrors(null);
 
       try {
-        await api
-          .login({ email: values.email, password: values.password })
-          .then(() => {
-            props.history.push('/');
-          });
+        await api.post('/reset', { email, password });
+
         setLoading(false);
+        props.history.push('/login');
       } catch (err) {
         setErrors(err);
         setLoading(false);

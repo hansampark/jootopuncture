@@ -6,6 +6,7 @@ import Signup from './Components/Auth/Signup';
 import Calendar from './Components/Calendar';
 import PatientListPage from './Components/Patients/PatientListPage';
 import PatientPage from './Components/Patients/PatientPage';
+import ResetPasswordForm from './Components/Auth/ResetPasswordForm';
 
 const isLoggedIn = () => {
   const token = localStorage.id_token;
@@ -31,6 +32,7 @@ const appRoutes = [
 const routes = [
   { path: '/login', component: LoginPage },
   { path: '/signup', component: Signup },
+  { path: '/reset', component: ResetPasswordForm },
   {
     path: '/',
     render: props => {

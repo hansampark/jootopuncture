@@ -71,3 +71,43 @@ exports.login = async (req, res, next) => {
     }
   }
 };
+
+// exports.resetPassword = async (req, res, next) => {
+//   const { email, password } = req.body;
+//   const errors = validationResult(req);
+//   console.log('[1]');
+
+//   if (!errors.isEmpty()) {
+//     const error = new Error('Validation failed.');
+//     error.statusCode = 422;
+//     error.data = errors.array();
+//     next(error);
+//   }
+
+//   try {
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       const error = new Error('Email does not exist.');
+//       error.statusCode = 401;
+//       next(error);
+//     }
+
+//     const hashedPw = await bcrypt.hash(password, 12);
+//     console.log('[2]');
+
+//     const newUser = await User.findOneAndUpdate(
+//       { email },
+//       {
+//         password: hashedPw
+//       },
+//       { new: true }
+//     );
+//     res.status(201).json({ message: 'Success', userId: newUser._id });
+//   } catch (err) {
+//     console.log('[3]');
+//     if (!err.statusCode) {
+//       err.statusCode = 500;
+//       next(err);
+//     }
+//   }
+// };
