@@ -72,9 +72,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 mongoose
-  .connect(MONGODB_URI, { useNewUrlParser: true })
+  .connect(MONGODB_URI, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => {
-    server.listen(port, host, () => console.log(`Listening on port ${port}`));
+    server.listen(port, () => console.log(`Listening on port ${port}`));
     console.log('[connection has been established successfully]');
   })
   .catch(err => {

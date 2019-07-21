@@ -223,7 +223,7 @@ function LoginPage(props) {
       setErrors(null);
 
       try {
-        await api.post('/reset', { email, password });
+        await api.put('/reset', { email, password });
 
         setLoading(false);
         props.history.push('/login');
