@@ -11,9 +11,6 @@ const URL =
     ? 'http://localhost:5000/api'
     : API_URL;
 
-console.log('[process.env]', process.env);
-console.log('[URL]', URL);
-
 const handleHTTPError = async res => {
   if (res.status < 200 || res.status >= 300) {
     let data;

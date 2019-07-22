@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, ListItem } from '@material-ui/core';
+import { Grid, ListItem, Button } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,13 +15,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Row(props) {
+export default function PatientList(props) {
   const classes = useStyles();
-  const { firstName, lastName, email, dob, phone } = props.data;
+  const { _id, firstName, lastName, email, dob, phone } = props.data;
 
   return (
     <ListItem className={classes.root}>
-      <Grid item xs={4}>
+      <Grid item xs={5}>
         <div>{`${lastName}, ${firstName}`}</div>
         <div>{`${email}`}</div>
       </Grid>
@@ -33,7 +33,7 @@ export default function Row(props) {
         {phone}
       </Grid>
       <Grid item xs={1}>
-        <Link to={'/:patientId/charts'}>Chart</Link>
+        <Button onClick={() => props.onClick(_id)}>Chart</Button>
       </Grid>
     </ListItem>
   );

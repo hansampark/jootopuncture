@@ -25,8 +25,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     overflow: 'auto',
-    minHeight: 'min-content',
-    backgroundColor: '#ffff99'
+    minHeight: 'min-content'
   }
 };
 
@@ -35,7 +34,6 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
     display: 'flex',
-
     flexDirection: 'column'
   },
   container: {
@@ -80,7 +78,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: -4
   },
   button: {
-    margin: theme.spacing(10)
+    margin: theme.spacing(10),
+    width: 100
   },
   dense: {
     marginTop: 19
@@ -89,11 +88,11 @@ const useStyles = makeStyles(theme => ({
     width: 200
   },
   progress: {
-    margin: theme.spacing(2)
+    color: '#ffffff'
   }
 }));
 
-export default function Patient() {
+export default function Patient(props) {
   const classes = useStyles();
   const [values, setValues] = useState({
     firstName: '',
@@ -244,7 +243,10 @@ export default function Patient() {
               onClick={e => handlePatientSubmit(e, values)}
             >
               {loading ? (
-                <CircularProgress className={classes.progress} />
+                <CircularProgress
+                  style={{ width: 24, height: 24 }}
+                  className={classes.progress}
+                />
               ) : (
                 'Create Patient'
               )}
@@ -260,8 +262,9 @@ export default function Patient() {
     setLoading(true);
     setError(null);
     try {
-      const data = await api.post('/patients', values);
+      const data = await api.post('/patients', { values, chart });
       setLoading(false);
+      props.history.push('/patients');
       return data;
     } catch (err) {
       setLoading(false);
