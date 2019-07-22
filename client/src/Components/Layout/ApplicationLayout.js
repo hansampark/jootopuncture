@@ -2,13 +2,7 @@ import React from 'react';
 // import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
-// import api from '../../lib/api';
-// import { logout } from '../../actions';
 import NavBar from './NavBar';
-// import AuthHelperMethods from '../Auth/AuthHelperMethods';
-// import withAuth from '../Auth/withAuth';
-
-// const Auth = new AuthHelperMethods();
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,13 +25,13 @@ const styles = {
 
 export default class ApplicationLayout extends React.Component {
   render() {
-    const { children } = this.props;
+    const { history, children } = this.props;
 
     return (
       <div style={styles.container}>
         <Grid container direction="column">
           <Grid item lg="auto">
-            <NavBar onClick={this.handleLogout} />
+            <NavBar history={history} />
           </Grid>
           <Grid item xs="auto">
             {children}
@@ -46,12 +40,6 @@ export default class ApplicationLayout extends React.Component {
       </div>
     );
   }
-
-  handleLogout = async () => {
-    const { history } = this.props;
-
-    await history.push('/login');
-  };
 
   //   async function handleLogout() {
   //     this.Auth.logout();
