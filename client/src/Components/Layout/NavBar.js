@@ -9,7 +9,8 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  CircularProgress
 } from '@material-ui/core';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import { Menu } from '@material-ui/icons';
@@ -19,11 +20,6 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
   },
-  link: {
-    textDecoration: 'none',
-    color: 'white'
-  },
-
   menuButton: {
     marginRight: theme.spacing(2)
   },
@@ -78,6 +74,20 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('sm')]: {
       width: 250
     }
+  },
+  link: {
+    textDecoration: 'none',
+    color: 'inherit'
+  },
+  buttonWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
+  },
+  button: {
+    marginTop: theme.spacing(30),
+    marginBottom: theme.spacing(5),
+    width: 100
   }
 }));
 
@@ -89,6 +99,9 @@ const NavBar = props => {
     bottom: false,
     right: false
   });
+  console.log('[props', props);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState(null);
 
   const toggleDrawer = (side, open) => event => {
     if (
@@ -101,7 +114,7 @@ const NavBar = props => {
     setState({ ...state, [side]: open });
   };
 
-  const sideList = ({ side, classes, onClick }) => (
+  const sideList = ({ side }) => (
     <div
       className={classes.list}
       onClick={toggleDrawer(side, false)}
@@ -109,26 +122,35 @@ const NavBar = props => {
     >
       <List>
         <ListItem button key="Patients">
-          <Link to="/patients">Patients</Link>
+          <Link className={classes.link} to="/patients">
+            Patients
+          </Link>
         </ListItem>
 
         <ListItem button key="PatientList">
-          <Link to="/patientList">Patient List</Link>
+          <Link className={classes.link} to="/patientList">
+            Patient List
+          </Link>
         </ListItem>
 
-        <ListItem button key="Users">
-          <ListItemText primary="Users" />>
-        </ListItem>
-        <ListItem button key="Logout">
+        <div className={classes.buttonWrapper}>
           <Button
-            varient="contained"
+            variant="contained"
             color="primary"
+            type="button"
             className={classes.button}
-            onClick={onClick}
+            onClick={handleLogout}
           >
-            Logout
+            {loading ? (
+              <CircularProgress
+                style={{ width: 24, height: 24 }}
+                className={classes.progress}
+              />
+            ) : (
+              'Logout'
+            )}
           </Button>
-        </ListItem>
+        </div>
       </List>
     </div>
   );
@@ -150,46 +172,35 @@ const NavBar = props => {
           <Typography className={classes.title} variant="h6" noWrap>
             {'Jootopuncture'}
           </Typography>
-
-          <div>
-            <Link
-              className={classes.link}
-              style={{ marginRight: 15 }}
-              to="/login"
-              onClick={toggleDrawer('left', false)}
-            >
-              {'Login'}
-            </Link>
-
-            <Link
-              className={classes.link}
-              to="/signup"
-              onClick={toggleDrawer('left', false)}
-            >
-              {'Sign up'}
-            </Link>
-          </div>
         </Toolbar>
       </AppBar>
 
-      <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
+      <Drawer
+        open={state.left}
+        classes={{ paper: classes.drawer }}
+        onClose={toggleDrawer('left', false)}
+      >
         {sideList({
-          side: 'left',
-          classes,
-          onClick: e => handleLogout(e, props)
+          side: 'left'
         })}
       </Drawer>
     </div>
   );
+
+  async function handleLogout(e) {
+    e.preventDefault();
+    setLoading(true);
+    setErrors(null);
+
+    try {
+      await api.logout();
+      setLoading(false);
+      props.history.push('/login');
+    } catch (err) {
+      setLoading(false);
+      setErrors(err);
+    }
+  }
 };
-
-async function handleLogout(e, props) {
-  e.preventDefault();
-
-  try {
-    await api.logout();
-    props.onClick();
-  } catch (err) {}
-}
 
 export default NavBar;
