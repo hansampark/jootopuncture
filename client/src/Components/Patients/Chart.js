@@ -51,22 +51,6 @@ const TextMaskCustom = props => {
   );
 };
 
-// const validateValue = ({ value, type }) => {
-//   let newValue;
-//   switch (type) {
-//     case 'heart':
-//     case 'lung':
-//       if(value.length > 3) {
-//         return {
-//           errors:
-//         }
-//       }
-
-//     default:
-//       break;
-//   }
-// };
-
 export default function Chart(props) {
   const classes = useStyles();
   const { onChange, chart } = props;
@@ -164,9 +148,9 @@ export default function Chart(props) {
               name: 'rhythm'
             }}
           >
-            <MenuItem value={'low'}>Low</MenuItem>
-            <MenuItem value={'regular'}>Regular</MenuItem>
-            <MenuItem value={'high'}>High</MenuItem>
+            <MenuItem value={'LOW'}>{'Low'}</MenuItem>
+            <MenuItem value={'REGULAR'}>{'Regular'}</MenuItem>
+            <MenuItem value={'HIGH'}>{'High'}</MenuItem>
           </Select>
         </FormControl>
 

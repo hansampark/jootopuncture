@@ -99,7 +99,6 @@ const NavBar = props => {
     bottom: false,
     right: false
   });
-  console.log('[props', props);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(null);
 
@@ -121,15 +120,21 @@ const NavBar = props => {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        <ListItem button key="Patients">
-          <Link className={classes.link} to="/patients">
-            Patients
+        <ListItem button key="Schedule">
+          <Link className={classes.link} to="/">
+            {'Schedule'}
           </Link>
         </ListItem>
 
-        <ListItem button key="PatientList">
-          <Link className={classes.link} to="/patientList">
-            Patient List
+        <ListItem button key="Create">
+          <Link className={classes.link} to="/create-patient">
+            {'Create Patient'}
+          </Link>
+        </ListItem>
+
+        <ListItem button key="Patients">
+          <Link className={classes.link} to="/patients">
+            {'Patients'}
           </Link>
         </ListItem>
 
