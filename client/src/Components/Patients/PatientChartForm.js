@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   Grid,
   Paper,
@@ -14,50 +14,47 @@ import {
   Divider,
   Button,
   CircularProgress
-} from '@material-ui/core';
-import api from '../../lib/api';
-import Chart from './Chart';
-
-const styles = {
-  center: {
-    width: '100%',
-    height: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    overflow: 'auto',
-    minHeight: 'min-content'
-  }
-};
+} from "@material-ui/core";
+import api from "../../lib/api";
+import Chart from "./Chart";
 
 const useStyles = makeStyles(theme => ({
+  center: {
+    width: "100%",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    overflow: "auto",
+    minHeight: "min-content"
+  },
   root: {
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
-    display: 'flex',
-    flexDirection: 'column'
+    display: "flex",
+    flexDirection: "column"
   },
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    width: '100%'
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    width: "100%"
   },
   row: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     paddingBottom: 10,
     marginBottom: 20,
-    borderBottom: '1px solid #cccccc'
+    borderBottom: "1px solid #cccccc"
   },
   nameField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down("xs")]: {
       width: 100
     },
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up("sm")]: {
       width: 150
     }
   },
@@ -71,7 +68,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   formGroup: {
-    borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
+    borderBottom: "1px solid rgba(0, 0, 0, 0.42)"
   },
   radioGroup: {
     marginBottom: -3,
@@ -79,7 +76,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(10),
-    width: 100
+    width: 200
   },
   dense: {
     marginTop: 19
@@ -88,30 +85,30 @@ const useStyles = makeStyles(theme => ({
     width: 200
   },
   progress: {
-    color: '#ffffff'
+    color: "#ffffff"
   }
 }));
 
 export default function Patient(props) {
   const classes = useStyles();
   const [values, setValues] = useState({
-    firstName: '',
-    lastName: '',
-    middleName: '',
-    email: '',
-    dob: '',
-    phone: '',
-    sex: ''
+    firstName: "",
+    lastName: "",
+    middleName: "",
+    email: "",
+    dob: "",
+    phone: "",
+    sex: ""
   });
   const [chart, setChart] = useState({
-    height: '',
-    weight: '',
-    temp: '',
-    bp: '',
-    heart: '',
-    rhythm: '',
-    lung: '',
-    sound: ''
+    height: "",
+    weight: "",
+    temp: "",
+    bp: "",
+    heart: "",
+    rhythm: "",
+    lung: "",
+    sound: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -126,14 +123,14 @@ export default function Patient(props) {
 
   return (
     <Grid item>
-      <div style={styles.center}>
+      <div className={classes.center}>
         <Paper className={classes.root}>
           <div>
             <Typography align="center" variant="h4" component="h1">
-              {'SBU DAOM New Patient Intake Form'}
+              {"SBU DAOM New Patient Intake Form"}
             </Typography>
             <Typography align="center" variant="h4" component="h1" gutterBottom>
-              {'CL840: Sepcialty development'}
+              {"CL840: Sepcialty development"}
             </Typography>
             <Typography
               variant="h6"
@@ -141,7 +138,7 @@ export default function Patient(props) {
               gutterBottom
               color="primary"
             >
-              {'Paitent Information'}
+              {"Paitent Information"}
             </Typography>
           </div>
 
@@ -152,7 +149,7 @@ export default function Patient(props) {
                 label="First Name"
                 className={classes.nameField}
                 value={values.firstName}
-                onChange={handleValueChange('firstName')}
+                onChange={handleValueChange("firstName")}
                 autoFocus
                 margin="normal"
               />
@@ -162,7 +159,7 @@ export default function Patient(props) {
                 label="Middle Name"
                 className={classes.nameField}
                 value={values.middleName}
-                onChange={handleValueChange('middleName')}
+                onChange={handleValueChange("middleName")}
                 margin="normal"
               />
 
@@ -171,7 +168,7 @@ export default function Patient(props) {
                 label="Last Name"
                 className={classes.nameField}
                 value={values.lastName}
-                onChange={handleValueChange('lastName')}
+                onChange={handleValueChange("lastName")}
                 margin="normal"
               />
 
@@ -180,7 +177,7 @@ export default function Patient(props) {
                 label="Email"
                 className={classes.textField}
                 value={values.email}
-                onChange={handleValueChange('email')}
+                onChange={handleValueChange("email")}
                 margin="normal"
               />
 
@@ -190,7 +187,7 @@ export default function Patient(props) {
                 type="date"
                 className={classes.nameField}
                 value={values.dob}
-                onChange={handleValueChange('dob')}
+                onChange={handleValueChange("dob")}
                 margin="normal"
                 InputLabelProps={{
                   shrink: true
@@ -202,32 +199,32 @@ export default function Patient(props) {
                 label="Phone"
                 className={classes.nameField}
                 value={values.phone}
-                onChange={handleValueChange('phone')}
+                onChange={handleValueChange("phone")}
                 margin="normal"
               />
               <FormControl margin="normal" className={classes.formGroup}>
                 <FormLabel className={classes.label} component="legend">
-                  {'Gender'}
+                  {"Gender"}
                 </FormLabel>
                 <RadioGroup
                   row
                   className={classes.radioGroup}
-                  onChange={handleValueChange('sex')}
+                  onChange={handleValueChange("sex")}
                 >
                   <FormControlLabel
                     value="Female"
                     control={<Radio />}
-                    label={'Female'}
+                    label={"Female"}
                   />
                   <FormControlLabel
                     value="Male"
                     control={<Radio />}
-                    label={'Male'}
+                    label={"Male"}
                   />
                   <FormControlLabel
                     value="Other"
                     control={<Radio />}
-                    label={'Other'}
+                    label={"Other"}
                   />
                 </RadioGroup>
               </FormControl>
@@ -248,7 +245,7 @@ export default function Patient(props) {
                   className={classes.progress}
                 />
               ) : (
-                'Create Patient'
+                "Create Patient"
               )}
             </Button>
           </form>
@@ -262,9 +259,9 @@ export default function Patient(props) {
     setLoading(true);
     setError(null);
     try {
-      const data = await api.post('/patients', { values, chart });
+      const data = await api.post("/patients", { values, chart });
       setLoading(false);
-      props.history.push('/patients');
+      props.history.push("/patients");
       return data;
     } catch (err) {
       setLoading(false);
