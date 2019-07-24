@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 
 export default function SideMenu(props) {
   const classes = useStyles();
-  console.log('[props]', props, props.open);
+
   const SideList = (
     <div
       className={classes.list}
