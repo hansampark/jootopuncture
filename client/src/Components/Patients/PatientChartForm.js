@@ -11,7 +11,6 @@ import {
   Radio,
   FormControlLabel,
   Typography,
-  Divider,
   Button,
   CircularProgress
 } from '@material-ui/core';
@@ -79,7 +78,7 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(10),
-    width: 100
+    width: 200
   },
   dense: {
     marginTop: 19
