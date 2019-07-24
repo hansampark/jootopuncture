@@ -54,7 +54,6 @@ export default {
       credentials: 'same-origin'
     };
     const response = await fetch(`${URL}/login`, req);
-    console.log('[login response]', response);
 
     const data = await response.json();
 

@@ -153,6 +153,7 @@ export default function Chart(props) {
             <MenuItem value={'HIGH'}>{'High'}</MenuItem>
           </Select>
         </FormControl>
+        <div />
 
         <TextField
           className={classes.textField}
@@ -172,6 +173,7 @@ export default function Chart(props) {
             )
           }}
         />
+
         <TextField
           className={classes.textField}
           id="sound"
