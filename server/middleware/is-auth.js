@@ -16,15 +16,12 @@ module.exports = (req, res, next) => {
   }
 
   if (!decodedToken) {
-    console.log('[!decodedTotken]');
     req.isAuth = false;
     return next();
   }
 
-  console.log('[!decodedTotken]', decodedToken);
-
   req.userId = decodedToken.userId;
   req.isAuth = true;
-  console.log('[1]');
+
   next();
 };

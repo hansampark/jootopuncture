@@ -14,7 +14,7 @@ const patientSchema = new Schema({
   middleName: String,
   email: String,
   dob: String,
-  phone: String,
+  phone: { type: String, required: true },
   sex: {
     type: String,
     enum: ['Male', 'Female', 'Other']

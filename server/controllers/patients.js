@@ -1,6 +1,3 @@
-const { Router } = require('express');
-const { check } = require('express-validator');
-const auth = require('../middleware/auth');
 const Patient = require('../models/patient');
 const Chart = require('../models/chart');
 
@@ -32,7 +29,6 @@ exports.createPatient = async (req, res, next) => {
       phone,
       sex
     });
-    console.log('[patient]', patient);
 
     if (!Object.values(chart).every(val => val === null || val === '')) {
       const newChart = new Chart({
@@ -46,7 +42,6 @@ exports.createPatient = async (req, res, next) => {
         sound,
         patientId: patient._id
       });
-      console.log('[newChart]', newChart);
 
       await newChart.save();
       patient.charts.push(newChart);
@@ -65,10 +60,10 @@ exports.createPatient = async (req, res, next) => {
 
 exports.getChartsByPatientId = async (req, res, next) => {
   const { patientId } = req.params;
-  console.log('[req.params]', req.params);
+
   try {
     const charts = await Chart.find({ patientId });
-    console.log('[charts]', charts);
+
     res.status(200).json({ message: 'Success', charts });
   } catch (err) {
     if (!err.statusCode) {
