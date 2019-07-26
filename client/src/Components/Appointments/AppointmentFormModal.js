@@ -88,7 +88,7 @@ export default function AppointmentFormModal(props) {
     end: '',
     patientId: ''
   });
-  const [toggle, setToggle] = useState('CREATE');
+  const [toggle, setToggle] = useState('NEW');
   const [patient, setPatient] = useState({
     firstName: '',
     lastName: '',
@@ -118,6 +118,16 @@ export default function AppointmentFormModal(props) {
 
   const handleToggleChange = (e, value) => {
     setToggle(value);
+    setAppointment({
+      ...appointment,
+      patientId: '',
+      title: ''
+    });
+    setPatient({
+      firstName: '',
+      lastName: '',
+      phone: ''
+    });
   };
 
   const handlePatientChange = name => event => {
@@ -202,9 +212,9 @@ export default function AppointmentFormModal(props) {
                 classes={{
                   root: classes.toggleButton
                 }}
-                value="CREATE"
+                value="NEW"
               >
-                {'Create Patient'}
+                {'New Patient'}
               </ToggleButton>
               <ToggleButton
                 classes={{
@@ -217,7 +227,7 @@ export default function AppointmentFormModal(props) {
             </ToggleButtonGroup>
           </div>
 
-          {toggle === 'CREATE' ? (
+          {toggle === 'NEW' ? (
             <FormGroup className={classes.formGroup}>
               <TextField
                 id="firstName"
