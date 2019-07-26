@@ -64,7 +64,7 @@ export default function MyCalendar(props) {
       setEvents(e);
     };
     fetchEvents();
-  }, [events]);
+  }, []);
 
   const handleViewChange = view => {
     setView(view);
@@ -157,8 +157,18 @@ export default function MyCalendar(props) {
     setErrors(null);
     try {
       const data = await api.post('/appointments', { event, patient });
+
       setLoading(false);
       setOpen(false);
+      setEvents([
+        ...events,
+        {
+          ...data,
+          title: data.title,
+          start: new Date(data.start),
+          end: new Date(data.end)
+        }
+      ]);
       return data;
     } catch (err) {
       setLoading(false);
