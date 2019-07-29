@@ -15,8 +15,8 @@ exports.getPatients = async (req, res, next) => {
 };
 
 exports.createPatient = async (req, res, next) => {
-  const { values, chart } = req.body;
-  const { firstName, lastName, middleName, email, dob, phone, sex } = values;
+  const { patient, chart } = req.body;
+  const { firstName, lastName, middleName, email, dob, phone, sex } = patient;
   const { height, weight, temp, bp, heart, rhythm, lung, sound } = chart;
 
   try {
@@ -44,6 +44,7 @@ exports.createPatient = async (req, res, next) => {
       });
 
       await newChart.save();
+
       patient.charts.push(newChart);
     }
 
