@@ -51,7 +51,7 @@ const TextMaskCustom = props => {
   );
 };
 
-export default function Chart(props) {
+export default function ChartForm(props) {
   const classes = useStyles();
   const { onChange, chart } = props;
   const { height, weight, temp, bp, heart, rhythm, lung, sound } = chart;

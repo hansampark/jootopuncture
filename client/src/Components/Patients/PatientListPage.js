@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, List, ListItem, Divider, Paper, Fab } from '@material-ui/core';
+import {
+  Grid,
+  List,
+  ListItem,
+  Divider,
+  Paper,
+  Button
+} from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import api from '../../lib/api';
 import PatientList from './PatientList';
+import PatientFormModal from './PatientFormModal';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -28,7 +36,6 @@ const useStyles = makeStyles(theme => ({
 export default function PatientListPage(props) {
   const classes = useStyles();
   const [data, setData] = useState([]);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,15 +64,13 @@ export default function PatientListPage(props) {
               {'Chart'}
             </Grid>
             <Grid item xs={1}>
-              <Fab
+              <Button
+                variant="contained"
                 color="primary"
-                size="small"
-                aria-label="Add"
-                className={classes.fab}
-                onClick={handleAddPatient}
+                onClick={handleRedirect}
               >
                 <Add />
-              </Fab>
+              </Button>
             </Grid>
           </ListItem>
           <Divider />
@@ -83,7 +88,7 @@ export default function PatientListPage(props) {
 
   return <div>No patients found</div>;
 
-  function handleAddPatient() {
+  function handleRedirect() {
     props.history.push('/create-patient');
   }
 

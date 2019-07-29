@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
   Paper,
@@ -13,47 +13,48 @@ import {
   Typography,
   Button,
   CircularProgress
-} from "@material-ui/core";
-import api from "../../lib/api";
-import Chart from "./Chart";
+} from '@material-ui/core';
+import api from '../../lib/api';
+import PatientForm from './PatientForm';
+import ChartForm from './ChartForm';
 
 const useStyles = makeStyles(theme => ({
   center: {
-    width: "100%",
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    overflow: "auto",
-    minHeight: "min-content"
+    width: '100%',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    overflow: 'auto',
+    minHeight: 'min-content'
   },
   root: {
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
-    display: "flex",
-    flexDirection: "column"
+    display: 'flex',
+    flexDirection: 'column'
   },
   container: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column",
-    width: "100%"
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '100%'
   },
   row: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
     paddingBottom: 10,
     marginBottom: 20,
-    borderBottom: "1px solid #cccccc"
+    borderBottom: '1px solid #cccccc'
   },
   nameField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down('xs')]: {
       width: 100
     },
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up('sm')]: {
       width: 150
     }
   },
@@ -67,7 +68,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   formGroup: {
-    borderBottom: "1px solid rgba(0, 0, 0, 0.42)"
+    borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
   },
   radioGroup: {
     marginBottom: -3,
@@ -84,36 +85,37 @@ const useStyles = makeStyles(theme => ({
     width: 200
   },
   progress: {
-    color: "#ffffff"
+    color: '#ffffff'
   }
 }));
 
 export default function Patient(props) {
   const classes = useStyles();
-  const [values, setValues] = useState({
-    firstName: "",
-    lastName: "",
-    middleName: "",
-    email: "",
-    dob: "",
-    phone: "",
-    sex: ""
+  const [patient, setPatient] = useState({
+    firstName: '',
+    lastName: '',
+    middleName: '',
+    email: '',
+    dob: '',
+    phone: '',
+    sex: ''
   });
   const [chart, setChart] = useState({
-    height: "",
-    weight: "",
-    temp: "",
-    bp: "",
-    heart: "",
-    rhythm: "",
-    lung: "",
-    sound: ""
+    height: '',
+    weight: '',
+    temp: '',
+    bp: '',
+    heart: '',
+    rhythm: '',
+    lung: '',
+    sound: ''
   });
+  const [toggle, setToggle] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleValueChange = name => event => {
-    setValues({ ...values, [name]: event.target.value });
+  const handlePatientChange = name => event => {
+    setPatient({ ...patient, [name]: event.target.value });
   };
 
   const handleChartChange = name => event => {
@@ -126,117 +128,25 @@ export default function Patient(props) {
         <Paper className={classes.root}>
           <div>
             <Typography align="center" variant="h4" component="h1">
-              {"SBU DAOM New Patient Intake Form"}
-            </Typography>
-            <Typography align="center" variant="h4" component="h1" gutterBottom>
-              {"CL840: Sepcialty development"}
-            </Typography>
-            <Typography
-              variant="h6"
-              align="center"
-              gutterBottom
-              color="primary"
-            >
-              {"Paitent Information"}
+              {'Patient Form'}
             </Typography>
           </div>
 
           <form className={classes.container}>
-            <FormGroup className={classes.row}>
-              <TextField
-                id="firstName"
-                label="First Name"
-                className={classes.nameField}
-                value={values.firstName}
-                onChange={handleValueChange("firstName")}
-                autoFocus
-                margin="normal"
-              />
+            <PatientForm onChange={handlePatientChange} patient={patient} />
 
-              <TextField
-                id="middleName"
-                label="Middle Name"
-                className={classes.nameField}
-                value={values.middleName}
-                onChange={handleValueChange("middleName")}
-                margin="normal"
-              />
+            <Button color="primary" onClick={handleToggle}>
+              {'Create Chart'}
+            </Button>
 
-              <TextField
-                id="lastName"
-                label="Last Name"
-                className={classes.nameField}
-                value={values.lastName}
-                onChange={handleValueChange("lastName")}
-                margin="normal"
-              />
-
-              <TextField
-                id="email"
-                label="Email"
-                className={classes.textField}
-                value={values.email}
-                onChange={handleValueChange("email")}
-                margin="normal"
-              />
-
-              <TextField
-                id="dob"
-                label="Date of Birth"
-                type="date"
-                className={classes.nameField}
-                value={values.dob}
-                onChange={handleValueChange("dob")}
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true
-                }}
-              />
-
-              <TextField
-                id="phone"
-                label="Phone"
-                className={classes.nameField}
-                value={values.phone}
-                onChange={handleValueChange("phone")}
-                margin="normal"
-              />
-              <FormControl margin="normal" className={classes.formGroup}>
-                <FormLabel className={classes.label} component="legend">
-                  {"Gender"}
-                </FormLabel>
-                <RadioGroup
-                  row
-                  className={classes.radioGroup}
-                  onChange={handleValueChange("sex")}
-                >
-                  <FormControlLabel
-                    value="Female"
-                    control={<Radio />}
-                    label={"Female"}
-                  />
-                  <FormControlLabel
-                    value="Male"
-                    control={<Radio />}
-                    label={"Male"}
-                  />
-                  <FormControlLabel
-                    value="Other"
-                    control={<Radio />}
-                    label={"Other"}
-                  />
-                </RadioGroup>
-              </FormControl>
-            </FormGroup>
-
-            <Chart onChange={handleChartChange} chart={chart} />
+            {toggle && <ChartForm onChange={handleChartChange} chart={chart} />}
 
             <Button
               variant="contained"
               color="primary"
               className={classes.button}
               disabled={!!error}
-              onClick={e => handlePatientSubmit(e, values)}
+              onClick={e => handleSubmit(e, patient, chart)}
             >
               {loading ? (
                 <CircularProgress
@@ -244,7 +154,7 @@ export default function Patient(props) {
                   className={classes.progress}
                 />
               ) : (
-                "Create Patient"
+                'Create Patient'
               )}
             </Button>
           </form>
@@ -253,14 +163,19 @@ export default function Patient(props) {
     </Grid>
   );
 
-  async function handlePatientSubmit(e, values) {
+  function handleToggle() {
+    setToggle(!toggle);
+  }
+
+  async function handleSubmit(e, patient, chart) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
     try {
-      const data = await api.post("/patients", { values, chart });
+      const data = await api.post('/patients', { patient, chart });
       setLoading(false);
-      props.history.push("/patients");
+      props.history.push('/patients');
       return data;
     } catch (err) {
       setLoading(false);
