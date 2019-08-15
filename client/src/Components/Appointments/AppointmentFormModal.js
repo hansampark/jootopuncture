@@ -13,7 +13,7 @@ import {
   InputLabel,
   Select,
   TextField,
-  MenuItem
+  MenuItem,
 } from '@material-ui/core';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
@@ -21,9 +21,12 @@ import api from '../../lib/api';
 import { fullName } from '../../lib/strings';
 import SelectOptions from '../Select';
 
+// import moment-range package
+import { extendMoment } from 'moment-range';
+
 const useStyles = makeStyles(theme => ({
   title: {
-    textAlign: 'center'
+    textAlign: 'center',
   },
   paper: {
     position: 'absolute',
@@ -32,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 4),
-    outline: 'none'
+    outline: 'none',
   },
   container: {
     display: 'flex',
@@ -40,45 +43,45 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    width: '100%'
+    width: '100%',
   },
   formGroup: {
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 10,
     marginBottom: 20,
-    maxWidth: '400px'
+    maxWidth: '400px',
   },
   toggleContainer: {
     margin: theme.spacing(2, 0),
-    width: '100%'
+    width: '100%',
   },
   toggleButton: {
     width: '50%',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   selected: {
     backgroundColor: '#3f51b5',
-    color: '#ffffff'
+    color: '#ffffff',
   },
 
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 180
+    width: 180,
   },
   timeField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 150
+    width: 150,
   },
   button: {
-    width: 120
-  }
+    width: 120,
+  },
 }));
 
 export default function AppointmentFormModal(props) {
-  const { open, onClick, onClose } = props;
+  const { open, onClick, onClose, events } = props;
   const classes = useStyles();
   const [appointment, setAppointment] = useState({
     title: '',
@@ -86,16 +89,22 @@ export default function AppointmentFormModal(props) {
     allDay: false,
     start: '',
     end: '',
-    patientId: ''
+    patientId: '',
   });
   const [toggle, setToggle] = useState('NEW');
   const [patient, setPatient] = useState({
     firstName: '',
     lastName: '',
-    phone: ''
+    phone: '',
   });
 
   const [data, setData] = useState(null);
+
+  // To compare times
+  const [overlap, setOverlap] = useState(false);
+
+  // Using moment-range
+  const time = extendMoment(moment);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,7 +117,7 @@ export default function AppointmentFormModal(props) {
   const selectOptions = (data || []).map((patient, index) => {
     return {
       value: patient._id,
-      label: fullName(patient.firstName, patient.lastName)
+      label: fullName(patient.firstName, patient.lastName),
     };
   });
 
@@ -121,12 +130,12 @@ export default function AppointmentFormModal(props) {
     setAppointment({
       ...appointment,
       patientId: '',
-      title: ''
+      title: '',
     });
     setPatient({
       firstName: '',
       lastName: '',
-      phone: ''
+      phone: '',
     });
   };
 
@@ -138,8 +147,47 @@ export default function AppointmentFormModal(props) {
     setAppointment({
       ...appointment,
       patientId: value.value,
-      title: value.label
+      title: value.label,
     });
+  };
+
+  // Appointment Validation
+  const handleSubmit = (e, appointment, patient) => {
+    e.preventDefault();
+
+    // Make moment-range variable for new appointment
+    const startTime = time(`${appointment.date}T${appointment.start}`);
+    const endTime = time(`${appointment.date}T${appointment.end}`);
+    const newRange = time.range(startTime, endTime);
+
+    // Make moment-range array for pre-exist appointment
+    const ranges = events.map(e => {
+      const start = time(e.start, 'YYYY-MM-DDTHH:mm');
+      const end = time(e.end, 'YYYY-MM-DDTHH:mm');
+      return time.range(start, end);
+    });
+
+    // Compare new appointment to original appointment
+    const validate = ranges.filter(function(n) {
+      return n.overlaps(newRange);
+    });
+    if (validate && validate.length) {
+      setOverlap(true);
+    } else {
+      onClick(e, appointment, patient);
+    }
+  };
+
+  // Show errorMessage for overlapping appointment
+  const errorMessageDiv = () => {
+    if (overlap) {
+      return (
+        <div style={{ color: 'red' }}>
+          You can't make appointment overlapped. Please select different time.
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -163,7 +211,7 @@ export default function AppointmentFormModal(props) {
               value={appointment.date}
               onChange={handleAppointmentChange('date')}
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
               margin="normal"
             />
@@ -176,10 +224,10 @@ export default function AppointmentFormModal(props) {
               value={appointment.start}
               onChange={handleAppointmentChange('start')}
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
               inputProps={{
-                step: 600
+                step: 600,
               }}
               margin="normal"
             />
@@ -192,14 +240,16 @@ export default function AppointmentFormModal(props) {
               value={appointment.end}
               onChange={handleAppointmentChange('end')}
               InputLabelProps={{
-                shrink: true
+                shrink: true,
               }}
               inputProps={{
-                step: 600
+                step: 600,
               }}
               margin="normal"
             />
           </FormGroup>
+
+          {errorMessageDiv()}
 
           <div className={classes.toggleContainer}>
             <ToggleButtonGroup
@@ -210,7 +260,7 @@ export default function AppointmentFormModal(props) {
             >
               <ToggleButton
                 classes={{
-                  root: classes.toggleButton
+                  root: classes.toggleButton,
                 }}
                 value="NEW"
               >
@@ -218,7 +268,7 @@ export default function AppointmentFormModal(props) {
               </ToggleButton>
               <ToggleButton
                 classes={{
-                  root: classes.toggleButton
+                  root: classes.toggleButton,
                 }}
                 value="EXISTING"
               >
@@ -282,7 +332,7 @@ export default function AppointmentFormModal(props) {
           className={classes.button}
           variant="contained"
           color="primary"
-          onClick={e => onClick(e, appointment, patient)}
+          onClick={e => handleSubmit(e, appointment, patient)}
           autoFocus
         >
           {'Save'}

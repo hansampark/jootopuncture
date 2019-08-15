@@ -14,22 +14,22 @@ const useStyles = makeStyles(theme => ({
   titleWrapper: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title: {
-    margin: theme.spacing(2)
+    margin: theme.spacing(2),
   },
   paper: {
     margin: theme.spacing(5),
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   buttonWrapper: {
-    textAlign: 'right'
+    textAlign: 'right',
   },
   button: {
-    margin: theme.spacing(1)
-  }
+    margin: theme.spacing(1),
+  },
 }));
 
 moment.locale('en');
@@ -57,7 +57,7 @@ export default function MyCalendar(props) {
           ...e,
           title: e.title,
           start: new Date(e.start),
-          end: new Date(e.end)
+          end: new Date(e.end),
         };
       });
 
@@ -82,7 +82,7 @@ export default function MyCalendar(props) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center'
+        justifyContent: 'center',
       }}
     >
       <div className={classes.titleWrapper}>
@@ -129,6 +129,7 @@ export default function MyCalendar(props) {
           open={open}
           onClick={handleCreateAppointment}
           onClose={() => handleModalClose()}
+          events={events}
         />
       )}
     </div>
@@ -150,7 +151,7 @@ export default function MyCalendar(props) {
       allDay,
       start: new Date(dateTime(date, start)),
       end: new Date(dateTime(date, end)),
-      patientId
+      patientId,
     };
 
     setLoading(true);
@@ -166,8 +167,8 @@ export default function MyCalendar(props) {
           ...data,
           title: data.title,
           start: new Date(data.start),
-          end: new Date(data.end)
-        }
+          end: new Date(data.end),
+        },
       ]);
       return data;
     } catch (err) {
