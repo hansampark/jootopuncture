@@ -78,7 +78,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function AppointmentFormModal(props) {
-  const { open, onClick, onClose } = props;
+  const { open, onClick, onClose, events } = props;
   const classes = useStyles();
   const [appointment, setAppointment] = useState({
     title: '',
@@ -96,6 +96,9 @@ export default function AppointmentFormModal(props) {
   });
 
   const [data, setData] = useState(null);
+
+  // To show error message, store error message if there is overlap
+  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -140,6 +143,86 @@ export default function AppointmentFormModal(props) {
       patientId: value.value,
       title: value.label
     });
+  };
+
+  // Appointment validation function
+  const handleSubmitModal = (e, appointment, patient) => {
+    e.preventDefault();
+
+    // New appointment time variables (start time and end time)
+    const startTime = moment(`${appointment.date} ${appointment.start}`).unix();
+    const endTime = moment(`${appointment.date} ${appointment.end}`).unix();
+
+    /* First way
+     * Find overlapped time (using for in loop)
+     * Return setErrors(errorMessage) if there is overlap
+     * Or
+     * Call onClick function if there is no overlap
+     * =========Time Complexity=========
+     * for in loop: worst O(n)
+     * ======> Total time complexity: worst O(n)
+     */
+    for (let e in events) {
+      if (
+        moment(events[e].start).unix() < startTime &&
+        startTime < moment(events[e].end).unix()
+      ) {
+        return setErrors(
+          `You can't make appointment overlapped. Please select different time.`
+        );
+      } else if (
+        moment(events[e].start).unix() < endTime &&
+        endTime < moment(events[e].end).unix()
+      ) {
+        return setErrors(
+          `You can't make appointment overlapped. Please select different time.`
+        );
+      }
+    }
+    setErrors(null);
+    onClick(e, appointment, patient);
+    // End first way
+
+    /* Second way
+     * Find overlap status and save boolean value into boolean array (using map method)
+     * Find 'overlap value == true' in boolean array (using find method)
+     * Return setErrors(errorMessage) if there is overlap
+     * Or
+     * Call onClick function if there is no overlap
+     * =========Time Complexity=========
+     * map() method: O(n)
+     * find() method: worst O(n)
+     * ======> Total time complexity: worst O(2n)
+     */
+    // const validationOverlap = events
+    //   .map(e => {
+    //     if (
+    //       moment(e.start).unix() < startTime &&
+    //       startTime < moment(e.end).unix()
+    //     ) {
+    //       return true;
+    //     } else if (
+    //       moment(e.start).unix() < endTime &&
+    //       endTime < moment(e.end).unix()
+    //     ) {
+    //       return true;
+    //     } else {
+    //       return false;
+    //     }
+    //   })
+    //   .find(item => {
+    //     return item === true;
+    //   });
+    // // Second way return statement
+    // if (validationOverlap) {
+    //   return setErrors(
+    //     `You can't make appointment overlapped. Please select different time.`
+    //   );
+    // } else {
+    //   setErrors(null);
+    //   onClick(e, appointment, patient);
+    // }
+    // End second way
   };
 
   return (
@@ -200,6 +283,8 @@ export default function AppointmentFormModal(props) {
               margin="normal"
             />
           </FormGroup>
+
+          {errors && <div style={{ color: 'red' }}>{errors}</div>}
 
           <div className={classes.toggleContainer}>
             <ToggleButtonGroup
@@ -282,7 +367,7 @@ export default function AppointmentFormModal(props) {
           className={classes.button}
           variant="contained"
           color="primary"
-          onClick={e => onClick(e, appointment, patient)}
+          onClick={e => handleSubmitModal(e, appointment, patient)}
           autoFocus
         >
           {'Save'}
