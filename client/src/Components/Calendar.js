@@ -129,6 +129,7 @@ export default function MyCalendar(props) {
           open={open}
           onClick={handleCreateAppointment}
           onClose={() => handleModalClose()}
+          events={events}
         />
       )}
     </div>
