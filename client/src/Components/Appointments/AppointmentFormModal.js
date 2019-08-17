@@ -153,76 +153,25 @@ export default function AppointmentFormModal(props) {
     const startTime = moment(`${appointment.date} ${appointment.start}`).unix();
     const endTime = moment(`${appointment.date} ${appointment.end}`).unix();
 
-    /* First way
-     * Find overlapped time (using for in loop)
-     * Return setErrors(errorMessage) if there is overlap
-     * Or
-     * Call onClick function if there is no overlap
-     * =========Time Complexity=========
-     * for in loop: worst O(n)
-     * ======> Total time complexity: worst O(n)
-     */
+    // Find overlapped time (using for in loop)
+    // Time Complexity: worst O(n)
+    let validationError;
     for (let e in events) {
       if (
-        moment(events[e].start).unix() < startTime &&
-        startTime < moment(events[e].end).unix()
+        (moment(events[e].start).unix() < startTime &&
+          startTime < moment(events[e].end).unix()) ||
+        (moment(events[e].start).unix() < endTime &&
+          endTime < moment(events[e].end).unix())
       ) {
-        return setErrors(
-          `You can't make appointment overlapped. Please select different time.`
-        );
-      } else if (
-        moment(events[e].start).unix() < endTime &&
-        endTime < moment(events[e].end).unix()
-      ) {
-        return setErrors(
-          `You can't make appointment overlapped. Please select different time.`
-        );
+        validationError = `You can't make appointment overlapped. Please select different time.`;
       }
     }
-    setErrors(null);
-    onClick(e, appointment, patient);
-    // End first way
-
-    /* Second way
-     * Find overlap status and save boolean value into boolean array (using map method)
-     * Find 'overlap value == true' in boolean array (using find method)
-     * Return setErrors(errorMessage) if there is overlap
-     * Or
-     * Call onClick function if there is no overlap
-     * =========Time Complexity=========
-     * map() method: O(n)
-     * find() method: worst O(n)
-     * ======> Total time complexity: worst O(2n)
-     */
-    // const validationOverlap = events
-    //   .map(e => {
-    //     if (
-    //       moment(e.start).unix() < startTime &&
-    //       startTime < moment(e.end).unix()
-    //     ) {
-    //       return true;
-    //     } else if (
-    //       moment(e.start).unix() < endTime &&
-    //       endTime < moment(e.end).unix()
-    //     ) {
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //   })
-    //   .find(item => {
-    //     return item === true;
-    //   });
-    // // Second way return statement
-    // if (validationOverlap) {
-    //   return setErrors(
-    //     `You can't make appointment overlapped. Please select different time.`
-    //   );
-    // } else {
-    //   setErrors(null);
-    //   onClick(e, appointment, patient);
-    // }
-    // End second way
+    if (validationError) {
+      setErrors(validationError);
+    } else {
+      setErrors(null);
+      onClick(e, appointment, patient);
+    }
   };
 
   return (
