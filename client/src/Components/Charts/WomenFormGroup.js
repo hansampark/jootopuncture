@@ -174,6 +174,7 @@ export default function WomenFormGroup(props) {
         type="number"
         value={values.menarche}
         onChange={handleChangeValues('menarche')}
+        disabled={disabled}
         margin="normal"
         InputProps={{
           endAdornment: (
@@ -191,6 +192,7 @@ export default function WomenFormGroup(props) {
         type="number"
         value={values.menopause}
         onChange={handleChangeValues('menopause')}
+        disabled={disabled}
         margin="normal"
         InputProps={{
           endAdornment: (
@@ -208,6 +210,7 @@ export default function WomenFormGroup(props) {
         type="number"
         value={values.pregnancy}
         onChange={handleChangeValues('pregnancy')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -218,6 +221,7 @@ export default function WomenFormGroup(props) {
         type="number"
         value={values.child}
         onChange={handleChangeValues('child')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -227,6 +231,7 @@ export default function WomenFormGroup(props) {
         label={'Miscarriage'}
         value={values.miscarriage}
         onChange={handleChangeValues('miscarriage')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -236,11 +241,16 @@ export default function WomenFormGroup(props) {
         label={'Leukorrhea'}
         value={values.leukorrhea}
         onChange={handleChangeValues('leukorrhea')}
+        disabled={disabled}
         margin="normal"
       />
 
       <div>
-        <FormControl margin="normal" className={classes.formGroup}>
+        <FormControl
+          margin="normal"
+          className={classes.formGroup}
+          disabled={disabled}
+        >
           <FormLabel className={classes.label} component="legend">
             {'Birth Control'}
           </FormLabel>
@@ -275,6 +285,7 @@ export default function WomenFormGroup(props) {
           type="number"
           value={values.bcUsage}
           onChange={handleChangeValues('bcUsage')}
+          disabled={disabled}
           margin="normal"
           InputProps={{
             endAdornment: (
@@ -297,6 +308,7 @@ export default function WomenFormGroup(props) {
           label={'LMP'}
           value={values.menstruation.lmp}
           onChange={handleChangeValues('lmp')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -306,6 +318,7 @@ export default function WomenFormGroup(props) {
           label={'Cycle'}
           value={values.menstruation.cycle}
           onChange={handleChangeValues('cycle')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -315,6 +328,7 @@ export default function WomenFormGroup(props) {
           label={'Quantity'}
           value={values.menstruation.quantity}
           onChange={handleChangeValues('quantity')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -324,6 +338,7 @@ export default function WomenFormGroup(props) {
           label={'Duration'}
           value={values.menstruation.duration}
           onChange={handleChangeValues('duration')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -333,6 +348,7 @@ export default function WomenFormGroup(props) {
           label={'Color'}
           value={values.menstruation.color}
           onChange={handleChangeValues('color')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -342,6 +358,7 @@ export default function WomenFormGroup(props) {
           label={'Clots'}
           value={values.menstruation.clots}
           onChange={handleChangeValues('clots')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -351,6 +368,7 @@ export default function WomenFormGroup(props) {
           label={'Dysmenorrhea'}
           value={values.menstruation.dysmenorrhea}
           onChange={handleChangeValues('dysmenorrhea')}
+          disabled={disabled}
           margin="normal"
         />
       </div>

@@ -61,7 +61,7 @@ const options = [
 
 export default function PulseFormGroup(props) {
   const classes = useStyles();
-  const { onChange, pulse } = props;
+  const { onChange, pulse, disabled } = props;
   const { right, left } = pulse;
   const [values, setValues] = useState({
     right: right || {
@@ -109,11 +109,13 @@ export default function PulseFormGroup(props) {
         <FormControl
           className={classes.textField}
           style={{ marginTop: 16, marginBottom: 8 }}
+          disabled={disabled}
         >
           <InputLabel htmlFor="first">{'Right 1st'}</InputLabel>
           <Select
             value={values.right.first}
             onChange={handleRightPulseChange('first')}
+            disabled={disabled}
             inputProps={{
               id: 'first',
               name: 'first'
@@ -130,11 +132,13 @@ export default function PulseFormGroup(props) {
         <FormControl
           className={classes.textField}
           style={{ marginTop: 16, marginBottom: 8 }}
+          disabled={disabled}
         >
           <InputLabel htmlFor="first">{'Right 2nd'}</InputLabel>
           <Select
             value={values.right.second}
             onChange={handleRightPulseChange('second')}
+            disabled={disabled}
             inputProps={{
               id: 'second',
               name: 'second'
@@ -151,11 +155,13 @@ export default function PulseFormGroup(props) {
         <FormControl
           className={classes.textField}
           style={{ marginTop: 16, marginBottom: 8 }}
+          disabled={disabled}
         >
           <InputLabel htmlFor="first">{'Right 3rd'}</InputLabel>
           <Select
             value={values.right.third}
             onChange={handleRightPulseChange('third')}
+            disabled={disabled}
             inputProps={{
               id: 'third',
               name: 'third'
@@ -175,11 +181,13 @@ export default function PulseFormGroup(props) {
         <FormControl
           className={classes.textField}
           style={{ marginTop: 16, marginBottom: 8 }}
+          disabled={disabled}
         >
           <InputLabel htmlFor="first">{'Left 1st'}</InputLabel>
           <Select
             value={values.left.first}
             onChange={handleLeftPulseChange('first')}
+            disabled={disabled}
             inputProps={{
               id: 'first',
               name: 'first'
@@ -196,11 +204,13 @@ export default function PulseFormGroup(props) {
         <FormControl
           className={classes.textField}
           style={{ marginTop: 16, marginBottom: 8 }}
+          disabled={disabled}
         >
           <InputLabel htmlFor="second">{'Left 2nd'}</InputLabel>
           <Select
             value={values.left.second}
             onChange={handleLeftPulseChange('second')}
+            disabled={disabled}
             inputProps={{
               id: 'second',
               name: 'second'
@@ -217,11 +227,13 @@ export default function PulseFormGroup(props) {
         <FormControl
           className={classes.textField}
           style={{ marginTop: 16, marginBottom: 8 }}
+          disabled={disabled}
         >
           <InputLabel htmlFor="third">{'Left 3rd'}</InputLabel>
           <Select
             value={values.left.third}
             onChange={handleLeftPulseChange('third')}
+            disabled={disabled}
             inputProps={{
               id: 'third',
               name: 'third'

@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function SystemicReviewFormGroup(props) {
   const classes = useStyles();
-  const { onChange, review } = props;
+  const { onChange, review, disabled } = props;
   const {
     head,
     eent,
@@ -63,8 +63,6 @@ export default function SystemicReviewFormGroup(props) {
     reviewData: reviewData || ''
   });
 
-  const [width, setWidth] = useState();
-
   const handleChangeValues = name => event => {
     setValues({ ...values, [name]: event.target.value });
 
@@ -87,6 +85,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Head / Face'}
           value={values.head}
           onChange={handleChangeValues('head')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -97,6 +96,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'EENT'}
           value={values.eent}
           onChange={handleChangeValues('eent')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -107,6 +107,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Skin'}
           value={values.skin}
           onChange={handleChangeValues('skin')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -117,6 +118,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Chest / Breast'}
           value={values.chest}
           onChange={handleChangeValues('chest')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -127,6 +129,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Respiratory'}
           value={values.respiratory}
           onChange={handleChangeValues('respiratory')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -137,6 +140,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Cardiovascular'}
           value={values.cardio}
           onChange={handleChangeValues('cardio')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -149,6 +153,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Gastrointerstinal'}
           value={values.gas}
           onChange={handleChangeValues('gas')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -159,6 +164,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Musculoskeletal'}
           value={values.muscle}
           onChange={handleChangeValues('muscle')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -168,6 +174,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Neurological'}
           value={values.neuro}
           onChange={handleChangeValues('neuro')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -178,6 +185,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Spine'}
           value={values.spine}
           onChange={handleChangeValues('spine')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -188,6 +196,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'Extremities'}
           value={values.extremities}
           onChange={handleChangeValues('extremities')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -198,6 +207,7 @@ export default function SystemicReviewFormGroup(props) {
           label={'DTR / Sensory'}
           value={values.dtr}
           onChange={handleChangeValues('dtr')}
+          disabled={disabled}
           margin="normal"
           fullWidth
         />
@@ -209,6 +219,7 @@ export default function SystemicReviewFormGroup(props) {
         label={'Muscle tones, MMT, ROM, Activities of Daily Living, etc.'}
         value={values.other}
         onChange={handleChangeValues('other')}
+        disabled={disabled}
         margin="normal"
         helperText={'Other / Describe the abnormalities'}
         fullWidth
@@ -222,9 +233,11 @@ export default function SystemicReviewFormGroup(props) {
       <div className={classes.canvas}>
         <Canvas
           src="/images/body-diagram.jpg"
+          data={reviewData}
           width={950}
           height={440}
           onSave={handleSave}
+          disabled={disabled}
         />
       </div>
     </FormGroup>

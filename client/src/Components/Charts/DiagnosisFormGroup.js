@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function DiagnosisFormGroup(props) {
   const classes = useStyles();
-  const { onChange, diagnosis } = props;
+  const { onChange, diagnosis, disabled } = props;
   const {
     etiology,
     tcm,
@@ -124,6 +124,7 @@ export default function DiagnosisFormGroup(props) {
         label={'Etiology'}
         value={values.etiology}
         onChange={handleChangeValues('etiology')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />
@@ -134,6 +135,7 @@ export default function DiagnosisFormGroup(props) {
         label={'TCM Diagnosis'}
         value={values.tcm}
         onChange={handleChangeValues('tcm')}
+        disabled={disabled}
         margin="normal"
         InputLabelProps={{
           shrink: true
@@ -147,6 +149,7 @@ export default function DiagnosisFormGroup(props) {
         label={'Treatment Principle'}
         value={values.treatment}
         onChange={handleChangeValues('treatment')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -156,6 +159,7 @@ export default function DiagnosisFormGroup(props) {
         label={'Acupuncture Points'}
         value={values.acPoints}
         onChange={handleChangeValues('acPoints')}
+        disabled={disabled}
         margin="normal"
         InputLabelProps={{
           shrink: true
@@ -171,6 +175,7 @@ export default function DiagnosisFormGroup(props) {
         label={'Herbal Treatment Formula Herbs Modification'}
         value={values.herbalTrt}
         onChange={handleChangeValues('herbalTrt')}
+        disabled={disabled}
         margin="normal"
         InputLabelProps={{
           shrink: true
@@ -183,6 +188,7 @@ export default function DiagnosisFormGroup(props) {
         label={'Pharmacological Assessments'}
         value={values.assessments}
         onChange={handleChangeValues('assessments')}
+        disabled={disabled}
         margin="normal"
         fullWidth
         InputLabelProps={{
@@ -204,9 +210,11 @@ export default function DiagnosisFormGroup(props) {
               onChange={handleChangeTreatment('tuina')}
               color="primary"
               value="tuina"
+              disabled={disabled}
             />
           }
           label="Tui-Na"
+          disabled={disabled}
         />
         <FormControlLabel
           control={
@@ -215,9 +223,11 @@ export default function DiagnosisFormGroup(props) {
               onChange={handleChangeTreatment('acupressure')}
               color="primary"
               value="acupressure"
+              disabled={disabled}
             />
           }
           label="Acupressure"
+          disabled={disabled}
         />
         <FormControlLabel
           control={
@@ -226,9 +236,11 @@ export default function DiagnosisFormGroup(props) {
               onChange={handleChangeTreatment('moxa')}
               color="primary"
               value="moxa"
+              disabled={disabled}
             />
           }
           label="Moxa"
+          disabled={disabled}
         />
         <FormControlLabel
           control={
@@ -237,9 +249,11 @@ export default function DiagnosisFormGroup(props) {
               onChange={handleChangeTreatment('cupping')}
               color="primary"
               value="cupping"
+              disabled={disabled}
             />
           }
           label="Cupping"
+          disabled={disabled}
         />
         <FormControlLabel
           control={
@@ -248,9 +262,11 @@ export default function DiagnosisFormGroup(props) {
               onChange={handleChangeTreatment('electroAc')}
               color="primary"
               value="electroAc"
+              disabled={disabled}
             />
           }
           label="Electro Acupuncture"
+          disabled={disabled}
         />
         <FormControlLabel
           control={
@@ -259,9 +275,11 @@ export default function DiagnosisFormGroup(props) {
               onChange={handleChangeTreatment('heatpack')}
               color="primary"
               value="heatpack"
+              disabled={disabled}
             />
           }
           label="Heat Pack"
+          disabled={disabled}
         />
         <FormControlLabel
           control={
@@ -270,9 +288,11 @@ export default function DiagnosisFormGroup(props) {
               onChange={handleChangeTreatment('other')}
               color="primary"
               value="other"
+              disabled={disabled}
             />
           }
           label="Other"
+          disabled={disabled}
         />
       </div>
 
@@ -282,6 +302,7 @@ export default function DiagnosisFormGroup(props) {
         label={'Auricular Acupuncture / Ear Seeds'}
         value={values.auricular}
         onChange={handleChangeValues('auricular')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />
@@ -292,6 +313,7 @@ export default function DiagnosisFormGroup(props) {
         label={'Condition Treated'}
         value={values.condition}
         onChange={handleChangeValues('condition')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -301,6 +323,7 @@ export default function DiagnosisFormGroup(props) {
         label={'ICD'}
         value={values.icd}
         onChange={handleChangeValues('icd')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -310,6 +333,7 @@ export default function DiagnosisFormGroup(props) {
         label={'CPT'}
         value={values.cpt}
         onChange={handleChangeValues('cpt')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -319,6 +343,7 @@ export default function DiagnosisFormGroup(props) {
         label={'Prognosis / Recommendations / Comments'}
         value={values.comments}
         onChange={handleChangeValues('comments')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />
@@ -337,6 +362,7 @@ export default function DiagnosisFormGroup(props) {
           label={'Pain Level'}
           value={values.pain}
           onChange={handleChangeValues('pain')}
+          disabled={disabled}
           margin="normal"
           InputProps={{
             endAdornment: (
@@ -353,6 +379,7 @@ export default function DiagnosisFormGroup(props) {
           label={'Heart Rate'}
           value={values.heart}
           onChange={handleChangeValues('heart')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -362,6 +389,7 @@ export default function DiagnosisFormGroup(props) {
           label={'Pulse'}
           value={values.pulse}
           onChange={handleChangeValues('pulse')}
+          disabled={disabled}
           margin="normal"
         />
       </div>
@@ -372,6 +400,7 @@ export default function DiagnosisFormGroup(props) {
         label={'DAOM Intern'}
         value={values.sign}
         onChange={handleChangeValues('sign')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />

@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function QuestionaireFormGroup(props) {
   const classes = useStyles();
-  const { onChange, questionaire } = props;
+  const { onChange, questionaire, disabled } = props;
   const {
     fever,
     perspiration,
@@ -166,6 +166,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Fever & Chills'}
         value={values.fever}
         onChange={handleChangeValues('fever')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -175,6 +176,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Perspiration'}
         value={values.perspiration}
         onChange={handleChangeValues('perspiration')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -184,6 +186,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Thirst'}
         value={values.thirst}
         onChange={handleChangeValues('thirst')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -193,6 +196,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Appetite'}
         value={values.appetite}
         onChange={handleChangeValues('appetite')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -202,6 +206,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Digestion'}
         value={values.digestion}
         onChange={handleChangeValues('digestion')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -211,6 +216,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Taste'}
         value={values.taste}
         onChange={handleChangeValues('taste')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -221,6 +227,7 @@ export default function QuestionaireFormGroup(props) {
           label={'Bowel Frequency'}
           value={values.bowel.frequency}
           onChange={handleChangeValues('bowelFrequency')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -230,6 +237,7 @@ export default function QuestionaireFormGroup(props) {
           label={'Bowel Quality'}
           value={values.bowel.quality}
           onChange={handleChangeValues('bowelQuality')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -239,6 +247,7 @@ export default function QuestionaireFormGroup(props) {
           label={'Bowel Color'}
           value={values.bowel.color}
           onChange={handleChangeValues('bowelColor')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -248,6 +257,7 @@ export default function QuestionaireFormGroup(props) {
           label={'Bowel Smell'}
           value={values.bowel.smell}
           onChange={handleChangeValues('bowelSmell')}
+          disabled={disabled}
           margin="normal"
         />
       </div>
@@ -259,6 +269,7 @@ export default function QuestionaireFormGroup(props) {
           label={'Urine Frequency'}
           value={values.urine.frequency}
           onChange={handleChangeValues('urineFrequency')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -268,6 +279,7 @@ export default function QuestionaireFormGroup(props) {
           label={'Urine Amount'}
           value={values.urine.amount}
           onChange={handleChangeValues('urineAmount')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -277,6 +289,7 @@ export default function QuestionaireFormGroup(props) {
           label={'Urine Color'}
           value={values.urine.color}
           onChange={handleChangeValues('urineColor')}
+          disabled={disabled}
           margin="normal"
         />
 
@@ -286,6 +299,7 @@ export default function QuestionaireFormGroup(props) {
           label={'Urine Smell'}
           value={values.urine.smell}
           onChange={handleChangeValues('urineSmell')}
+          disabled={disabled}
           margin="normal"
         />
       </div>
@@ -296,6 +310,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Sleep'}
         value={values.sleep}
         onChange={handleChangeValues('sleep')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />
@@ -306,6 +321,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Pain'}
         value={values.pain}
         onChange={handleChangeValues('pain')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />
@@ -316,6 +332,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Consciousness'}
         value={values.consciousness}
         onChange={handleChangeValues('consciousness')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -325,6 +342,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Energy Level'}
         value={values.energy}
         onChange={handleChangeValues('energy')}
+        disabled={disabled}
         InputLabelProps={{
           shrink: true
         }}
@@ -344,6 +362,7 @@ export default function QuestionaireFormGroup(props) {
         label={'Stress'}
         value={values.stress}
         onChange={handleChangeValues('stress')}
+        disabled={disabled}
         InputLabelProps={{
           shrink: true
         }}

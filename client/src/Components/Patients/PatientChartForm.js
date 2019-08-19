@@ -79,15 +79,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Patient(props) {
   const classes = useStyles();
-  const [patient, setPatient] = useState({
-    firstName: '',
-    lastName: '',
-    middleName: '',
-    email: '',
-    dob: '',
-    phone: '',
-    sex: ''
-  });
+  const [patient, setPatient] = useState({});
 
   const [vitals, setVitals] = useState({});
   const [complaints, setComplaints] = useState({});
@@ -103,8 +95,8 @@ export default function Patient(props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handlePatientChange = name => event => {
-    setPatient({ ...patient, [name]: event.target.value });
+  const handlePatientChange = patient => {
+    setPatient(patient);
   };
 
   const handleVitalChange = vitals => {
@@ -186,6 +178,7 @@ export default function Patient(props) {
             onTongueChange={handleTongueChange}
             onPulseChange={handlePulseChange}
             onDiagnosisChange={handleDiagnosisChange}
+            disabled={false}
           />
 
           <Button
@@ -227,7 +220,8 @@ export default function Patient(props) {
       review,
       women,
       tongue,
-      pulse
+      pulse,
+      diagnosis
     };
 
     try {

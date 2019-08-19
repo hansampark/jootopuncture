@@ -130,11 +130,20 @@ export default function ChartForm(props) {
     onWomenChange,
     onTongueChange,
     onPulseChange,
-    onDiagnosisChange
+    onDiagnosisChange,
+    disabled
   } = props;
 
   const {
-    vitals,
+    date,
+    height,
+    weight,
+    temp,
+    bp,
+    heart,
+    rhythm,
+    lung,
+    sound,
     complaints,
     illnesses,
     info,
@@ -169,7 +178,21 @@ export default function ChartForm(props) {
         className={classes.wrapper}
         unmountOnExit
       >
-        <VitalFormGroup onChange={onVitalChange} vitals={vitals} />
+        <VitalFormGroup
+          onChange={onVitalChange}
+          vitals={{
+            date,
+            height,
+            weight,
+            temp,
+            bp,
+            heart,
+            rhythm,
+            lung,
+            sound
+          }}
+          disabled={disabled}
+        />
       </Collapse>
 
       <div className={classes.wrapper}>
@@ -196,6 +219,7 @@ export default function ChartForm(props) {
         <ComplaintFormGroup
           onChange={onComplaintChange}
           complaints={complaints}
+          disabled={disabled}
         />
       </Collapse>
 
@@ -220,7 +244,11 @@ export default function ChartForm(props) {
         className={classes.wrapper}
         unmountOnExit
       >
-        <IllnessFormGroup onChange={onIllnessChange} illnesses={illnesses} />
+        <IllnessFormGroup
+          onChange={onIllnessChange}
+          illnesses={illnesses}
+          disabled={disabled}
+        />
       </Collapse>
 
       <div className={classes.wrapper}>
@@ -244,7 +272,11 @@ export default function ChartForm(props) {
         className={classes.wrapper}
         unmountOnExit
       >
-        <PastHistoryFormGroup onChange={onInfoChange} info={info} />
+        <PastHistoryFormGroup
+          onChange={onInfoChange}
+          info={info}
+          disabled={disabled}
+        />
       </Collapse>
 
       <div className={classes.wrapper}>
@@ -271,6 +303,7 @@ export default function ChartForm(props) {
         <QuestionaireFormGroup
           onChange={onQuestionaireChange}
           questionaire={questionaire}
+          disabled={disabled}
         />
       </Collapse>
 
@@ -295,7 +328,11 @@ export default function ChartForm(props) {
         className={classes.wrapper}
         unmountOnExit
       >
-        <SystemicReviewFormGroup onChange={onReviewChange} review={review} />
+        <SystemicReviewFormGroup
+          onChange={onReviewChange}
+          review={review}
+          disabled={disabled}
+        />
       </Collapse>
 
       <div className={classes.wrapper}>
@@ -319,7 +356,11 @@ export default function ChartForm(props) {
         className={classes.wrapper}
         unmountOnExit
       >
-        <WomenFormGroup onChange={onWomenChange} women={women} />
+        <WomenFormGroup
+          onChange={onWomenChange}
+          women={women}
+          disabled={disabled}
+        />
       </Collapse>
 
       <div className={classes.wrapper}>
@@ -343,7 +384,11 @@ export default function ChartForm(props) {
         className={classes.wrapper}
         unmountOnExit
       >
-        <TongueInfoFormGroup onChange={onTongueChange} tongue={tongue} />
+        <TongueInfoFormGroup
+          onChange={onTongueChange}
+          tongue={tongue}
+          disabled={disabled}
+        />
       </Collapse>
 
       <div className={classes.wrapper}>
@@ -367,7 +412,11 @@ export default function ChartForm(props) {
         className={classes.wrapper}
         unmountOnExit
       >
-        <PulseFormGroup onChange={onPulseChange} pulse={pulse} />
+        <PulseFormGroup
+          onChange={onPulseChange}
+          pulse={pulse}
+          disabled={disabled}
+        />
       </Collapse>
 
       <div className={classes.wrapper}>
@@ -394,6 +443,7 @@ export default function ChartForm(props) {
         <DiagnosisFormGroup
           onChange={onDiagnosisChange}
           diagnosis={diagnosis}
+          disabled={disabled}
         />
       </Collapse>
     </React.Fragment>

@@ -25,7 +25,11 @@ const useStyles = makeStyles(theme => ({
     height: '1.1875rem',
     border: 'none',
     outline: 'none',
-    width: 50
+    width: 50,
+
+    '&:disabled': {
+      color: 'rgba(0, 0, 0, 0.38)'
+    }
   },
   adornment: {
     color: 'rgba(0, 0, 0, 0.54)'
@@ -53,6 +57,7 @@ function InputTypes(props) {
             className={classes.input}
             value={ft}
             onChange={props.onChange('ft')}
+            disabled={props.disabled}
           />
           <label className={classes.adornment}>{'ft'}</label>
 
@@ -64,6 +69,7 @@ function InputTypes(props) {
             className={classes.input}
             value={inch}
             onChange={props.onChange('inch')}
+            disabled={props.disabled}
           />
           <label className={classes.adornment}>{'in'}</label>
         </div>
@@ -82,6 +88,7 @@ function InputTypes(props) {
             className={classes.input}
             value={bp1}
             onChange={props.onChange('bp1')}
+            disabled={props.disabled}
           />
           <label className={classes.mask}>{props.mask}</label>
           <input
@@ -92,6 +99,7 @@ function InputTypes(props) {
             className={classes.input}
             value={bp2}
             onChange={props.onChange('bp2')}
+            disabled={props.disabled}
           />
           <label className={classes.adornment}>{'mmHg'}</label>
         </div>
@@ -143,7 +151,8 @@ export default function MaskedInput(props) {
     min,
     max,
     value,
-    onChange
+    onChange,
+    disabled
   } = props;
 
   useEffect(() => {
@@ -159,7 +168,9 @@ export default function MaskedInput(props) {
     <div
       ref={wrapperRef}
       style={{
-        borderBottom: isSelected
+        borderBottom: disabled
+          ? '1px dotted rgba(0, 0, 0, 0.42) '
+          : isSelected
           ? '2px solid #303f9f'
           : onHover
           ? '2px solid rgba(0, 0, 0, 0.42)'
@@ -191,6 +202,7 @@ export default function MaskedInput(props) {
         mask={mask}
         value={value}
         onChange={onChange}
+        disabled={disabled}
       />
     </div>
   );

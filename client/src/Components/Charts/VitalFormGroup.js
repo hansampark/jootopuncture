@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function VitalFormGroup(props) {
   const classes = useStyles();
-  const { onChange, vitals } = props;
+  const { onChange, vitals, disabled } = props;
   const { date, height, weight, temp, bp, heart, rhythm, lung, sound } = vitals;
   const [ft, inch] = removeSpecialChars(height);
   const [bp1, bp2] = removeSpecialChars(bp);
@@ -75,6 +75,7 @@ export default function VitalFormGroup(props) {
         InputLabelProps={{
           shrink: true
         }}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -86,6 +87,7 @@ export default function VitalFormGroup(props) {
         max="11"
         value={{ ft: values.ft, inch: values.inch }}
         onChange={handleChangeValues}
+        disabled={disabled}
       />
 
       <TextField
@@ -102,6 +104,7 @@ export default function VitalFormGroup(props) {
             </InputAdornment>
           )
         }}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -122,6 +125,7 @@ export default function VitalFormGroup(props) {
             </InputAdornment>
           )
         }}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -134,6 +138,7 @@ export default function VitalFormGroup(props) {
         max="999"
         value={{ bp1: values.bp1, bp2: values.bp2 }}
         onChange={handleChangeValues}
+        disabled={disabled}
       />
 
       <TextField
@@ -154,12 +159,14 @@ export default function VitalFormGroup(props) {
             </InputAdornment>
           )
         }}
+        disabled={disabled}
         margin="normal"
       />
 
       <FormControl
         className={classes.textField}
         style={{ marginTop: 16, marginBottom: 8 }}
+        disabled={disabled}
       >
         <InputLabel htmlFor="rhythm">{'Rhythm'}</InputLabel>
         <Select
@@ -193,6 +200,7 @@ export default function VitalFormGroup(props) {
             </InputAdornment>
           )
         }}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -202,6 +210,7 @@ export default function VitalFormGroup(props) {
         label="Sound"
         value={values.sound}
         onChange={handleChangeValues('sound')}
+        disabled={disabled}
         margin="normal"
       />
     </FormGroup>

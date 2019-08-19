@@ -97,6 +97,7 @@ export default function ComplaintFormGroup(props) {
         label="Chief Complaint"
         value={values.complaint}
         onChange={handleChangeValues('complaint')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />
@@ -107,6 +108,7 @@ export default function ComplaintFormGroup(props) {
         label="Location"
         value={values.ocation}
         onChange={handleChangeValues('location')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -116,6 +118,7 @@ export default function ComplaintFormGroup(props) {
         label="Onset"
         value={values.onset}
         onChange={handleChangeValues('onset')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -125,6 +128,7 @@ export default function ComplaintFormGroup(props) {
         label="Provocation/Aggravate F."
         value={values.provocation}
         onChange={handleChangeValues('provocation')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -134,6 +138,7 @@ export default function ComplaintFormGroup(props) {
         label="Palliation/Alleviate F."
         value={values.palliation}
         onChange={handleChangeValues('palliation')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -143,6 +148,7 @@ export default function ComplaintFormGroup(props) {
         label="Qaulity"
         value={values.quality}
         onChange={handleChangeValues('quality')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -152,6 +158,7 @@ export default function ComplaintFormGroup(props) {
         label="Region/Radiation"
         value={values.region}
         onChange={handleChangeValues('region')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -173,10 +180,15 @@ export default function ComplaintFormGroup(props) {
             </InputAdornment>
           )
         }}
+        disabled={disabled}
         margin="normal"
       />
 
-      <FormControl margin="normal" className={classes.formGroup}>
+      <FormControl
+        margin="normal"
+        className={classes.formGroup}
+        disabled={disabled}
+      >
         <FormLabel className={classes.label} component="legend">
           {'Pain Intesnity'}
         </FormLabel>
@@ -224,10 +236,15 @@ export default function ComplaintFormGroup(props) {
         label="Timing"
         value={values.timing}
         onChange={handleChangeValues('timing')}
+        disabled={disabled}
         margin="normal"
       />
 
-      <FormControl margin="normal" className={classes.formGroup}>
+      <FormControl
+        margin="normal"
+        className={classes.formGroup}
+        disabled={disabled}
+      >
         <FormLabel className={classes.label} component="legend">
           {'Frequency'}
         </FormLabel>
@@ -275,6 +292,7 @@ export default function ComplaintFormGroup(props) {
         label="Possible Cause"
         value={values.cause}
         onChange={handleChangeValues('cause')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -284,6 +302,7 @@ export default function ComplaintFormGroup(props) {
         label="Remarks"
         value={values.remarks}
         onChange={handleChangeValues('remarks')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />

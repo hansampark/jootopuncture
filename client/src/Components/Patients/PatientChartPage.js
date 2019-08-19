@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 2),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    maxWidth: 1200
   },
   container: {
     display: 'flex',
@@ -37,6 +37,13 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     flexDirection: 'column',
     width: '100%'
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 10,
+    marginBottom: 20,
+    borderBottom: '1px solid #cccccc'
   },
   flexContainer: {
     display: 'flex',
@@ -47,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     flex: 1
   },
   tabsContainer: {
-    maxWidth: 1000,
+    maxWidth: 1200,
     minWidth: 500
   },
   tabs: {
@@ -58,6 +65,7 @@ const useStyles = makeStyles(theme => ({
     // maxWidth: 150
   },
   progress: {
+    width: '100%',
     color: '#cccccc'
   }
 }));
@@ -82,45 +90,16 @@ export default function PatientChartPage(props) {
   return (
     <div className={classes.center}>
       <Paper className={classes.paper}>
-        <Typography align="center" variant="h4" component="h1">
-          {'Patient Information'}
-        </Typography>
-        {loading && isEmpty(patient) ? (
-          <CircularProgress className={classes.progress} />
-        ) : (
-          <React.Fragment>
-            <PatientForm
-              patient={patient}
-              disabled={true}
-              onChange={() => {}}
-            />
+        <div>
+          <Typography align="center" variant="h4" component="h1">
+            {'Patient Information'}
+          </Typography>
+        </div>
 
-            <div className={classes.flexContainer}>
-              <div className={classes.flexBox} />
+        <div className={classes.container}>
+          <PatientForm patient={patient} disabled={true} />
 
-              <div className={classes.flexBox}>
-                <Typography
-                  className={classes.typography}
-                  align="center"
-                  variant="h4"
-                  component="h1"
-                >
-                  {'Charts'}
-                </Typography>
-              </div>
-
-              <div className={classes.flexBox} style={{ textAlign: 'end' }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.button}
-                  onClick={handleCreateChart}
-                >
-                  {'Create'}
-                </Button>
-              </div>
-            </div>
-
+          {patient && patient.charts && patient.charts.length > 0 && (
             <div className={classes.tabsContainer}>
               <Tabs
                 value={index}
@@ -143,10 +122,10 @@ export default function PatientChartPage(props) {
                   );
                 })}
               </Tabs>
-              <ChartForm chart={patient.charts[index]} onChange={() => {}} />
+              <ChartForm chart={patient.charts[index]} disabled />
             </div>
-          </React.Fragment>
-        )}
+          )}
+        </div>
       </Paper>
     </div>
   );

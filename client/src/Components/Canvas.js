@@ -59,6 +59,7 @@ export default class Canvas extends React.Component {
 
   render() {
     const {
+      data,
       loadTimeOffset,
       lazyRadius,
       brushRadius,
@@ -84,12 +85,15 @@ export default class Canvas extends React.Component {
         <div style={styles.canvas}>
           <CanvasDraw
             ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
+            imgSrc={src}
             canvasWidth={width}
             canvasHeight={height}
             brushRadius={lineWidth}
             brushColor={`rgba(${color.r},${color.g},${color.b},${color.a})`}
             lazyRadius={lazyRadius}
-            imgSrc={src}
+            immediateLoading={immediateLoading}
+            loadTimeOffset={loadTimeOffset}
+            disabled={disabled}
           />
         </div>
 
@@ -105,6 +109,7 @@ export default class Canvas extends React.Component {
             label={'Brush Radius'}
             type="number"
             value={lineWidth}
+            disabled={disabled}
             onChange={this.handleLineWidthChange}
           />
           <input
@@ -113,15 +118,16 @@ export default class Canvas extends React.Component {
             label={'Opacity'}
             type="number"
             value={opacity}
+            disabled={disabled}
             onChange={this.handleOpacityChange}
           />
-          <button type="button" onClick={this.handleSave}>
+          <button type="button" onClick={this.handleSave} disabled={disabled}>
             {'Save'}
           </button>
-          <button type="button" onClick={this.handleUndo}>
+          <button type="button" onClick={this.handleUndo} disabled={disabled}>
             {'Undo'}
           </button>
-          <button type="button" onClick={this.handleClear}>
+          <button type="button" onClick={this.handleClear} disabled={disabled}>
             {'Clear'}
           </button>
         </div>
@@ -129,18 +135,24 @@ export default class Canvas extends React.Component {
     );
   }
 
+  componentDidMount() {
+    const { data } = this.props;
+    const newData = JSON.stringify(data);
+
+    if (data) {
+      this.saveableCanvas.loadSaveData(newData);
+    }
+  }
+
   handleLineWidthChange = e => {
     this.setState({
       lineWidth: parseInt(e.target.value, 10) || 0
     });
-    // setValues({ ...values, brushRadius: parseInt(e.target.value, 10) || '0' });
   };
 
   handleOpacityChange = e => {
     const updatedOpacity = parseInt(e.target.value, 10);
-    // this.setState(state => ({
-    //   opacity: parseInt(e.target.value, 10) || 0
-    // }));
+
     this.setState(state => ({
       opacity: updatedOpacity,
       color: {

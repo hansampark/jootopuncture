@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function PastHistoryFormGroup(props) {
   const classes = useStyles();
-  const { onChange, info } = props;
+  const { onChange, info, disabled } = props;
   const { pastHx, medication, familyHx, allergy } = info;
   const [values, setValues] = useState({
     pastHx: pastHx || '',
@@ -42,6 +42,7 @@ export default function PastHistoryFormGroup(props) {
         label={'Significant Disease, Surgical History, Trauma, Other'}
         value={values.pastHx}
         onChange={handleChangeValues('pastHx')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />
@@ -52,6 +53,7 @@ export default function PastHistoryFormGroup(props) {
         label={'Medication'}
         value={values.medication}
         onChange={handleChangeValues('medication')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />
@@ -62,6 +64,7 @@ export default function PastHistoryFormGroup(props) {
         label={'Family Hx'}
         value={values.familyHx}
         onChange={handleChangeValues('familyHx')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />
@@ -72,6 +75,7 @@ export default function PastHistoryFormGroup(props) {
         label={'Allergy'}
         value={values.allergy}
         onChange={handleChangeValues('allergy')}
+        disabled={disabled}
         margin="normal"
         fullWidth
       />

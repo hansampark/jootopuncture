@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function IllnessFormGroup(props) {
   const classes = useStyles();
-  const { onChange, illnesses } = props;
+  const { onChange, illnesses, disabled } = props;
   const { illness, diagnosis } = illnesses;
   const [values, setValues] = useState({
     illness: illness || '',
@@ -42,6 +42,7 @@ export default function IllnessFormGroup(props) {
         }
         value={values.illness}
         onChange={handleChangeValues('illness')}
+        disabled={disabled}
         margin="normal"
         fullWidth
         multiline
@@ -57,6 +58,7 @@ export default function IllnessFormGroup(props) {
         label={'Western Medical Diagnosis (Only if the patient brings in):'}
         value={values.diagnosis}
         onChange={handleChangeValues('diagnosis')}
+        disabled={disabled}
         margin="normal"
         fullWidth
         InputLabelProps={{

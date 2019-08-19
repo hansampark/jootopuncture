@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function TongueInfoFormGroup(props) {
   const classes = useStyles();
-  const { onChange, tongue } = props;
+  const { onChange, tongue, disabled } = props;
   const { body, coat, tongueData } = tongue;
   const [values, setValues] = useState({
     body: body || {
@@ -232,6 +232,7 @@ export default function TongueInfoFormGroup(props) {
               />
             }
             label="Pale"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -240,6 +241,7 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('pink')}
                 color="primary"
                 value="pink"
+                disabled={disabled}
               />
             }
             label="Pink"
@@ -251,9 +253,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('red')}
                 color="primary"
                 value="red"
+                disabled={disabled}
               />
             }
             label="Red"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -262,9 +266,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('darkRed')}
                 color="primary"
                 value="darkRed"
+                disabled={disabled}
               />
             }
             label="Dark Red"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -273,9 +279,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('purple')}
                 color="primary"
                 value="purple"
+                disabled={disabled}
               />
             }
             label="Purple"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -284,9 +292,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('reddishPurple')}
                 color="primary"
                 value="reddishPurple"
+                disabled={disabled}
               />
             }
             label="Reddish Purple"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -295,9 +305,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('bluishPurple')}
                 color="primary"
                 value="bluishPurple"
+                disabled={disabled}
               />
             }
             label="Bluish Purple"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -306,9 +318,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('redTip')}
                 color="primary"
                 value="redTip"
+                disabled={disabled}
               />
             }
             label="Red Tip"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -317,9 +331,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('redder')}
                 color="primary"
                 value="redder"
+                disabled={disabled}
               />
             }
             label="Redder Side"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -328,9 +344,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('orange')}
                 color="primary"
                 value="orange"
+                disabled={disabled}
               />
             }
             label="Orange Side"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -339,9 +357,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyColorChange('purpleSide')}
                 color="primary"
                 value="purpleSide"
+                disabled={disabled}
               />
             }
             label="Purple Side"
+            disabled={disabled}
           />
 
           <FormLabel className={classes.label} component="legend">
@@ -354,9 +374,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('stiff')}
                 color="primary"
                 value="stiff"
+                disabled={disabled}
               />
             }
             label="Stiff"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -365,9 +387,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('long')}
                 color="primary"
                 value="long"
+                disabled={disabled}
               />
             }
             label="Long"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -376,9 +400,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('flaccid')}
                 color="primary"
                 value="flaccid"
+                disabled={disabled}
               />
             }
             label="Flaccid"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -387,9 +413,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('cracked')}
                 color="primary"
                 value="cracked"
+                disabled={disabled}
               />
             }
             label="Cracked"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -398,9 +426,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('swollen')}
                 color="primary"
                 value="swollen"
+                disabled={disabled}
               />
             }
             label="Swollen in SIdes or Tip or Center"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -409,9 +439,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('short')}
                 color="primary"
                 value="short"
+                disabled={disabled}
               />
             }
             label="Short"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -420,9 +452,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('rollUp')}
                 color="primary"
                 value="rollUp"
+                disabled={disabled}
               />
             }
             label="Rolled Up"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -431,9 +465,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('rollDown')}
                 color="primary"
                 value="rollDown"
+                disabled={disabled}
               />
             }
             label="Rolled Down"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -442,9 +478,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('ulcerate')}
                 color="primary"
                 value="ulcerate"
+                disabled={disabled}
               />
             }
             label="Ulcerate"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -453,9 +491,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('tooth')}
                 color="primary"
                 value="tooth"
+                disabled={disabled}
               />
             }
             label="Tooth-marked"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -464,9 +504,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('halfSwollen')}
                 color="primary"
                 value="halfSwollen"
+                disabled={disabled}
               />
             }
             label="Half Swollen"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -475,9 +517,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('thin')}
                 color="primary"
                 value="thin"
+                disabled={disabled}
               />
             }
             label="Thin"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -486,9 +530,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('thick')}
                 color="primary"
                 value="thick"
+                disabled={disabled}
               />
             }
             label="Thick"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -497,9 +543,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('narrow')}
                 color="primary"
                 value="narrow"
+                disabled={disabled}
               />
             }
             label="Narrow"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -508,9 +556,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('deviation')}
                 color="primary"
                 value="deviation"
+                disabled={disabled}
               />
             }
             label="Deviation"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -519,9 +569,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('trembling')}
                 color="primary"
                 value="trembling"
+                disabled={disabled}
               />
             }
             label="Trembling"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -530,9 +582,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleBodyShapeChange('normal')}
                 color="primary"
                 value="normal"
+                disabled={disabled}
               />
             }
             label="Normal"
+            disabled={disabled}
           />
         </div>
 
@@ -549,9 +603,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatColorChange('white')}
                 color="primary"
                 value="white"
+                disabled={disabled}
               />
             }
             label="White"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -560,9 +616,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatColorChange('yellow')}
                 color="primary"
                 value="yellow"
+                disabled={disabled}
               />
             }
             label="Yellow"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -571,9 +629,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatColorChange('gray')}
                 color="primary"
                 value="gray"
+                disabled={disabled}
               />
             }
             label="Gray"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -582,9 +642,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatColorChange('black')}
                 color="primary"
                 value="black"
+                disabled={disabled}
               />
             }
             label="Black"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -593,9 +655,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatColorChange('greenish')}
                 color="primary"
                 value="greenish"
+                disabled={disabled}
               />
             }
             label="Greenish"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -604,9 +668,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatColorChange('half')}
                 color="primary"
                 value="half"
+                disabled={disabled}
               />
             }
             label="Half White or Yellow"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -615,9 +681,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatColorChange('center')}
                 color="primary"
                 value="center"
+                disabled={disabled}
               />
             }
             label="Center or Side or Central Surface or Root"
+            disabled={disabled}
           />
 
           <FormLabel className={classes.label} component="legend">
@@ -630,9 +698,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('thin')}
                 color="primary"
                 value="thin"
+                disabled={disabled}
               />
             }
             label="Thin"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -641,9 +711,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('thick')}
                 color="primary"
                 value="thick"
+                disabled={disabled}
               />
             }
             label="Thick"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -652,9 +724,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('scanty')}
                 color="primary"
                 value="scanty"
+                disabled={disabled}
               />
             }
             label="Scanty"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -663,9 +737,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('none')}
                 color="primary"
                 value="none"
+                disabled={disabled}
               />
             }
             label="None"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -674,9 +750,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('dry')}
                 color="primary"
                 value="dry"
+                disabled={disabled}
               />
             }
             label="Dry"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -685,9 +763,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('wet')}
                 color="primary"
                 value="wet"
+                disabled={disabled}
               />
             }
             label="Wet"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -696,9 +776,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('slippery')}
                 color="primary"
                 value="slippery"
+                disabled={disabled}
               />
             }
             label="Slippery"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -707,9 +789,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('greasy')}
                 color="primary"
                 value="greasy"
+                disabled={disabled}
               />
             }
             label="Greasy"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -718,9 +802,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('rough')}
                 color="primary"
                 value="rough"
+                disabled={disabled}
               />
             }
             label="Rough"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -729,9 +815,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('sticky')}
                 color="primary"
                 value="sticky"
+                disabled={disabled}
               />
             }
             label="Sticky"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -740,9 +828,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('graphic')}
                 color="primary"
                 value="graphic"
+                disabled={disabled}
               />
             }
             label="Graphic"
+            disabled={disabled}
           />
           <FormControlLabel
             control={
@@ -751,9 +841,11 @@ export default function TongueInfoFormGroup(props) {
                 onChange={handleCoatQualityChange('mirror')}
                 color="primary"
                 value="mirror"
+                disabled={disabled}
               />
             }
             label="Mirror"
+            disabled={disabled}
           />
         </div>
       </div>
@@ -768,9 +860,11 @@ export default function TongueInfoFormGroup(props) {
       >
         <Canvas
           src="/images/tongue-chart.jpg"
+          data={tongueData}
           width={300}
           height={300}
           onSave={handleSave}
+          disabled={disabled}
         />
       </div>
     </FormGroup>
