@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
@@ -11,7 +11,6 @@ import {
 import { Add } from '@material-ui/icons';
 import api from '../../lib/api';
 import PatientList from './PatientList';
-import PatientFormModal from './PatientFormModal';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -93,6 +92,6 @@ export default function PatientListPage(props) {
   }
 
   function handleChartClick(patientId) {
-    props.history.push(`/patientList/${patientId}/charts`);
+    props.history.push(`/patients/${patientId}/charts`);
   }
 }

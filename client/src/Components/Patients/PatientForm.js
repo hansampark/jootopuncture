@@ -1,5 +1,3 @@
-// Currently not used.
-// might be used in future
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -53,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function PatientForm(props) {
   const classes = useStyles();
-  const { onChange, patient } = props;
+  const { onChange, disabled, patient } = props;
   const { firstName, lastName, middleName, email, dob, phone, sex } = patient;
 
   return (
@@ -65,6 +63,7 @@ export default function PatientForm(props) {
         value={firstName}
         onChange={onChange('firstName')}
         autoFocus
+        disabled={disabled}
         margin="normal"
       />
 
@@ -74,6 +73,7 @@ export default function PatientForm(props) {
         className={classes.nameField}
         value={middleName}
         onChange={onChange('middleName')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -83,6 +83,7 @@ export default function PatientForm(props) {
         className={classes.nameField}
         value={lastName}
         onChange={onChange('lastName')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -92,6 +93,7 @@ export default function PatientForm(props) {
         className={classes.textField}
         value={email}
         onChange={onChange('email')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -102,6 +104,7 @@ export default function PatientForm(props) {
         className={classes.nameField}
         value={dob}
         onChange={onChange('dob')}
+        disabled={disabled}
         margin="normal"
         InputLabelProps={{
           shrink: true
@@ -114,6 +117,7 @@ export default function PatientForm(props) {
         className={classes.nameField}
         value={phone}
         onChange={onChange('phone')}
+        disabled={disabled}
         margin="normal"
       />
       <FormControl margin="normal" className={classes.formGroup}>
@@ -123,15 +127,31 @@ export default function PatientForm(props) {
         <RadioGroup
           row
           className={classes.radioGroup}
+          value={sex}
           onChange={onChange('sex')}
+          disabled={disabled}
         >
           <FormControlLabel
             value="Female"
-            control={<Radio />}
+            checked={sex === 'Female'}
+            control={<Radio color="primary" />}
             label={'Female'}
+            disabled={disabled}
           />
-          <FormControlLabel value="Male" control={<Radio />} label={'Male'} />
-          <FormControlLabel value="Other" control={<Radio />} label={'Other'} />
+          <FormControlLabel
+            value="Male"
+            checked={sex === 'Male'}
+            control={<Radio color="primary" />}
+            label={'Male'}
+            disabled={disabled}
+          />
+          <FormControlLabel
+            value="Other"
+            checked={sex === 'Other'}
+            control={<Radio color="primary" />}
+            label={'Other'}
+            disabled={disabled}
+          />
         </RadioGroup>
       </FormControl>
     </FormGroup>

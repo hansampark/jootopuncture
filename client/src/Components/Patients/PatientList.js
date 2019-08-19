@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
 export default function PatientList(props) {
   const classes = useStyles();
   const { _id, firstName, lastName, email, dob, phone } = props.data;
+  console.log('[_id]', _id, typeof _id);
 
   return (
     <ListItem className={classes.root}>
@@ -33,7 +34,7 @@ export default function PatientList(props) {
         {phone}
       </Grid>
       <Grid item xs={1}>
-        <Button onClick={() => props.onClick(_id)}>Chart</Button>
+        <Button onClick={() => props.onClick(_id)}>{'Chart'}</Button>
       </Grid>
     </ListItem>
   );

@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core';
 import api from '../../lib/api';
 import PatientForm from './PatientForm';
-import ChartForm from './ChartForm';
+import ChartForm from '../Charts/ChartForm';
 
 const useStyles = makeStyles(theme => ({
   title: {
