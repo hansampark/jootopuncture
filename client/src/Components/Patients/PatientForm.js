@@ -1,6 +1,4 @@
-// Currently not used.
-// might be used in future
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   FormGroup,
@@ -53,8 +51,25 @@ const useStyles = makeStyles(theme => ({
 
 export default function PatientForm(props) {
   const classes = useStyles();
-  const { onChange, patient } = props;
+  const { onChange, patient, disabled } = props;
   const { firstName, lastName, middleName, email, dob, phone, sex } = patient;
+  const [values, setValues] = useState({
+    firstName: firstName || '',
+    lastName: lastName || '',
+    middleName: middleName || '',
+    email: email || '',
+    dob: dob || '',
+    phone: phone || '',
+    sex: sex || ''
+  });
+
+  const handleValueChange = name => event => {
+    setValues({ ...values, [name]: event.target.value });
+
+    if (onChange) {
+      onChange({ ...values, [name]: event.target.value });
+    }
+  };
 
   return (
     <FormGroup className={classes.row}>
@@ -62,9 +77,10 @@ export default function PatientForm(props) {
         id="firstName"
         label="First Name"
         className={classes.nameField}
-        value={firstName}
-        onChange={onChange('firstName')}
+        value={values.firstName}
+        onChange={handleValueChange('firstName')}
         autoFocus
+        disabled={disabled}
         margin="normal"
       />
 
@@ -72,8 +88,9 @@ export default function PatientForm(props) {
         id="middleName"
         label="Middle Name"
         className={classes.nameField}
-        value={middleName}
-        onChange={onChange('middleName')}
+        value={values.middleName}
+        onChange={handleValueChange('middleName')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -81,8 +98,9 @@ export default function PatientForm(props) {
         id="lastName"
         label="Last Name"
         className={classes.nameField}
-        value={lastName}
-        onChange={onChange('lastName')}
+        value={values.lastName}
+        onChange={handleValueChange('lastName')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -90,8 +108,9 @@ export default function PatientForm(props) {
         id="email"
         label="Email"
         className={classes.textField}
-        value={email}
-        onChange={onChange('email')}
+        value={values.email}
+        onChange={handleValueChange('email')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -100,8 +119,9 @@ export default function PatientForm(props) {
         label="Date of Birth"
         type="date"
         className={classes.nameField}
-        value={dob}
-        onChange={onChange('dob')}
+        value={values.dob}
+        onChange={handleValueChange('dob')}
+        disabled={disabled}
         margin="normal"
         InputLabelProps={{
           shrink: true
@@ -112,26 +132,47 @@ export default function PatientForm(props) {
         id="phone"
         label="Phone"
         className={classes.nameField}
-        value={phone}
-        onChange={onChange('phone')}
+        value={values.phone}
+        onChange={handleValueChange('phone')}
+        disabled={disabled}
         margin="normal"
       />
-      <FormControl margin="normal" className={classes.formGroup}>
+      <FormControl
+        margin="normal"
+        className={classes.formGroup}
+        disabled={disabled}
+      >
         <FormLabel className={classes.label} component="legend">
           {'Gender'}
         </FormLabel>
         <RadioGroup
           row
           className={classes.radioGroup}
-          onChange={onChange('sex')}
+          value={values.sex}
+          onChange={handleValueChange('sex')}
+          disabled={disabled}
         >
           <FormControlLabel
             value="Female"
-            control={<Radio />}
+            checked={values.sex === 'Female'}
+            control={<Radio color="primary" disabled={disabled} />}
             label={'Female'}
+            disabled={disabled}
           />
-          <FormControlLabel value="Male" control={<Radio />} label={'Male'} />
-          <FormControlLabel value="Other" control={<Radio />} label={'Other'} />
+          <FormControlLabel
+            value="Male"
+            checked={values.sex === 'Male'}
+            control={<Radio color="primary" disabled={disabled} />}
+            label={'Male'}
+            disabled={disabled}
+          />
+          <FormControlLabel
+            value="Other"
+            checked={values.sex === 'Other'}
+            control={<Radio color="primary" disabled={disabled} />}
+            label={'Other'}
+            disabled={disabled}
+          />
         </RadioGroup>
       </FormControl>
     </FormGroup>

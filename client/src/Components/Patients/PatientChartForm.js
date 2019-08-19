@@ -1,22 +1,9 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Grid,
-  Paper,
-  FormGroup,
-  FormControl,
-  FormLabel,
-  TextField,
-  RadioGroup,
-  Radio,
-  FormControlLabel,
-  Typography,
-  Button,
-  CircularProgress
-} from '@material-ui/core';
+import { Paper, Typography, Button, CircularProgress } from '@material-ui/core';
 import api from '../../lib/api';
 import PatientForm from './PatientForm';
-import ChartForm from './ChartForm';
+import ChartForm from '../Charts/ChartForm';
 
 const useStyles = makeStyles(theme => ({
   center: {
@@ -27,11 +14,12 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto',
     minHeight: 'min-content'
   },
-  root: {
+  paper: {
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    maxWidth: 1200
   },
   container: {
     display: 'flex',
@@ -91,89 +79,156 @@ const useStyles = makeStyles(theme => ({
 
 export default function Patient(props) {
   const classes = useStyles();
-  const [patient, setPatient] = useState({
-    firstName: '',
-    lastName: '',
-    middleName: '',
-    email: '',
-    dob: '',
-    phone: '',
-    sex: ''
-  });
-  const [chart, setChart] = useState({
-    height: '',
-    weight: '',
-    temp: '',
-    bp: '',
-    heart: '',
-    rhythm: '',
-    lung: '',
-    sound: ''
-  });
-  const [toggle, setToggle] = useState(false);
+  const [patient, setPatient] = useState({});
+
+  const [vitals, setVitals] = useState({});
+  const [complaints, setComplaints] = useState({});
+  const [illnesses, setIllnesses] = useState({});
+  const [info, setInfo] = useState({});
+  const [questionaire, setQuestionaire] = useState({});
+  const [review, setReview] = useState({});
+  const [women, setWomen] = useState({});
+  const [tongue, setTongue] = useState({});
+  const [pulse, setPulse] = useState({});
+  const [diagnosis, setDiagnosis] = useState({});
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handlePatientChange = name => event => {
-    setPatient({ ...patient, [name]: event.target.value });
+  const handlePatientChange = patient => {
+    setPatient(patient);
   };
 
-  const handleChartChange = name => event => {
-    setChart({ ...chart, [name]: event.target.value });
+  const handleVitalChange = vitals => {
+    setVitals(vitals);
+  };
+
+  const handleComplaintChange = complaints => {
+    setComplaints(complaints);
+  };
+
+  const handleIllnessChange = illnesses => {
+    setIllnesses(illnesses);
+  };
+
+  const handleInfoChange = info => {
+    setInfo(info);
+  };
+
+  const handleQuestionaireChange = questionaire => {
+    setQuestionaire(questionaire);
+  };
+
+  const handleReviewChange = review => {
+    setReview(review);
+  };
+
+  const handleWomenChange = women => {
+    setWomen(women);
+  };
+
+  const handleTongueChange = tongue => {
+    setTongue(tongue);
+  };
+
+  const handlePulseChange = pulse => {
+    setPulse(pulse);
+  };
+
+  const handleDiagnosisChange = diagnosis => {
+    setDiagnosis(diagnosis);
   };
 
   return (
-    <Grid item>
-      <div className={classes.center}>
-        <Paper className={classes.root}>
-          <div>
-            <Typography align="center" variant="h4" component="h1">
-              {'Patient Form'}
-            </Typography>
-          </div>
+    <div className={classes.center}>
+      <Paper className={classes.paper}>
+        <div>
+          <Typography align="center" variant="h4" component="h1">
+            {'Patient Form'}
+          </Typography>
+        </div>
 
-          <form className={classes.container}>
-            <PatientForm onChange={handlePatientChange} patient={patient} />
+        <form className={classes.container}>
+          <PatientForm
+            onChange={handlePatientChange}
+            patient={patient}
+            disabled={false}
+          />
 
-            <Button color="primary" onClick={handleToggle}>
-              {'Create Chart'}
-            </Button>
+          <ChartForm
+            chart={{
+              vitals,
+              complaints,
+              illnesses,
+              info,
+              questionaire,
+              review,
+              women,
+              tongue,
+              pulse,
+              diagnosis
+            }}
+            onVitalChange={handleVitalChange}
+            onComplaintChange={handleComplaintChange}
+            onIllnessChange={handleIllnessChange}
+            onInfoChange={handleInfoChange}
+            onQuestionaireChange={handleQuestionaireChange}
+            onReviewChange={handleReviewChange}
+            onWomenChange={handleWomenChange}
+            onTongueChange={handleTongueChange}
+            onPulseChange={handlePulseChange}
+            onDiagnosisChange={handleDiagnosisChange}
+            disabled={false}
+          />
 
-            {toggle && <ChartForm onChange={handleChartChange} chart={chart} />}
-
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              disabled={!!error}
-              onClick={e => handleSubmit(e, patient, chart)}
-            >
-              {loading ? (
-                <CircularProgress
-                  style={{ width: 24, height: 24 }}
-                  className={classes.progress}
-                />
-              ) : (
-                'Create Patient'
-              )}
-            </Button>
-          </form>
-        </Paper>
-      </div>
-    </Grid>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            disabled={!!error}
+            onClick={handleSubmit}
+          >
+            {loading ? (
+              <CircularProgress
+                style={{ width: 24, height: 24 }}
+                className={classes.progress}
+              />
+            ) : (
+              'Create Patient'
+            )}
+          </Button>
+        </form>
+      </Paper>
+    </div>
   );
 
-  function handleToggle() {
-    setToggle(!toggle);
-  }
-
-  async function handleSubmit(e, patient, chart) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
+    const params = {
+      vitals: {
+        ...vitals,
+        height: `${vitals.ft}-${vitals.inch}`,
+        bp: `${vitals.bp1}/${vitals.bp2}`
+      },
+      complaints,
+      illnesses,
+      info,
+      questionaire,
+      review,
+      women,
+      tongue,
+      pulse,
+      diagnosis
+    };
+
     try {
-      const data = await api.post('/patients', { patient, chart });
+      const data = await api.post('/patients', {
+        patient,
+        chart: params
+      });
       setLoading(false);
       props.history.push('/patients');
       return data;
