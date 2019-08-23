@@ -17,7 +17,8 @@ const patientSchema = new Schema({
   phone: { type: String, required: true },
   sex: {
     type: String,
-    enum: ['Male', 'Female', 'Other']
+    enum: ['MALE', 'FEMALE', 'OTHER'].concat([null]),
+    default: null
   },
   appointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }],
   charts: [{ type: Schema.Types.ObjectId, ref: 'Chart' }]

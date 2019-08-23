@@ -67,7 +67,7 @@ const chartSchema = new Schema({
     },
     sleep: String,
     pain: String,
-    conciousness: String,
+    consciousness: String,
     energy: String,
     stress: String
   },
