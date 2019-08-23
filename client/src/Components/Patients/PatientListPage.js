@@ -14,10 +14,12 @@ import PatientList from './PatientList';
 
 const useStyles = makeStyles(theme => ({
   paper: {
+    boxSizing: 'border-box',
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    maxWidth: 992
   },
   list: {
     width: '100%',

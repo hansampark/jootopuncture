@@ -27,11 +27,12 @@ const useStyles = makeStyles(theme => ({
     minHeight: 'min-content'
   },
   paper: {
+    boxSizing: 'border-box',
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
     display: 'flex',
     flexDirection: 'column',
-    maxWidth: 1200
+    maxWidth: 992
   },
   container: {
     display: 'flex',
