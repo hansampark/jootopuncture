@@ -234,7 +234,7 @@ export default function SystemicReviewFormGroup(props) {
         <Canvas
           src="/images/body-diagram.jpg"
           data={reviewData}
-          width={950}
+          width={918}
           height={440}
           onSave={handleSave}
           disabled={disabled}

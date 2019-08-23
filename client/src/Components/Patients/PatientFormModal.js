@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -6,18 +7,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Divider,
-  FormGroup,
-  FormControl,
-  FormLabel,
-  InputLabel,
-  Select,
-  TextField,
-  MenuItem
+  CircularProgress
 } from '@material-ui/core';
 import api from '../../lib/api';
 import PatientForm from './PatientForm';
-import ChartForm from '../Charts/ChartForm';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -33,16 +26,24 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: 120
+  },
+  progress: {
+    color: '#ffffff'
   }
 }));
 
 export default function PatientFormModal(props) {
-  const { open, onClose } = props;
+  const { open, patient, onClose } = props;
   const classes = useStyles();
 
+  const [updatedPatient, setPatient] = useState(props.patient);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(null);
-  const [chart, setChart] = useState(false);
+
+  const handlePatientChange = patient => {
+    setPatient(patient);
+    setErrors(null);
+  };
 
   return (
     <Dialog
@@ -52,17 +53,16 @@ export default function PatientFormModal(props) {
       aria-describedby="patient-form"
     >
       <DialogTitle id="appointment-form-title" className={classes.title}>
-        {'Patient Form'}
+        {'Edit Patient'}
       </DialogTitle>
       <DialogContent>
         <form className={classes.form}>
-          <PatientForm />
-
-          {chart && (
-            <React.Fragment>
-              <Divider /> <ChartForm />
-            </React.Fragment>
-          )}
+          <PatientForm
+            patient={patient}
+            errors={errors}
+            onChange={handlePatientChange}
+            disabled={false}
+          />
         </form>
       </DialogContent>
       <DialogActions>
@@ -74,34 +74,60 @@ export default function PatientFormModal(props) {
           {'Cancel'}
         </Button>
         <Button
+          type="submit"
           className={classes.button}
           variant="contained"
           color="primary"
+          onClick={handleSubmit}
+          disabled={errors}
           autoFocus
         >
-          {'Save'}
+          {loading ? (
+            <CircularProgress
+              style={{ width: 24, height: 24 }}
+              className={classes.progress}
+            />
+          ) : (
+            'Save'
+          )}
         </Button>
       </DialogActions>
     </Dialog>
   );
 
-  function createChart() {
-    setChart(true);
-  }
-
-  async function handleSubmit(e, patient, chart) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    const { onSubmit, onClose } = props;
     setLoading(true);
     setErrors(null);
 
-    try {
-      const data = await api.post('/patients', { patient, chart });
-      setLoading(false);
+    const validationErrors = {};
 
-      return data;
-    } catch (err) {
+    if (updatedPatient.firstName.length === 0) {
+      validationErrors.firstName = 'First Name is required.';
+    }
+    if (updatedPatient.lastName.length === 0) {
+      validationErrors.lastName = 'Last Name is required.';
+    }
+    if (updatedPatient.phone.length === 0) {
+      validationErrors.phone = 'Phone number is required.';
+    }
+
+    if (!isEmpty(validationErrors)) {
+      setErrors(validationErrors);
       setLoading(false);
-      setErrors(err);
+    } else {
+      try {
+        const data = await api.put(`/patients/${props.patient._id}`, {
+          patient: updatedPatient
+        });
+        setLoading(false);
+        onSubmit(data);
+        onClose();
+      } catch (err) {
+        setLoading(false);
+        setErrors(err);
+      }
     }
   }
 }

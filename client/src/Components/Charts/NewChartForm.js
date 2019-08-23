@@ -9,7 +9,6 @@ import ChartForm from '../Charts/ChartForm';
 const useStyles = makeStyles(theme => ({
   center: {
     width: '100%',
-    height: '100vh',
     display: 'flex',
     justifyContent: 'center',
     overflow: 'auto',
@@ -20,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 2),
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center'
+    maxWidth: 1200
   },
   container: {
     display: 'flex',
@@ -45,30 +44,66 @@ export default function CreateChartPage(props) {
   const [patient, setPatient] = useState({});
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState(null);
-  const [chart, setChart] = useState({
-    date: '',
-    height: '',
-    weight: '',
-    temp: '',
-    bp: '',
-    heart: '',
-    rhythm: '',
-    lung: '',
-    sound: '',
-    complaint: '',
-    location: '',
-    onset: '',
-    provocation: '',
-    palliation: '',
-    quality: '',
-    region: '',
-    severity: '',
-    frequency: '',
-    timing: '',
-    cause: '',
-    remarks: '',
-    illness: ''
-  });
+  const [vitals, setVitals] = useState({});
+  const [complaints, setComplaints] = useState({});
+  const [illnesses, setIllnesses] = useState({});
+  const [info, setInfo] = useState({});
+  const [questionaire, setQuestionaire] = useState({});
+  const [review, setReview] = useState({});
+  const [women, setWomen] = useState({});
+  const [tongue, setTongue] = useState({});
+  const [pulse, setPulse] = useState({});
+  const [diagnosis, setDiagnosis] = useState({});
+
+  const handleVitalChange = vitals => {
+    setVitals(vitals);
+    setErrors(null);
+  };
+
+  const handleComplaintChange = complaints => {
+    setComplaints(complaints);
+    setErrors(null);
+  };
+
+  const handleIllnessChange = illnesses => {
+    setIllnesses(illnesses);
+    setErrors(null);
+  };
+
+  const handleInfoChange = info => {
+    setInfo(info);
+    setErrors(null);
+  };
+
+  const handleQuestionaireChange = questionaire => {
+    setQuestionaire(questionaire);
+    setErrors(null);
+  };
+
+  const handleReviewChange = review => {
+    setReview(review);
+    setErrors(null);
+  };
+
+  const handleWomenChange = women => {
+    setWomen(women);
+    setErrors(null);
+  };
+
+  const handleTongueChange = tongue => {
+    setTongue(tongue);
+    setErrors(null);
+  };
+
+  const handlePulseChange = pulse => {
+    setPulse(pulse);
+    setErrors(null);
+  };
+
+  const handleDiagnosisChange = diagnosis => {
+    setDiagnosis(diagnosis);
+    setErrors(null);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,72 +115,120 @@ export default function CreateChartPage(props) {
     fetchData();
   }, [patientId]);
 
-  const handleChartChange = name => event => {
-    setChart({ ...chart, [name]: event.target.value });
+  const expanded = {
+    vitalField: true,
+    complaintField: false,
+    illnessField: false,
+    infoField: false,
+    questionaireField: false,
+    reviewField: false,
+    womenField: false,
+    tongueField: false,
+    pulseField: false,
+    diagnosisField: false
   };
 
   return (
     <div className={classes.center}>
       <Paper className={classes.paper}>
-        <Typography align="center" variant="h4" component="h1">
-          {'Patient Information'}
-        </Typography>
-        {loading && isEmpty(patient) ? (
-          <CircularProgress className={classes.progress} />
-        ) : (
-          <div>
-            <PatientForm
-              patient={patient}
-              disabled={true}
-              onChange={() => {}}
+        <div>
+          <Typography align="center" variant="h4" component="h1">
+            {'Patient Information'}
+          </Typography>
+        </div>
+
+        <div>
+          <PatientForm patient={patient} disabled={true} />
+
+          <form className={classes.container}>
+            <ChartForm
+              chart={{
+                vitals,
+                complaints,
+                illnesses,
+                info,
+                questionaire,
+                review,
+                women,
+                tongue,
+                pulse,
+                diagnosis
+              }}
+              expanded={expanded}
+              onVitalChange={handleVitalChange}
+              onComplaintChange={handleComplaintChange}
+              onIllnessChange={handleIllnessChange}
+              onInfoChange={handleInfoChange}
+              onQuestionaireChange={handleQuestionaireChange}
+              onReviewChange={handleReviewChange}
+              onWomenChange={handleWomenChange}
+              onTongueChange={handleTongueChange}
+              onPulseChange={handlePulseChange}
+              onDiagnosisChange={handleDiagnosisChange}
+              disabled={false}
             />
 
-            <form className={classes.container}>
-              <Paper className={classes.paper}>
-                <Typography align="center" variant="h4" component="h1">
-                  {'Create Chart'}
-                </Typography>
-
-                <ChartForm chart={chart} onChange={handleChartChange} />
-
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.button}
-                  disabled={!!errors}
-                  onClick={e => handleSubmit(e, chart)}
-                >
-                  {loading ? (
-                    <CircularProgress
-                      style={{ width: 24, height: 24 }}
-                      className={classes.progress}
-                    />
-                  ) : (
-                    'Create Patient'
-                  )}
-                </Button>
-              </Paper>
-            </form>
-          </div>
-        )}
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              disabled={!!errors}
+              onClick={handleSubmit}
+            >
+              {loading ? (
+                <CircularProgress
+                  style={{ width: 24, height: 24 }}
+                  className={classes.progress}
+                />
+              ) : (
+                'Create Patient'
+              )}
+            </Button>
+          </form>
+        </div>
       </Paper>
     </div>
   );
 
-  async function handleSubmit(e, chart) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     setErrors(null);
-    console.log('[chart]', chart);
 
-    try {
-      const data = await api.post(`/patients/${patientId}/charts`, { chart });
+    const params = {
+      vitals: {
+        ...vitals,
+        height: vitals.feet && vitals.inch ? `${vitals.ft}-${vitals.inch}` : '',
+        bp: vitals.bp1 && vitals.bp2 ? `${vitals.bp1}/${vitals.bp2}` : ''
+      },
+      complaints,
+      illnesses,
+      info,
+      questionaire,
+      review,
+      women,
+      tongue,
+      pulse,
+      diagnosis
+    };
+    const validationErrors = {};
+    // Add validation check for new chart creation
+    if (!isEmpty(validationErrors)) {
+      setErrors(validationErrors);
       setLoading(false);
-      props.history.push(`/patients/${patientId}/charts`);
-      return data;
-    } catch (err) {
-      setLoading(false);
-      setErrors(err);
+    } else {
+      try {
+        const data = await api.post(`/patients/${patientId}/charts`, {
+          chart: params
+        });
+        console.log('[data]', data);
+        setLoading(false);
+        props.history.push(`/patients/${patientId}/charts/${data._id}`);
+        return data;
+      } catch (err) {
+        setLoading(false);
+        setErrors(err);
+      }
     }
   }
 }

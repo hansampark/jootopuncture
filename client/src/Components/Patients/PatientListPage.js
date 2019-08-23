@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
@@ -92,6 +92,7 @@ export default function PatientListPage(props) {
   }
 
   function handleChartClick(patientId) {
-    props.history.push(`/patients/${patientId}/charts`);
+    const charts = data.find(patient => patient._id === patientId).charts;
+    props.history.push(`/patients/${patientId}/charts/${charts[0]._id}`);
   }
 }

@@ -66,18 +66,53 @@ const useStyles = makeStyles(theme => ({
 
 export default function ChartForm(props) {
   const classes = useStyles();
-  const [vitalFieldExpanded, setVitalFieldExpanded] = useState(true);
-  const [complaintFieldExpanded, setComplaintFieldExpanded] = useState(false);
-  const [illnessFieldExpanded, setIllnessFieldExpanded] = useState(false);
-  const [historyFieldExpanded, setHistoryFieldExpanded] = useState(false);
-  const [questionaireFieldExpanded, setQuestionaireFieldExpanded] = useState(
-    false
+  const {
+    match,
+    chart,
+    expanded,
+    onVitalChange,
+    onComplaintChange,
+    onIllnessChange,
+    onInfoChange,
+    onQuestionaireChange,
+    onReviewChange,
+    onWomenChange,
+    onTongueChange,
+    onPulseChange,
+    onDiagnosisChange,
+    disabled
+  } = props;
+
+  const [vitalFieldExpanded, setVitalFieldExpanded] = useState(
+    expanded.vitalField
   );
-  const [reviewFieldExpanded, setReviewFieldExpanded] = useState(false);
-  const [womenFieldExpanded, setWomenFieldExpanded] = useState(false);
-  const [tongueFieldExpanded, setTongueFieldExpanded] = useState(false);
-  const [pulseFieldExpanded, setPulseFieldExpanded] = useState(false);
-  const [diagnosisFieldExpanded, setDiagnosisFieldExpanded] = useState(false);
+  const [complaintFieldExpanded, setComplaintFieldExpanded] = useState(
+    expanded.complaintField
+  );
+  const [illnessFieldExpanded, setIllnessFieldExpanded] = useState(
+    expanded.illnessField
+  );
+  const [historyFieldExpanded, setHistoryFieldExpanded] = useState(
+    expanded.infoField
+  );
+  const [questionaireFieldExpanded, setQuestionaireFieldExpanded] = useState(
+    expanded.questionaireField
+  );
+  const [reviewFieldExpanded, setReviewFieldExpanded] = useState(
+    expanded.reviewField
+  );
+  const [womenFieldExpanded, setWomenFieldExpanded] = useState(
+    expanded.womenField
+  );
+  const [tongueFieldExpanded, setTongueFieldExpanded] = useState(
+    expanded.tongueField
+  );
+  const [pulseFieldExpanded, setPulseFieldExpanded] = useState(
+    expanded.pulseField
+  );
+  const [diagnosisFieldExpanded, setDiagnosisFieldExpanded] = useState(
+    expanded.diagnosisField
+  );
 
   function handleVitalFieldToggle() {
     setVitalFieldExpanded(!vitalFieldExpanded);
@@ -119,20 +154,18 @@ export default function ChartForm(props) {
     setDiagnosisFieldExpanded(!diagnosisFieldExpanded);
   }
 
-  const {
-    chart,
-    onVitalChange,
-    onComplaintChange,
-    onIllnessChange,
-    onInfoChange,
-    onQuestionaireChange,
-    onReviewChange,
-    onWomenChange,
-    onTongueChange,
-    onPulseChange,
-    onDiagnosisChange,
-    disabled
-  } = props;
+  // const prevId = usePrevious(match.params.chartId);
+  // console.log('[prevId]', prevId);
+  // console.log('[props.match.params]', props.match.params);
+
+  // function usePrevious(value) {
+  //   const ref = useRef();
+
+  //   useEffect(() => {
+  //     ref.current = value;
+  //   }, [value]);
+  //   return ref.current;
+  // }
 
   const {
     date,

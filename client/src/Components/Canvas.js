@@ -37,7 +37,7 @@ export default class Canvas extends React.Component {
       r: 255,
       g: 0,
       b: 0,
-      a: 0.3
+      a: 0.5
     },
     catenaryColor: '#0a0302',
     gridColor: 'rgba(150,150,150,0.17)',
@@ -137,10 +137,10 @@ export default class Canvas extends React.Component {
 
   componentDidMount() {
     const { data } = this.props;
-    const newData = JSON.stringify(data);
+    const stringifyData = JSON.stringify(data);
 
     if (data) {
-      this.saveableCanvas.loadSaveData(newData);
+      this.saveableCanvas.loadSaveData(stringifyData);
     }
   }
 

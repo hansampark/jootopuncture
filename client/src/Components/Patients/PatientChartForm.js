@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Typography, Button, CircularProgress } from '@material-ui/core';
@@ -8,7 +9,6 @@ import ChartForm from '../Charts/ChartForm';
 const useStyles = makeStyles(theme => ({
   center: {
     width: '100%',
-    height: '100vh',
     display: 'flex',
     justifyContent: 'center',
     overflow: 'auto',
@@ -29,47 +29,8 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     width: '100%'
   },
-  row: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingBottom: 10,
-    marginBottom: 20,
-    borderBottom: '1px solid #cccccc'
-  },
-  nameField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    [theme.breakpoints.down('xs')]: {
-      width: 100
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: 150
-    }
-  },
-  label: {
-    fontSize: 12
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 250
-  },
-
-  formGroup: {
-    borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
-  },
-  radioGroup: {
-    marginBottom: -3,
-    marginTop: -4
-  },
   button: {
     margin: theme.spacing(10),
-    width: 200
-  },
-  dense: {
-    marginTop: 19
-  },
-  menu: {
     width: 200
   },
   progress: {
@@ -93,50 +54,74 @@ export default function Patient(props) {
   const [diagnosis, setDiagnosis] = useState({});
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState(null);
 
   const handlePatientChange = patient => {
     setPatient(patient);
+    setErrors(null);
   };
 
   const handleVitalChange = vitals => {
     setVitals(vitals);
+    setErrors(null);
   };
 
   const handleComplaintChange = complaints => {
     setComplaints(complaints);
+    setErrors(null);
   };
 
   const handleIllnessChange = illnesses => {
     setIllnesses(illnesses);
+    setErrors(null);
   };
 
   const handleInfoChange = info => {
     setInfo(info);
+    setErrors(null);
   };
 
   const handleQuestionaireChange = questionaire => {
     setQuestionaire(questionaire);
+    setErrors(null);
   };
 
   const handleReviewChange = review => {
     setReview(review);
+    setErrors(null);
   };
 
   const handleWomenChange = women => {
     setWomen(women);
+    setErrors(null);
   };
 
   const handleTongueChange = tongue => {
     setTongue(tongue);
+    setErrors(null);
   };
 
   const handlePulseChange = pulse => {
     setPulse(pulse);
+    setErrors(null);
   };
 
   const handleDiagnosisChange = diagnosis => {
     setDiagnosis(diagnosis);
+    setErrors(null);
+  };
+
+  const expanded = {
+    vitalField: true,
+    complaintField: false,
+    illnessField: false,
+    infoField: false,
+    questionaireField: false,
+    reviewField: false,
+    womenField: false,
+    tongueField: false,
+    pulseField: false,
+    diagnosisField: false
   };
 
   return (
@@ -152,6 +137,7 @@ export default function Patient(props) {
           <PatientForm
             onChange={handlePatientChange}
             patient={patient}
+            errors={errors}
             disabled={false}
           />
 
@@ -168,6 +154,7 @@ export default function Patient(props) {
               pulse,
               diagnosis
             }}
+            expanded={expanded}
             onVitalChange={handleVitalChange}
             onComplaintChange={handleComplaintChange}
             onIllnessChange={handleIllnessChange}
@@ -185,7 +172,7 @@ export default function Patient(props) {
             variant="contained"
             color="primary"
             className={classes.button}
-            disabled={!!error}
+            disabled={!!errors}
             onClick={handleSubmit}
           >
             {loading ? (
@@ -205,13 +192,13 @@ export default function Patient(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setErrors(null);
 
     const params = {
       vitals: {
         ...vitals,
-        height: `${vitals.ft}-${vitals.inch}`,
-        bp: `${vitals.bp1}/${vitals.bp2}`
+        height: vitals.feet && vitals.inch ? `${vitals.ft}-${vitals.inch}` : '',
+        bp: vitals.bp1 && vitals.bp2 ? `${vitals.bp1}/${vitals.bp2}` : ''
       },
       complaints,
       illnesses,
@@ -223,18 +210,41 @@ export default function Patient(props) {
       pulse,
       diagnosis
     };
+    const validationErrors = {};
 
-    try {
-      const data = await api.post('/patients', {
-        patient,
-        chart: params
-      });
+    if (isEmpty(patient)) {
+      validationErrors.firstName = 'First Name is required.';
+      validationErrors.lastName = 'Last Name is required.';
+      validationErrors.phone = 'Phone number is required.';
+    } else {
+      if (!patient.firstName) {
+        validationErrors.firstName = 'First Name is required.';
+      }
+      if (!patient.lastName) {
+        validationErrors.lastName = 'Last Name is required.';
+      }
+      if (!patient.phone) {
+        validationErrors.phone = 'Phone number is required.';
+      }
+    }
+    // Add validation check for new chart creation
+
+    if (!isEmpty(validationErrors)) {
+      setErrors(validationErrors);
       setLoading(false);
-      props.history.push('/patients');
-      return data;
-    } catch (err) {
-      setLoading(false);
-      setError(err);
+    } else {
+      try {
+        const data = await api.post('/patients', {
+          patient,
+          chart: params
+        });
+        setLoading(false);
+        props.history.push('/patients');
+        return data;
+      } catch (err) {
+        setLoading(false);
+        setErrors(err);
+      }
     }
   }
 }
