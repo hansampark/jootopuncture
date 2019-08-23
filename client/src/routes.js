@@ -6,7 +6,7 @@ import Signup from './Components/Auth/Signup';
 import Calendar from './Components/Calendar';
 import PatientListPage from './Components/Patients/PatientListPage';
 import PatientChartForm from './Components/Patients/PatientChartForm';
-import CreateChartPage from './Components/Charts/CreateChartPage';
+import NewChartForm from './Components/Charts/NewChartForm';
 import PatientChartPage from './Components/Patients/PatientChartPage';
 
 import ResetPasswordForm from './Components/Auth/ResetPasswordForm';
@@ -29,9 +29,13 @@ const appRoutes = [
     component: PatientListPage,
     exact: true
   },
-  { path: '/patients/:patientId/create-chart', component: CreateChartPage },
   {
     path: '/patients/:patientId/charts',
+    component: NewChartForm,
+    exact: true
+  },
+  {
+    path: '/patients/:patientId/charts/:chartId',
     component: PatientChartPage
   }
 ];

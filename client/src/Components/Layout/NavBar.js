@@ -9,7 +9,6 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText,
   CircularProgress
 } from '@material-ui/core';
 import { fade, makeStyles } from '@material-ui/core/styles';

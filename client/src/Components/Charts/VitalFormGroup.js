@@ -29,6 +29,16 @@ const useStyles = makeStyles(theme => ({
       width: 150
     }
   },
+  numberField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    [theme.breakpoints.down('xs')]: {
+      width: 100
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: 100
+    }
+  },
   adornment: {
     fontSize: 12
   }
@@ -91,7 +101,7 @@ export default function VitalFormGroup(props) {
       />
 
       <TextField
-        className={classes.textField}
+        className={classes.numberField}
         id="weight"
         label="Weight"
         type="number"
@@ -109,7 +119,7 @@ export default function VitalFormGroup(props) {
       />
 
       <TextField
-        className={classes.textField}
+        className={classes.numberField}
         id="temp"
         label="Temperature"
         type="number"
@@ -142,7 +152,7 @@ export default function VitalFormGroup(props) {
       />
 
       <TextField
-        className={classes.textField}
+        className={classes.numberField}
         id="heart"
         label="Heart"
         placeholder="Rate"
@@ -153,6 +163,28 @@ export default function VitalFormGroup(props) {
         }}
         InputProps={{
           value: values.heart,
+          endAdornment: (
+            <InputAdornment className={classes.adornment} position="end">
+              {'BPM'}
+            </InputAdornment>
+          )
+        }}
+        disabled={disabled}
+        margin="normal"
+      />
+
+      <TextField
+        className={classes.numberField}
+        id="lung"
+        label="Lung"
+        type="number"
+        placeholder="Rate"
+        onChange={handleChangeValues('lung')}
+        InputLabelProps={{
+          shrink: true
+        }}
+        InputProps={{
+          value: values.lung,
           endAdornment: (
             <InputAdornment className={classes.adornment} position="end">
               {'BPM'}
@@ -182,27 +214,6 @@ export default function VitalFormGroup(props) {
           <MenuItem value={'HIGH'}>{'High'}</MenuItem>
         </Select>
       </FormControl>
-
-      <TextField
-        className={classes.textField}
-        id="lung"
-        label="Lung"
-        placeholder="Rate"
-        onChange={handleChangeValues('lung')}
-        InputLabelProps={{
-          shrink: true
-        }}
-        InputProps={{
-          value: values.lung,
-          endAdornment: (
-            <InputAdornment className={classes.adornment} position="end">
-              {'BPM'}
-            </InputAdornment>
-          )
-        }}
-        disabled={disabled}
-        margin="normal"
-      />
 
       <TextField
         className={classes.textField}

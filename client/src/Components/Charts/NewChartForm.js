@@ -1,9 +1,9 @@
 import { isEmpty } from 'lodash';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Typography, Button, CircularProgress } from '@material-ui/core';
+import { Typography, Paper, Button, CircularProgress } from '@material-ui/core';
 import api from '../../lib/api';
-import PatientForm from './PatientForm';
+import PatientForm from '../Patients/PatientForm';
 import ChartForm from '../Charts/ChartForm';
 
 const useStyles = makeStyles(theme => ({
@@ -34,14 +34,16 @@ const useStyles = makeStyles(theme => ({
     width: 200
   },
   progress: {
-    color: '#ffffff'
+    color: '#cccccc'
   }
 }));
 
-export default function Patient(props) {
+export default function CreateChartPage(props) {
   const classes = useStyles();
+  const { patientId } = props.match.params;
   const [patient, setPatient] = useState({});
-
+  const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState(null);
   const [vitals, setVitals] = useState({});
   const [complaints, setComplaints] = useState({});
   const [illnesses, setIllnesses] = useState({});
@@ -52,14 +54,6 @@ export default function Patient(props) {
   const [tongue, setTongue] = useState({});
   const [pulse, setPulse] = useState({});
   const [diagnosis, setDiagnosis] = useState({});
-
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState(null);
-
-  const handlePatientChange = patient => {
-    setPatient(patient);
-    setErrors(null);
-  };
 
   const handleVitalChange = vitals => {
     setVitals(vitals);
@@ -111,6 +105,16 @@ export default function Patient(props) {
     setErrors(null);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await api.get(`/patients/${patientId}`);
+
+      setPatient(data);
+      setLoading(false);
+    };
+    fetchData();
+  }, [patientId]);
+
   const expanded = {
     vitalField: true,
     complaintField: false,
@@ -129,62 +133,59 @@ export default function Patient(props) {
       <Paper className={classes.paper}>
         <div>
           <Typography align="center" variant="h4" component="h1">
-            {'Patient Form'}
+            {'Patient Information'}
           </Typography>
         </div>
 
-        <form className={classes.container}>
-          <PatientForm
-            onChange={handlePatientChange}
-            patient={patient}
-            errors={errors}
-            disabled={false}
-          />
+        <div>
+          <PatientForm patient={patient} disabled={true} />
 
-          <ChartForm
-            chart={{
-              vitals,
-              complaints,
-              illnesses,
-              info,
-              questionaire,
-              review,
-              women,
-              tongue,
-              pulse,
-              diagnosis
-            }}
-            expanded={expanded}
-            onVitalChange={handleVitalChange}
-            onComplaintChange={handleComplaintChange}
-            onIllnessChange={handleIllnessChange}
-            onInfoChange={handleInfoChange}
-            onQuestionaireChange={handleQuestionaireChange}
-            onReviewChange={handleReviewChange}
-            onWomenChange={handleWomenChange}
-            onTongueChange={handleTongueChange}
-            onPulseChange={handlePulseChange}
-            onDiagnosisChange={handleDiagnosisChange}
-            disabled={false}
-          />
+          <form className={classes.container}>
+            <ChartForm
+              chart={{
+                vitals,
+                complaints,
+                illnesses,
+                info,
+                questionaire,
+                review,
+                women,
+                tongue,
+                pulse,
+                diagnosis
+              }}
+              expanded={expanded}
+              onVitalChange={handleVitalChange}
+              onComplaintChange={handleComplaintChange}
+              onIllnessChange={handleIllnessChange}
+              onInfoChange={handleInfoChange}
+              onQuestionaireChange={handleQuestionaireChange}
+              onReviewChange={handleReviewChange}
+              onWomenChange={handleWomenChange}
+              onTongueChange={handleTongueChange}
+              onPulseChange={handlePulseChange}
+              onDiagnosisChange={handleDiagnosisChange}
+              disabled={false}
+            />
 
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            disabled={!!errors}
-            onClick={handleSubmit}
-          >
-            {loading ? (
-              <CircularProgress
-                style={{ width: 24, height: 24 }}
-                className={classes.progress}
-              />
-            ) : (
-              'Create Patient'
-            )}
-          </Button>
-        </form>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              disabled={!!errors}
+              onClick={handleSubmit}
+            >
+              {loading ? (
+                <CircularProgress
+                  style={{ width: 24, height: 24 }}
+                  className={classes.progress}
+                />
+              ) : (
+                'Create Patient'
+              )}
+            </Button>
+          </form>
+        </div>
       </Paper>
     </div>
   );
@@ -211,35 +212,18 @@ export default function Patient(props) {
       diagnosis
     };
     const validationErrors = {};
-
-    if (isEmpty(patient)) {
-      validationErrors.firstName = 'First Name is required.';
-      validationErrors.lastName = 'Last Name is required.';
-      validationErrors.phone = 'Phone number is required.';
-    } else {
-      if (!patient.firstName) {
-        validationErrors.firstName = 'First Name is required.';
-      }
-      if (!patient.lastName) {
-        validationErrors.lastName = 'Last Name is required.';
-      }
-      if (!patient.phone) {
-        validationErrors.phone = 'Phone number is required.';
-      }
-    }
     // Add validation check for new chart creation
-
     if (!isEmpty(validationErrors)) {
       setErrors(validationErrors);
       setLoading(false);
     } else {
       try {
-        const data = await api.post('/patients', {
-          patient,
+        const data = await api.post(`/patients/${patientId}/charts`, {
           chart: params
         });
+        console.log('[data]', data);
         setLoading(false);
-        props.history.push('/patients');
+        props.history.push(`/patients/${patientId}/charts/${data._id}`);
         return data;
       } catch (err) {
         setLoading(false);

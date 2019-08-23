@@ -156,7 +156,6 @@ export default function QuestionaireFormGroup(props) {
       onChange({ ...values, [name]: event.target.value });
     }
   };
-  console.log('[values]', values);
 
   return (
     <FormGroup className={classes.row}>

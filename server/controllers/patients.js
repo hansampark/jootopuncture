@@ -3,7 +3,11 @@ const Chart = require('../models/chart');
 
 exports.getPatients = async (req, res, next) => {
   try {
-    const patients = await Patient.find();
+    const patients = await Patient.find().populate('charts');
+    // sort charts by recent date
+    patients.map(patient => {
+      patient.charts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    });
 
     res.status(200).json({ message: 'Success', patients });
   } catch (err) {
@@ -91,6 +95,51 @@ exports.getPatient = async (req, res, next) => {
   }
 };
 
+exports.updatePatient = async (req, res, next) => {
+  const { patientId } = req.params;
+  const { patient } = req.body;
+
+  try {
+    const updatedPatient = await Patient.findOneAndUpdate(
+      { _id: patientId },
+      { ...patient },
+      { new: true }
+    ).populate('charts');
+    // sort charts by recent date
+    updatedPatient.charts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    res.status(200).json(updatedPatient);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.deletePatient = async (res, req, next) => {
+  const { patientId } = req.params;
+
+  try {
+    const patient = await Patient.findById(patientId);
+
+    if (!patient) {
+      const error = new Error('Could not find patient.');
+      error.statusCode = 404;
+      next(error);
+    }
+
+    await Patient.findByIdAndRemove(patientId);
+
+    // const charts = await Chart.find({ patientId });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
 exports.getChartsByPatientId = async (req, res, next) => {
   const { patientId } = req.params;
 
@@ -144,6 +193,53 @@ exports.createChart = async (req, res, next) => {
     await patient.save();
 
     res.status(201).json(newChart);
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
+exports.updateChart = async (req, res, next) => {
+  const { chartId } = req.params;
+  const { chart } = req.body;
+  const {
+    vitals,
+    complaints,
+    illnesses,
+    info,
+    questionaire,
+    review,
+    women,
+    tongue,
+    pulse,
+    diagnosis
+  } = chart;
+
+  try {
+    // Mongoose findOneAndUpdate method takes 4 args, [condition]: Object, [update]: Object, [options]: Object,
+    // [callback]: Function
+    const updatedChart = await Chart.findOneAndUpdate(
+      { _id: chartId },
+      {
+        ...vitals,
+        complaints,
+        illnesses,
+        info,
+        questionaire,
+        review,
+        women,
+        tongue,
+        pulse,
+        diagnosis
+      },
+      { new: true } // when true, returns modified data rather than original
+    );
+
+    await updatedChart.save();
+
+    res.status(201).json(updatedChart);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

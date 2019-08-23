@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, ListItem, Button } from '@material-ui/core';
 
@@ -18,7 +17,6 @@ const useStyles = makeStyles(theme => ({
 export default function PatientList(props) {
   const classes = useStyles();
   const { _id, firstName, lastName, email, dob, phone } = props.data;
-  console.log('[_id]', _id, typeof _id);
 
   return (
     <ListItem className={classes.root}>
