@@ -10,7 +10,7 @@ This repo contains 2 apps. client and servers.
 - JavaScript, HTML, CSS
 - [reactjs](https://reactjs.org/): UI library
 - [NodeJS](https://nodejs.org/en/): NodeJS backend
-- [Heroku](https://www.heroku.com/: Hosting
+- [Heroku](https://www.heroku.com/): Hosting
 
 2. Client
 
