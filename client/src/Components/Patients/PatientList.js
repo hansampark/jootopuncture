@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, ListItem, Button } from '@material-ui/core';
 
@@ -33,7 +32,7 @@ export default function PatientList(props) {
         {phone}
       </Grid>
       <Grid item xs={1}>
-        <Button onClick={() => props.onClick(_id)}>Chart</Button>
+        <Button onClick={() => props.onClick(_id)}>{'Chart'}</Button>
       </Grid>
     </ListItem>
   );

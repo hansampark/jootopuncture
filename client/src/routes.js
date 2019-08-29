@@ -6,7 +6,8 @@ import Signup from './Components/Auth/Signup';
 import Calendar from './Components/Calendar';
 import PatientListPage from './Components/Patients/PatientListPage';
 import PatientChartForm from './Components/Patients/PatientChartForm';
-import ChartPage from './Components/Patients/ChartPage';
+import NewChartForm from './Components/Charts/NewChartForm';
+import PatientChartPage from './Components/Patients/PatientChartPage';
 
 import ResetPasswordForm from './Components/Auth/ResetPasswordForm';
 
@@ -22,6 +23,7 @@ const isLoggedIn = () => {
 const appRoutes = [
   { path: '/', component: Calendar, exact: true },
   { path: '/create-patient', component: PatientChartForm },
+
   {
     path: '/patients',
     component: PatientListPage,
@@ -29,7 +31,12 @@ const appRoutes = [
   },
   {
     path: '/patients/:patientId/charts',
-    component: ChartPage
+    component: NewChartForm,
+    exact: true
+  },
+  {
+    path: '/patients/:patientId/charts/:chartId',
+    component: PatientChartPage
   }
 ];
 

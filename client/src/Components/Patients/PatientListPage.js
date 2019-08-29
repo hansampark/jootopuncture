@@ -11,14 +11,15 @@ import {
 import { Add } from '@material-ui/icons';
 import api from '../../lib/api';
 import PatientList from './PatientList';
-import PatientFormModal from './PatientFormModal';
 
 const useStyles = makeStyles(theme => ({
   paper: {
+    boxSizing: 'border-box',
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    maxWidth: 992
   },
   list: {
     width: '100%',
@@ -93,6 +94,7 @@ export default function PatientListPage(props) {
   }
 
   function handleChartClick(patientId) {
-    props.history.push(`/patientList/${patientId}/charts`);
+    const charts = data.find(patient => patient._id === patientId).charts;
+    props.history.push(`/patients/${patientId}/charts/${charts[0]._id}`);
   }
 }

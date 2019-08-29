@@ -1,6 +1,4 @@
-// Currently not used.
-// might be used in future
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   FormGroup,
@@ -27,7 +25,7 @@ const useStyles = makeStyles(theme => ({
       width: 100
     },
     [theme.breakpoints.up('sm')]: {
-      width: 150
+      width: 155
     }
   },
   label: {
@@ -38,12 +36,12 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
     width: 250
   },
-  formGroup: {
-    borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
-  },
+  // formGroup: {
+  //   borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
+  // },
   radioGroup: {
-    marginBottom: -3,
-    marginTop: -4
+    marginTop: -7,
+    borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
   },
   button: {
     margin: theme.spacing(10),
@@ -53,18 +51,51 @@ const useStyles = makeStyles(theme => ({
 
 export default function PatientForm(props) {
   const classes = useStyles();
-  const { onChange, patient } = props;
+  const { patient, errors, disabled, onChange } = props;
   const { firstName, lastName, middleName, email, dob, phone, sex } = patient;
+
+  const [values, setValues] = useState({
+    firstName: firstName || '',
+    lastName: lastName || '',
+    middleName: middleName || '',
+    email: email || '',
+    dob: dob || '',
+    phone: phone || '',
+    sex: sex || null
+  });
+
+  useEffect(() => {
+    setValues({
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      middleName: patient.middleName,
+      email: patient.email,
+      dob: patient.dob,
+      phone: patient.phone,
+      sex: patient.sex
+    });
+  }, [patient]);
+
+  const handleValueChange = name => event => {
+    setValues({ ...values, [name]: event.target.value });
+
+    if (onChange) {
+      onChange({ ...values, [name]: event.target.value });
+    }
+  };
 
   return (
     <FormGroup className={classes.row}>
       <TextField
         id="firstName"
-        label="First Name"
+        label="First Name *"
         className={classes.nameField}
-        value={firstName}
-        onChange={onChange('firstName')}
+        value={values.firstName}
+        error={errors && !!errors.firstName}
+        helperText={errors && errors.firstName}
+        onChange={handleValueChange('firstName')}
         autoFocus
+        disabled={disabled}
         margin="normal"
       />
 
@@ -72,17 +103,21 @@ export default function PatientForm(props) {
         id="middleName"
         label="Middle Name"
         className={classes.nameField}
-        value={middleName}
-        onChange={onChange('middleName')}
+        value={values.middleName}
+        onChange={handleValueChange('middleName')}
+        disabled={disabled}
         margin="normal"
       />
 
       <TextField
         id="lastName"
-        label="Last Name"
+        label="Last Name *"
         className={classes.nameField}
-        value={lastName}
-        onChange={onChange('lastName')}
+        value={values.lastName}
+        error={errors && !!errors.lastName}
+        helperText={errors && errors.lastName}
+        onChange={handleValueChange('lastName')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -90,8 +125,9 @@ export default function PatientForm(props) {
         id="email"
         label="Email"
         className={classes.textField}
-        value={email}
-        onChange={onChange('email')}
+        value={values.email}
+        onChange={handleValueChange('email')}
+        disabled={disabled}
         margin="normal"
       />
 
@@ -100,8 +136,9 @@ export default function PatientForm(props) {
         label="Date of Birth"
         type="date"
         className={classes.nameField}
-        value={dob}
-        onChange={onChange('dob')}
+        value={values.dob}
+        onChange={handleValueChange('dob')}
+        disabled={disabled}
         margin="normal"
         InputLabelProps={{
           shrink: true
@@ -110,28 +147,51 @@ export default function PatientForm(props) {
 
       <TextField
         id="phone"
-        label="Phone"
+        label="Phone *"
         className={classes.nameField}
-        value={phone}
-        onChange={onChange('phone')}
+        value={values.phone}
+        error={errors && !!errors.phone}
+        helperText={errors && errors.phone}
+        onChange={handleValueChange('phone')}
+        disabled={disabled}
         margin="normal"
       />
-      <FormControl margin="normal" className={classes.formGroup}>
+      <FormControl
+        margin="normal"
+        className={classes.formGroup}
+        disabled={disabled}
+      >
         <FormLabel className={classes.label} component="legend">
           {'Gender'}
         </FormLabel>
         <RadioGroup
           row
           className={classes.radioGroup}
-          onChange={onChange('sex')}
+          value={values.sex}
+          onChange={handleValueChange('sex')}
+          disabled={disabled}
         >
           <FormControlLabel
-            value="Female"
-            control={<Radio />}
+            value="FEMALE"
+            checked={values.sex === 'FEMALE'}
+            control={<Radio color="primary" disabled={disabled} />}
             label={'Female'}
+            disabled={disabled}
           />
-          <FormControlLabel value="Male" control={<Radio />} label={'Male'} />
-          <FormControlLabel value="Other" control={<Radio />} label={'Other'} />
+          <FormControlLabel
+            value="MALE"
+            checked={values.sex === 'MALE'}
+            control={<Radio color="primary" disabled={disabled} />}
+            label={'Male'}
+            disabled={disabled}
+          />
+          <FormControlLabel
+            value="OTHER"
+            checked={values.sex === 'OTHER'}
+            control={<Radio color="primary" disabled={disabled} />}
+            label={'Other'}
+            disabled={disabled}
+          />
         </RadioGroup>
       </FormControl>
     </FormGroup>
