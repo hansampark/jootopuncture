@@ -3,6 +3,8 @@
 // const GRAPHQL_URL = `${base}${BASE_URL || ''}/graphql`;
 import fetch from 'isomorphic-fetch';
 import decode from 'jwt-decode';
+import { dispatch } from '../store';
+import { sessionExpired } from '../actions';
 import { ApiError } from './errors';
 
 const API_URL = 'https://jootopuncture.herokuapp.com/api';
@@ -17,6 +19,8 @@ const handleHTTPError = async res => {
     try {
       data = await res.json();
     } catch (err) {
+      // API returned invalid JSON error object.
+
       const text = await res.text();
 
       throw new ApiError({
@@ -25,13 +29,17 @@ const handleHTTPError = async res => {
       });
     }
 
+    // 401 is handled. No need to throw.
     if (res.status === 401) {
-      return data;
+      dispatch(sessionExpired());
+      throw new ApiError(data);
     }
 
+    // API returned JSON error object.
     throw new ApiError(data);
   }
 
+  // It's all good. proceed.
   return res;
 };
 
@@ -70,33 +78,23 @@ export default {
     return !!token && !this.isTokenExpired(token);
   },
 
-  async isTokenExpired(token) {
-    try {
-      const decoded = decode(token);
-      if (decoded.exp < Date.now() / 1000) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (err) {
-      return false;
-    }
-  },
-
-  setToken(idToken) {
+  setToken(token) {
     // Saves user token to localStorage
-    localStorage.setItem('id_token', idToken);
+    localStorage.setItem('token', token);
   },
 
   getToken() {
     // Retrieves the user token from localStorage
-    return localStorage.getItem('id_token');
+    return localStorage.getItem('token');
   },
 
-  getConfirm() {
-    // Using jwt-decode npm package to decode the token
-    let answer = decode(this.getToken());
-    return answer;
+  // TODO: Use refresh jwt token for every call if token is valid
+  setRefreshToken(refreshToken) {
+    localStorage.setItem('refreshToken', refreshToken);
+  },
+
+  getRefreshToken() {
+    return localStorage.getItem('refreshToken');
   },
 
   async logout() {
@@ -111,27 +109,39 @@ export default {
 
     const response = await fetch(`${URL}/logout`, req).then(handleHTTPError);
 
-    const { data, session } = await response.json();
+    const data = await response.json();
 
-    localStorage.removeItem('id_token');
+    localStorage.removeItem('token');
     return data;
   },
 
-  verify({ password, token }) {
-    return this.post(
-      '/users/verify',
-      {
-        token,
-        password
-      },
-      false
-    );
-  },
+  // TODO: Refresh jwt token
+  // async refreshToken({ user, refreshToken }) {
+  //   const req = {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${this.getToken()}`
+  //     },
+  //     body: JSON.stringify({
+  //       user,
+  //       refreshToken
+  //     }),
+  //     credentials: 'same-origin'
+  //   };
+
+  //   const response = await fetch(`${URL}/refreshToken`, req);
+
+  //   const data = await response.json();
+  //   // console.log('[data]', data);
+  // },
 
   //   TODO: add multipart request
 
   async request({ method, endpoint, params }) {
     const token = this.getToken();
+    // console.log('[request token]', token);
     const req = {
       method,
       headers: {
@@ -142,17 +152,59 @@ export default {
     };
 
     if (params) {
+      console.log('[params]', params, JSON.stringify(params));
       req.body = JSON.stringify(params);
     }
 
     const response = await fetch(`${URL}${endpoint}`, req).then(
       handleHTTPError
     );
+    console.log('[response]', response);
 
     const data = await response.json();
 
     return data;
   },
+
+  // TODO:
+  // async requestWithRefresh({ method, endpoint, params }) {
+  //   const token = this.getToken();
+  //   const refreshToken = this.getRefreshToken();
+
+  //   if (!token) {
+  //     console.log('[no token]');
+  //     throw new Error({ status: 401 });
+  //   } else {
+  //     try {
+  //       console.log('[success token]', token);
+  //       const data = await this.request({
+  //         method,
+  //         endpoint,
+  //         params
+  //       });
+
+  //       return data;
+  //     } catch (err) {
+  //       console.log('[refresh err]', err);
+  //       if (err && token && refreshToken) {
+  //         // const refresh = await refreshToken({ user, refreshToken });
+  //         // console.log('[refresh]', refresh);
+
+  //         const data = await this.request({
+  //           method,
+  //           endpoint,
+  //           params
+  //         });
+
+  //         return data;
+  //       } else {
+  //         // Didn't work. Forward error
+  //         console.log('[PLATFORM] What error is this?', err);
+  //         throw err;
+  //       }
+  //     }
+  //   }
+  // },
 
   get(endpoint, params) {
     return this.request({

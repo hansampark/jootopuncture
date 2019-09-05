@@ -40,8 +40,10 @@ export default function PatientListPage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await api.get('/patients');
-      setData(result.patients);
+      try {
+        const result = await api.get('/patients');
+        setData(result.patients);
+      } catch (err) {}
     };
     fetchData();
   }, []);

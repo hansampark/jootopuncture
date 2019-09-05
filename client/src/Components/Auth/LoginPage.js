@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid,
@@ -10,7 +11,7 @@ import {
   Button,
   CircularProgress
 } from '@material-ui/core';
-import api from '../../lib/api';
+import { login } from '../../actions';
 import { lowerCase } from '../../lib/strings';
 import { EMAIL_REGEX } from '../../lib/validators';
 
@@ -92,6 +93,7 @@ const validate = ({ email, password }) => {
 
 function LoginPage(props) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [values, setValues] = useState({
     email: '',
     password: ''
@@ -165,7 +167,7 @@ function LoginPage(props) {
               color="primary"
               disabled={!!errors}
               className={classes.button}
-              onClick={e => handleLogin(e, values)}
+              onClick={handleLogin}
             >
               {loading ? (
                 <CircularProgress
@@ -186,7 +188,7 @@ function LoginPage(props) {
     </Grid>
   );
 
-  async function handleLogin(e, values) {
+  async function handleLogin(e) {
     e.preventDefault();
     const { email, password } = values;
     const validationErrors = validate({
@@ -202,7 +204,7 @@ function LoginPage(props) {
       setErrors(null);
 
       try {
-        await api.login({ email: lowerCase(email), password });
+        await dispatch(login({ email: lowerCase(email), password }));
         setLoading(false);
         props.history.push('/');
       } catch (err) {

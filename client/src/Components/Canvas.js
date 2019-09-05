@@ -112,6 +112,7 @@ export default class Canvas extends React.Component {
             disabled={disabled}
             onChange={this.handleLineWidthChange}
           />
+
           <input
             style={styles.textField}
             id="opacity"
@@ -121,12 +122,15 @@ export default class Canvas extends React.Component {
             disabled={disabled}
             onChange={this.handleOpacityChange}
           />
+
           <button type="button" onClick={this.handleSave} disabled={disabled}>
             {'Save'}
           </button>
+
           <button type="button" onClick={this.handleUndo} disabled={disabled}>
             {'Undo'}
           </button>
+
           <button type="button" onClick={this.handleClear} disabled={disabled}>
             {'Clear'}
           </button>

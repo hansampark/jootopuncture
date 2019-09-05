@@ -150,12 +150,17 @@ export default function PatientChartPage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await api.get(`/patients/${patientId}`);
-      const chart = data.charts.find(c => c._id === chartId);
+      try {
+        const data = await api.get(`/patients/${patientId}`);
+        const chart = data.charts.find(c => c._id === chartId);
 
-      setPatient(data);
-      setSelectedChart(chart);
-      setFetching(false);
+        setPatient(data);
+        setSelectedChart(chart);
+        setFetching(false);
+      } catch (err) {
+        setFetching(false);
+        console.log('[patient chart err]', err);
+      }
     };
 
     fetchData();

@@ -12,7 +12,7 @@ import PatientChartPage from './Components/Patients/PatientChartPage';
 import ResetPasswordForm from './Components/Auth/ResetPasswordForm';
 
 const isLoggedIn = () => {
-  const token = localStorage.id_token;
+  const token = localStorage.token;
 
   if (!token) {
     return false;

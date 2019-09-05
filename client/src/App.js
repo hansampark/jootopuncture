@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import configureStore from './store/configureStore';
+// import { PersistGate } from 'redux-persist/integration/react';
+import { store } from './store';
 import BaseLayout from './Components/Layout/BaseLayout';
 import routes from './routes';
 
 import './App.css';
-
-const store = configureStore();
 
 class App extends Component {
   render() {
@@ -28,5 +27,3 @@ class App extends Component {
 }
 
 export default App;
-
-// export default withAuth(App);

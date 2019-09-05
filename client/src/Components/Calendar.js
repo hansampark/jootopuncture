@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useStore } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Fab, Paper, Typography, Button } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
@@ -8,7 +9,6 @@ import moment from 'moment';
 import api from '../lib/api';
 import { dateTime } from '../lib/strings';
 import AppointmentFormModal from './Appointments/AppointmentFormModal';
-import { setDate } from 'date-fns';
 
 const useStyles = makeStyles(theme => ({
   titleWrapper: {
@@ -39,6 +39,7 @@ const allViews = Object.keys(Views).map(k => Views[k]);
 
 export default function MyCalendar(props) {
   const classes = useStyles();
+  const { session } = useStore().getState();
   const [view, setView] = useState('month');
   const [events, setEvents] = useState([]);
   const [date, setDate] = useState(new Date());
@@ -50,18 +51,20 @@ export default function MyCalendar(props) {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const data = await api.get('/appointments');
+      try {
+        const data = await api.get('/appointments');
 
-      const e = data.map(e => {
-        return {
-          ...e,
-          title: e.title,
-          start: new Date(e.start),
-          end: new Date(e.end)
-        };
-      });
+        const e = data.map(e => {
+          return {
+            ...e,
+            title: e.title,
+            start: new Date(e.start),
+            end: new Date(e.end)
+          };
+        });
 
-      setEvents(e);
+        setEvents(e);
+      } catch (err) {}
     };
     fetchEvents();
   }, []);

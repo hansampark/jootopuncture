@@ -1,19 +1,17 @@
 import React from 'react';
 // import { withRouter } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Grid } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { Grid } from '@material-ui/core';
+import { withSession } from '../../reducers/session';
 import NavBar from './NavBar';
+import SessionExpiredModal from '../Auth/SessionExpiredModal';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary
-  }
-}));
+const SessionStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  EXPIRED: 'EXPIRED',
+  REDIRECT: 'REDIRECT'
+};
 
 const styles = {
   container: {
@@ -21,10 +19,16 @@ const styles = {
   }
 };
 
-// const classes = useStyles();  ??
+class ApplicationLayout extends React.Component {
+  constructor(props) {
+    super(props);
 
-export default class ApplicationLayout extends React.Component {
+    this.state = {
+      sessionStatus: SessionStatus.ACTIVE
+    };
+  }
   render() {
+    const { sessionStatus } = this.state;
     const { history, children } = this.props;
 
     return (
@@ -37,15 +41,26 @@ export default class ApplicationLayout extends React.Component {
             {children}
           </Grid>
         </Grid>
+
+        {sessionStatus === SessionStatus.EXPIRED && (
+          <SessionExpiredModal open history={history} />
+        )}
       </div>
     );
   }
 
-  //   async function handleLogout() {
-  //     this.Auth.logout();
-
-  //     this.props.history.replace('/login');
-  //   }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.session &&
+      this.props.session &&
+      prevProps.session.isExpired !== this.props.session.isExpired &&
+      this.props.session.isExpired === true
+    ) {
+      this.setState({
+        sessionStatus: SessionStatus.EXPIRED
+      });
+    }
+  }
 }
 
-// export default withAuth(ApplicationLayout);
+export default connect(withSession)(ApplicationLayout);

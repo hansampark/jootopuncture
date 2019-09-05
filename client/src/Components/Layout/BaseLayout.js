@@ -45,7 +45,7 @@ class BaseLayout extends React.Component {
     super(props);
 
     this.state = {
-      token: localStorage.id_token || null,
+      token: localStorage.token || null,
       redirect: false
     };
   }
