@@ -1,10 +1,8 @@
 // Root reducer
 
-import { combineReducers } from 'redux';
-import { LOGGED_OUT } from '../constants/action-types';
+// import { combineReducers } from 'redux';
+import { LOGGED_OUT, PURGE_STORAGE } from '../constants/action-types';
 import session from './session';
-
-const entities = combineReducers({});
 
 const initialState = {
   session: {}
@@ -21,6 +19,12 @@ const rootReducer = (state = initialState, action) => {
       };
 
       return nextState;
+
+    case PURGE_STORAGE:
+      return {
+        ...initialState,
+        session: session(undefined, action)
+      };
 
     default:
       nextState = {

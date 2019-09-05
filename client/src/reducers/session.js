@@ -1,4 +1,8 @@
-import { LOGGED_IN, LOGGED_OUT } from '../constants/action-types';
+import {
+  LOGGED_IN,
+  LOGGED_OUT,
+  SESSION_EXPIRED
+} from '../constants/action-types';
 
 const initialState = {
   accessToken: null,
@@ -11,9 +15,14 @@ export default function session(state = initialState, action) {
     case LOGGED_IN:
       return {
         ...state,
-        ...action.session,
+        accessToken: action.token,
         user: action.user,
         isExpired: false
+      };
+    case SESSION_EXPIRED:
+      return {
+        ...state,
+        isExpired: true
       };
     case LOGGED_OUT:
       return { ...initialState };
@@ -23,5 +32,5 @@ export default function session(state = initialState, action) {
 }
 
 export const withSession = state => ({
-  sesison: state.session
+  session: state.session
 });

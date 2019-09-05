@@ -1,11 +1,23 @@
 import api from '../lib/api';
-import { LOGGED_IN, LOGGED_OUT } from '../constants/action-types';
+import { persistor } from '../store';
+import {
+  LOGGED_IN,
+  LOGGED_OUT,
+  SESSION_EXPIRED,
+  PURGE_STORAGE
+} from '../constants/action-types';
 
 // Action Creators
-
-const userHasLoggedIn = ({ user }) => ({
+const userHasLoggedIn = ({ token, refreshToken, expiresAt, user }) => ({
   type: LOGGED_IN,
+  token,
+  refreshToken,
+  expiresAt,
   user
+});
+
+export const sessionExpired = () => ({
+  type: SESSION_EXPIRED
 });
 
 export const userHasLoggedOut = () => ({
@@ -15,12 +27,9 @@ export const userHasLoggedOut = () => ({
 // Action Thunks
 
 export const login = ({ email, password }) => async dispatch => {
-  console.log('[action email]', email, password);
   const data = await api.login({ email, password });
-  console.log('[action data]', data);
-  //   console.log('[action session]', session);
 
-  dispatch(userHasLoggedIn({ user: data.user }));
+  dispatch(userHasLoggedIn(data));
 
   return data;
 };
@@ -35,4 +44,16 @@ export const logout = () => async dispatch => {
   } catch (err) {
     return;
   }
+};
+
+export const purgeStorage = () => async dispatch => {
+  localStorage.clear();
+
+  if (persistor) {
+    persistor.purge();
+  }
+
+  dispatch({
+    type: PURGE_STORAGE
+  });
 };
