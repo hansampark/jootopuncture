@@ -3,8 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
 const helmet = require('helmet');
 const routes = require('./server/routes');
 const User = require('./server/models/user');
@@ -18,11 +16,6 @@ const {
 } = process.env;
 
 const MONGODB_URI = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0-1cth2.mongodb.net/${MONGO_DEFAULT_DATABASE}`;
-
-// const store = new MongoDBStore({
-//   uri: MONGODB_URI,
-//   collection: 'sessions'
-// });
 
 const server = express();
 const port = PORT || 5000;
@@ -57,10 +50,9 @@ server.use('/api', routes);
 // handling error using built-in express package
 server.use((error, req, res, next) => {
   const { statusCode, message, data } = error;
-  if (!statusCode) {
-    statusCode = 500;
-  }
-  res.status(statusCode).json({ message, data });
+  const status = error.statusCode || 500;
+
+  res.status(status).json({ message, statusCode });
 });
 
 if (process.env.NODE_ENV === 'production') {

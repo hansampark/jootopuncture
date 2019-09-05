@@ -4,6 +4,7 @@ const auth = require('../middleware/auth');
 const {
   signup,
   login,
+  // refreshToken,
   resetPassword
 } = require('../controllers/authenticates');
 const User = require('../models/user');

@@ -9,19 +9,20 @@ module.exports = (req, res, next) => {
   const token = authHeader.split(' ')[1];
   let decodedToken;
   try {
-    decodedToken = jwt.verify(token, 'jootopuncture web app');
+    decodedToken = jwt.verify(token, process.env.SECRET);
+
+    if (!decodedToken) {
+      req.isAuth = false;
+      next();
+    } else {
+      req.userId = decodedToken.userId;
+      req.isAuth = true;
+
+      next();
+    }
   } catch (err) {
+    err.statusCode = 401;
     req.isAuth = false;
-    return next();
+    next(err);
   }
-
-  if (!decodedToken) {
-    req.isAuth = false;
-    return next();
-  }
-
-  req.userId = decodedToken.userId;
-  req.isAuth = true;
-
-  next();
 };

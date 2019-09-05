@@ -1,6 +1,10 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
+const {
+  createToken,
+  createRefreshToken,
+  validateRefreshToken
+} = require('../lib/auth');
 const User = require('../models/user');
 
 exports.signup = async (req, res, next) => {
@@ -44,7 +48,7 @@ exports.login = async (req, res, next) => {
       error.statusCode = 401;
       next(error);
     }
-    loadedUser = user;
+
     const validate = await bcrypt.compare(password, user.password);
 
     if (!validate) {
@@ -52,18 +56,21 @@ exports.login = async (req, res, next) => {
       error.statusCode = 401;
       error.status = 401;
       next(error);
+    } else {
+      loadedUser = user;
+
+      const token = await createToken(loadedUser);
+
+      res.status(200).json({
+        token: token,
+        user: {
+          _id: loadedUser._id.toString(),
+          firstName: loadedUser.firstName,
+          lastName: loadedUser.lastName,
+          email: loadedUser.email
+        }
+      });
     }
-
-    const token = jwt.sign(
-      {
-        email: loadedUser.email,
-        userId: loadedUser._id.toString()
-      },
-      'jootopuncture web app',
-      { expiresIn: '1h' }
-    );
-
-    res.status(200).json({ token: token, userId: loadedUser._id.toString() });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -71,6 +78,27 @@ exports.login = async (req, res, next) => {
     }
   }
 };
+
+// TODO: RefreshToken controller
+// exports.refreshToken = async (req, res, next) => {
+//   const { user, refreshToken } = req.body;
+
+//   const validate = validateRefreshToken(refreshToken);
+
+//   if (validate) {
+//     try {
+//       const newToken = await createToken(user);
+//       const newRefreshToken = await createRefreshToken(user);
+
+//       res.status(200).json({ token: newToken, refreshToken: newRefreshToken });
+//     } catch (err) {
+//       if (!err.statusCode) {
+//         err.statusCode = 401;
+//         next(err);
+//       }
+//     }
+//   }
+// };
 
 exports.resetPassword = async (req, res, next) => {
   const { email, password } = req.body;
