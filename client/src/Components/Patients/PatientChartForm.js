@@ -113,14 +113,14 @@ export default function Patient(props) {
   };
 
   const expanded = {
-    vitalField: true,
+    vitalField: false, // return to true
     complaintField: false,
     illnessField: false,
     infoField: false,
     questionaireField: false,
-    reviewField: false,
+    reviewField: true, // return to false
     womenField: false,
-    tongueField: false,
+    tongueField: true, // return to false
     pulseField: false,
     diagnosisField: false
   };

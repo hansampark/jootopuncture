@@ -10,7 +10,7 @@ exports.createToken = async user => {
       userId: user._id.toString()
     },
     SECRET,
-    { expiresIn: '8h' }
+    { expiresIn: '1h' }
   );
 };
 

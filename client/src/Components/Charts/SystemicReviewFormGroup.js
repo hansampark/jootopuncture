@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { FormGroup, TextField } from '@material-ui/core';
 import Canvas from '../Canvas';
+import NewCanvas from '../NewCanvas';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -44,7 +45,7 @@ export default function SystemicReviewFormGroup(props) {
     extremities,
     dtr,
     other,
-    reviewData
+    drawings
   } = review;
   const [values, setValues] = useState({
     head: head || '',
@@ -60,8 +61,9 @@ export default function SystemicReviewFormGroup(props) {
     extremities: extremities || '',
     dtr: dtr || '',
     other: other || '',
-    reviewData: reviewData || ''
+    drawings: drawings || { objects: [] }
   });
+  console.log('[review drawing[', drawings);
 
   const handleChangeValues = name => event => {
     setValues({ ...values, [name]: event.target.value });
@@ -72,8 +74,8 @@ export default function SystemicReviewFormGroup(props) {
   };
 
   const handleSave = data => {
-    setValues({ ...values, reviewData: JSON.parse(data) });
-    onChange({ ...values, reviewData: JSON.parse(data) });
+    setValues({ ...values, drawings: { objects: data } });
+    onChange({ ...values, drawings: { objects: data } });
   };
 
   return (
@@ -231,12 +233,14 @@ export default function SystemicReviewFormGroup(props) {
       />
 
       <div className={classes.canvas}>
-        <Canvas
+        <NewCanvas
           src="/images/body-diagram.jpg"
-          data={reviewData}
+          data={drawings}
           width={918}
           height={440}
+          opacity={0.5}
           onSave={handleSave}
+          isDrawing
           disabled={disabled}
         />
       </div>
