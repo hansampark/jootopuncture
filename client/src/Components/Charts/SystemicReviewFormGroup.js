@@ -63,7 +63,7 @@ export default function SystemicReviewFormGroup(props) {
     other: other || '',
     drawings: drawings || { objects: [] }
   });
-  console.log('[review drawing[', drawings);
+  // console.log('[review drawing[', drawings);
 
   const handleChangeValues = name => event => {
     setValues({ ...values, [name]: event.target.value });
@@ -74,6 +74,7 @@ export default function SystemicReviewFormGroup(props) {
   };
 
   const handleSave = data => {
+    // console.log('[data]', data);
     setValues({ ...values, drawings: { objects: data } });
     onChange({ ...values, drawings: { objects: data } });
   };

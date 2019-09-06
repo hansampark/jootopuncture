@@ -80,6 +80,7 @@ export default class NewCanvas extends React.Component {
       opacity,
       canUndo
     } = this.state;
+    console.log('[drawing data]', data);
 
     return (
       <div ref={this.setWrapperRef} style={styles.root}>
@@ -178,11 +179,16 @@ export default class NewCanvas extends React.Component {
 
   componentDidMount() {
     document.addEventListener('click', this.handleClickOutside);
+
+    // for tablet use
+    document.addEventListener('touchstart', this.handleClickOutside);
     this.handleScaleImage();
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.handleClickOutside);
+    // for tablet use
+    document.removeEventListener('touchend', this.handleClickOutside);
   }
 
   setWrapperRef(node) {
@@ -190,11 +196,13 @@ export default class NewCanvas extends React.Component {
   }
 
   handleClickOutside(event) {
+    event.preventDefault();
     const { onSave } = this.props;
 
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       onSave(this.sketch.toJSON().objects);
     }
+    console.log('[mouseEvent]');
   }
 
   handleScaleImage = () => {

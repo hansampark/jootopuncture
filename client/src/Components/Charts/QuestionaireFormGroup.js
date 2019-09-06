@@ -65,8 +65,6 @@ export default function QuestionaireFormGroup(props) {
     stress: stress || ''
   });
 
-  console.log('[values]', values);
-
   const handleChangeValues = name => event => {
     switch (name) {
       case 'bowelFrequency': {
