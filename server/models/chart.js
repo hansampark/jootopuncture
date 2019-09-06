@@ -85,7 +85,7 @@ const chartSchema = new Schema({
     extremities: String,
     dtr: String,
     other: String,
-    reviewData: Object
+    drawings: Object
   },
   women: {
     menarche: String,

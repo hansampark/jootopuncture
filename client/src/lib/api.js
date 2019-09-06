@@ -2,7 +2,6 @@
 // const API_URL = `${base}${BASE_URL || ''}/api`;
 // const GRAPHQL_URL = `${base}${BASE_URL || ''}/graphql`;
 import fetch from 'isomorphic-fetch';
-import decode from 'jwt-decode';
 import { dispatch } from '../store';
 import { sessionExpired } from '../actions';
 import { ApiError } from './errors';
@@ -152,14 +151,12 @@ export default {
     };
 
     if (params) {
-      console.log('[params]', params, JSON.stringify(params));
       req.body = JSON.stringify(params);
     }
 
     const response = await fetch(`${URL}${endpoint}`, req).then(
       handleHTTPError
     );
-    console.log('[response]', response);
 
     const data = await response.json();
 
