@@ -122,7 +122,7 @@ export default function Patient(props) {
     womenField: false,
     tongueField: true, // return to false
     pulseField: false,
-    diagnosisField: false
+    diagnosisField: true
   };
 
   return (

@@ -169,7 +169,7 @@ const chartSchema = new Schema({
         mirror: Boolean
       }
     },
-    tongueData: Object
+    drawings: Object
   },
   pulse: {
     right: {
@@ -339,7 +339,7 @@ const chartSchema = new Schema({
     pain: String,
     heart: String,
     pulse: String,
-    sign: String
+    signature: Object
   },
   patientId: {
     type: Schema.Types.ObjectId,

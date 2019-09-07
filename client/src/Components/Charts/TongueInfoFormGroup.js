@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 export default function TongueInfoFormGroup(props) {
   const classes = useStyles();
   const { onChange, tongue, disabled } = props;
-  const { body, coat, tongueData } = tongue;
+  const { body, coat, drawings } = tongue;
   const [values, setValues] = useState({
     body: body || {
       color: {
@@ -101,7 +101,7 @@ export default function TongueInfoFormGroup(props) {
         mirror: false
       }
     },
-    tongueData: tongueData || ''
+    drawings: drawings || { objects: [] }
   });
 
   const handleBodyColorChange = name => event => {
@@ -209,8 +209,8 @@ export default function TongueInfoFormGroup(props) {
   };
 
   const handleSave = data => {
-    setValues({ ...values, tongueData: JSON.parse(data) });
-    onChange({ ...values, tongueData: JSON.parse(data) });
+    setValues({ ...values, ddrawings: { objects: data } });
+    onChange({ ...values, drawings: { objects: data } });
   };
 
   return (
@@ -860,10 +860,18 @@ export default function TongueInfoFormGroup(props) {
       >
         <Canvas
           src="/images/tongue-chart.jpg"
-          data={tongueData}
-          width={300}
+          data={drawings}
+          width={314}
           height={300}
+          opacity={0.5}
           onSave={handleSave}
+          wrapperStyle={{ flexWrap: 'wrap' }}
+          inputWrapperStyle={{ marginBottom: 10 }}
+          pickerWrapperStyle={{ marginBottom: 10 }}
+          buttonWrapperStyle={{
+            width: '100%',
+            justifyContent: 'space-around'
+          }}
           disabled={disabled}
         />
       </div>

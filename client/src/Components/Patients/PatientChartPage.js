@@ -159,7 +159,6 @@ export default function PatientChartPage(props) {
         setFetching(false);
       } catch (err) {
         setFetching(false);
-        console.log('[patient chart err]', err);
       }
     };
 

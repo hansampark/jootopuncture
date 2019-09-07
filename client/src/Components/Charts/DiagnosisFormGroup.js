@@ -7,6 +7,7 @@ import {
   InputAdornment,
   Checkbox
 } from '@material-ui/core';
+import SignatureField from '../SignatureField';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -59,7 +60,7 @@ export default function DiagnosisFormGroup(props) {
     pain,
     heart,
     pulse,
-    sign
+    signature
   } = diagnosis;
   const [values, setValues] = useState({
     etiology: etiology || '',
@@ -85,7 +86,7 @@ export default function DiagnosisFormGroup(props) {
     pain: pain || '',
     heart: heart || '',
     pulse: pulse || '',
-    sign: sign || ''
+    signature: signature || { objects: [] }
   });
 
   const handleChangeValues = name => event => {
@@ -114,6 +115,11 @@ export default function DiagnosisFormGroup(props) {
         }
       });
     }
+  };
+
+  const handleSave = data => {
+    setValues({ ...values, signature: { objects: data } });
+    onChange({ ...values, signature: { objects: data } });
   };
 
   return (
@@ -394,16 +400,13 @@ export default function DiagnosisFormGroup(props) {
         />
       </div>
 
-      <TextField
-        className={classes.textField}
-        id="sign"
-        label={'DAOM Intern'}
-        value={values.sign}
-        onChange={handleChangeValues('sign')}
-        disabled={disabled}
-        margin="normal"
-        fullWidth
-      />
+      <div>
+        <SignatureField
+          data={signature}
+          onSave={handleSave}
+          disabled={disabled}
+        />
+      </div>
     </FormGroup>
   );
 }

@@ -1,6 +1,8 @@
 import React from 'react';
+import { Button } from '@material-ui/core';
+import { Undo, Redo, Clear } from '@material-ui/icons';
+import { SketchField, Tools } from 'react-sketch';
 import { HuePicker } from 'react-color';
-import CanvasDraw from 'react-canvas-draw';
 
 const styles = {
   root: {
@@ -12,177 +14,276 @@ const styles = {
     padding: 10,
     boxShadow: '0px 2px 3px -1px #ADADAD'
   },
-  padding: {
+  toolWrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 10
   },
   label: {
-    width: 'inherit',
-    textAlign: 'center',
-    fontSize: '1rem',
+    display: 'block',
     color: 'rgba(0, 0, 0, 0.54)',
-    padding: 10
+    fontSize: 12,
+    fontWeight: 400,
+    marginBottom: 5
   },
-  textField: {
-    marginRight: 10,
-    width: 100
+  inputField: {
+    width: 100,
+    cursor: 'text',
+    border: 'none',
+    outline: 'none',
+    font: 'inherit',
+    borderBottom: '1px solid rgba(0, 0, 0, 0.42)'
+  },
+  buttonWrapper: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    width: 250,
+    marginTop: 5
+  },
+  button: {
+    width: 50
   }
 };
 
 export default class Canvas extends React.Component {
   static defaultProps = {
-    loadTimeOffset: 1,
-    lazyRadius: 0,
-    brushRadius: 1,
-    brushColor: {
-      r: 255,
-      g: 0,
-      b: 0,
-      a: 0.5
-    },
-    catenaryColor: '#0a0302',
-    gridColor: 'rgba(150,150,150,0.17)',
-    hideGrid: false,
-    disabled: false,
-    saveData: null,
-    immediateLoading: false
+    width: 980,
+    height: 400,
+    tool: Tools.pencil
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      lineWidth: props.brushRadius || 0,
-      color: props.brushColor,
-      opacity: 3
+      width: props.width,
+      height: props.height,
+      lineColor: props.lineColor || { r: 0, g: 0, b: 0, a: props.opacity },
+      lineWidth: 3,
+      opacity: props.opacity || 1,
+      canUndo: false,
+      canRedo: false
     };
+
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
   render() {
     const {
       data,
-      loadTimeOffset,
-      lazyRadius,
-      brushRadius,
-      brushColor,
-      catenaryColor,
-      gridColor,
-      hideGrid,
-      canvasWidth,
-      canvasHeight,
-      disabled,
-      imgSrc,
-      saveData,
-      immediateLoading,
+      wrapperStyle,
+      inputWrapperStyle,
+      pickerWrapperStyle,
+      buttonWrapperStyle
+    } = this.props;
+    const {
       width,
       height,
-      src
-    } = this.props;
-
-    const { lineWidth, color, opacity } = this.state;
+      lineColor,
+      lineWidth,
+      opacity,
+      canUndo
+    } = this.state;
 
     return (
-      <div style={styles.root}>
+      <div ref={this.setWrapperRef} style={styles.root}>
         <div style={styles.canvas}>
-          <CanvasDraw
-            ref={canvasDraw => (this.saveableCanvas = canvasDraw)}
-            imgSrc={src}
-            canvasWidth={width}
-            canvasHeight={height}
-            brushRadius={lineWidth}
-            brushColor={`rgba(${color.r},${color.g},${color.b},${color.a})`}
-            lazyRadius={lazyRadius}
-            immediateLoading={immediateLoading}
-            loadTimeOffset={loadTimeOffset}
-            disabled={disabled}
+          <SketchField
+            ref={c => (this.sketch = c)}
+            canUndo={canUndo}
+            width={width}
+            height={height}
+            undoSteps={100}
+            tool={Tools.pencil}
+            lineColor={`rgba(${lineColor.r}, ${lineColor.g}, ${lineColor.b}, ${opacity})`}
+            lineWidth={lineWidth}
+            value={data}
+            onChange={this.handleChangeValue}
           />
         </div>
 
-        <div style={styles.padding}>
-          <div style={styles.label}>{'Color Picker'}</div>
-          <HuePicker color={color} onChangeComplete={this.handleColorChange} />
-        </div>
+        <div style={{ ...styles.toolWrapper, ...wrapperStyle }}>
+          <div style={inputWrapperStyle}>
+            <label style={styles.label}>{'Line Width'}</label>
+            <input
+              style={styles.inputField}
+              id="line-width"
+              label={'Line Width'}
+              type="number"
+              value={lineWidth}
+              onChange={this.handleLineWidthChange}
+            />
+          </div>
 
-        <div style={styles.padding}>
-          <input
-            style={styles.textField}
-            id="radius"
-            label={'Brush Radius'}
-            type="number"
-            value={lineWidth}
-            disabled={disabled}
-            onChange={this.handleLineWidthChange}
-          />
+          <div style={inputWrapperStyle}>
+            <label style={styles.label}>{'Opacity'}</label>
+            <input
+              style={styles.inputField}
+              id="opacity"
+              label={'Opacity'}
+              type="number"
+              step={0.1}
+              min={0}
+              max={1}
+              value={opacity}
+              onChange={this.handleOpacityChange}
+            />
+          </div>
 
-          <input
-            style={styles.textField}
-            id="opacity"
-            label={'Opacity'}
-            type="number"
-            value={opacity}
-            disabled={disabled}
-            onChange={this.handleOpacityChange}
-          />
+          <div style={pickerWrapperStyle}>
+            <label style={{ ...styles.label, marginBottom: 10 }}>
+              {'Line Color'}
+            </label>
+            <HuePicker
+              color={lineColor}
+              onChangeComplete={this.handleColorChange}
+            />
+          </div>
 
-          <button type="button" onClick={this.handleSave} disabled={disabled}>
-            {'Save'}
-          </button>
+          <div style={{ ...styles.buttonWrapper, ...buttonWrapperStyle }}>
+            <Button
+              variant="contained"
+              type="button"
+              color="primary"
+              disabled={!canUndo}
+              style={styles.button}
+              onClick={this.handleUndo}
+            >
+              <Undo />
+            </Button>
 
-          <button type="button" onClick={this.handleUndo} disabled={disabled}>
-            {'Undo'}
-          </button>
+            <Button
+              variant="contained"
+              type="button"
+              color="primary"
+              style={styles.button}
+              onClick={this.handleRedo}
+            >
+              <Redo />
+            </Button>
 
-          <button type="button" onClick={this.handleClear} disabled={disabled}>
-            {'Clear'}
-          </button>
+            <Button
+              variant="contained"
+              type="button"
+              color="secondary"
+              style={styles.button}
+              disabled={!canUndo}
+              onClick={this.handleClear}
+            >
+              <Clear />
+            </Button>
+          </div>
         </div>
       </div>
     );
   }
 
   componentDidMount() {
-    const { data } = this.props;
-    const stringifyData = JSON.stringify(data);
+    document.addEventListener('click', this.handleClickOutside);
 
-    if (data) {
-      this.saveableCanvas.loadSaveData(stringifyData);
+    // for tablet use
+    document.addEventListener('touchstart', this.handleClickOutside);
+    this.handleScaleImage();
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClickOutside);
+    // for tablet use
+    document.removeEventListener('touchend', this.handleClickOutside);
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
+  handleClickOutside(event) {
+    event.preventDefault();
+    const { onSave } = this.props;
+
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      onSave(this.sketch.toJSON().objects);
     }
   }
 
-  handleLineWidthChange = e => {
-    this.setState({
-      lineWidth: parseInt(e.target.value, 10) || 0
-    });
-  };
+  handleScaleImage = () => {
+    const sketch = this.sketch;
+    const { src } = this.props;
+    const img = new Image();
+    img.onload = () => {
+      let newHeight = this.state.height;
+      let newScale = 1;
+      const height = img.height;
+      const width = img.width;
 
-  handleOpacityChange = e => {
-    const updatedOpacity = parseInt(e.target.value, 10);
+      newHeight = Math.round((height * sketch.props.width) / width);
+      newScale = newHeight / height;
+      this.setState({ height: newHeight });
 
-    this.setState(state => ({
-      opacity: updatedOpacity,
-      color: {
-        ...state.color,
-        a: updatedOpacity / 10
-      }
-    }));
+      sketch.clear();
+      let opts = { left: 0, top: 0, scale: newScale };
+      sketch.addImg(src, opts);
+    };
+    img.src = src;
   };
 
   handleColorChange = color => {
     this.setState(state => ({
-      color: { ...color.rgb, a: state.opacity / 10 }
+      lineColor: { ...color.rgb, a: state.opacity }
     }));
   };
 
-  handleSave = () => {
-    const { onSave } = this.props;
-    const savedData = this.saveableCanvas.getSaveData();
-    onSave(savedData);
+  handleLineWidthChange = e => {
+    this.setState({
+      lineWidth: e.target.value
+    });
+  };
+
+  handleOpacityChange = e => {
+    this.setState({
+      opacity: e.target.value
+    });
   };
 
   handleUndo = () => {
-    this.saveableCanvas.undo();
+    if (this.sketch.toJSON().objects.length === 1) {
+      this.setState({
+        canUndo: false,
+        canRedo: this.sketch.canRedo()
+      });
+    } else {
+      this.setState({
+        canUndo: this.sketch.canUndo(),
+        canRedo: this.sketch.canRedo()
+      });
+    }
+    this.sketch.undo();
+  };
+
+  handleRedo = () => {
+    this.sketch.redo();
+    this.setState({
+      canUndo: this.sketch.canUndo(),
+      canRedo: this.sketch.canRedo()
+    });
   };
 
   handleClear = () => {
-    this.saveableCanvas.clear();
+    this.sketch.clear();
+    this.handleScaleImage();
+    this.setState({
+      canUndo: this.sketch.canUndo(),
+      canRedo: this.sketch.canRedo()
+    });
+  };
+
+  handleChangeValue = () => {
+    const sketch = this.sketch;
+
+    this.setState({
+      canUndo: sketch.toJSON().objects.length === 1 ? false : true,
+      canRedo: sketch.toJSON().objects.length === 1 ? false : true
+    });
   };
 }

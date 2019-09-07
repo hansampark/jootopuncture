@@ -222,7 +222,7 @@ export default function CreateChartPage(props) {
         const data = await api.post(`/patients/${patientId}/charts`, {
           chart: params
         });
-        console.log('[data]', data);
+
         setLoading(false);
         props.history.push(`/patients/${patientId}/charts/${data._id}`);
         return data;
