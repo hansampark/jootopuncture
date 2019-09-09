@@ -1,9 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, ListItem, Button } from '@material-ui/core';
+import { Avatar, ListItem } from '@material-ui/core';
 
-// Adding avatar
-import Avatar from '@material-ui/core/Avatar';
 import teal from '@material-ui/core/colors/teal';
 
 const useStyles = makeStyles(theme => ({
@@ -21,7 +19,6 @@ const useStyles = makeStyles(theme => ({
   listSection: {
     backgroundColor: 'inherit'
   },
-
   avatar: {
     margin: 10,
     color: '#fff',
@@ -38,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function PatientList(props) {
   const classes = useStyles();
-  const { _id, firstName, lastName, email, dob, phone } = props.data;
+  const { _id, firstName, lastName, email, phone } = props.data;
 
   return (
     <ListItem className={classes.root} onClick={handleClick}>

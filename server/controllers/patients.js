@@ -9,7 +9,7 @@ exports.getPatients = async (req, res, next) => {
       patient.charts.sort((a, b) => new Date(b.date) - new Date(a.date));
     });
 
-    res.status(200).json({ message: 'Success', patients });
+    res.status(200).json(patients);
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

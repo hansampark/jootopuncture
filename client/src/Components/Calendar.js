@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useStore } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Fab, Paper, Typography, Button } from '@material-ui/core';
@@ -8,6 +8,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import api from '../lib/api';
 import { dateTime } from '../lib/strings';
+// import { PatientContext } from '../context';
 import AppointmentFormModal from './Appointments/AppointmentFormModal';
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +44,8 @@ export default function MyCalendar(props) {
   const [view, setView] = useState('month');
   const [events, setEvents] = useState([]);
   const [date, setDate] = useState(new Date());
+  // const [test, setTest] = useContext(PatientContext);
+  // console.log('[test]', test);
 
   const [open, setOpen] = useState(false);
 
