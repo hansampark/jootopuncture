@@ -154,19 +154,6 @@ export default function ChartForm(props) {
     setDiagnosisFieldExpanded(!diagnosisFieldExpanded);
   }
 
-  // const prevId = usePrevious(match.params.chartId);
-  // console.log('[prevId]', prevId);
-  // console.log('[props.match.params]', props.match.params);
-
-  // function usePrevious(value) {
-  //   const ref = useRef();
-
-  //   useEffect(() => {
-  //     ref.current = value;
-  //   }, [value]);
-  //   return ref.current;
-  // }
-
   const {
     date,
     height,
