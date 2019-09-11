@@ -66,13 +66,13 @@ export default function PatientForm(props) {
 
   useEffect(() => {
     setValues({
-      firstName: patient.firstName,
-      lastName: patient.lastName,
-      middleName: patient.middleName,
-      email: patient.email,
-      dob: patient.dob,
-      phone: patient.phone,
-      sex: patient.sex
+      firstName: firstName || '',
+      lastName: lastName || '',
+      middleName: middleName || '',
+      email: email || '',
+      dob: dob || '',
+      phone: phone || '',
+      sex: sex || null
     });
   }, [patient]);
 

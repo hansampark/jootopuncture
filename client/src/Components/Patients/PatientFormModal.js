@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Button,
@@ -9,6 +9,7 @@ import {
   DialogTitle,
   CircularProgress
 } from '@material-ui/core';
+import { PatientContext } from '../../context';
 import api from '../../lib/api';
 import PatientForm from './PatientForm';
 
@@ -37,6 +38,7 @@ export default function PatientFormModal(props) {
   const classes = useStyles();
 
   const [updatedPatient, setPatient] = useState(props.patient);
+  const [patients, setPatients] = useContext(PatientContext);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(null);
 
@@ -123,6 +125,16 @@ export default function PatientFormModal(props) {
         });
         setLoading(false);
         onSubmit(data);
+        setPatients(state => ({
+          ...state,
+          table: {
+            ...state.table,
+            [props.patient._id]: {
+              ...state.table[props.patient._id],
+              ...updatedPatient
+            }
+          }
+        }));
         onClose();
       } catch (err) {
         setLoading(false);

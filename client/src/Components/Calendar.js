@@ -79,15 +79,13 @@ export default function MyCalendar(props) {
   };
   const handleSelectEvent = event => {
     setView('day');
-    console.log('[event]', event);
+    // console.log('[event]', event);
 
     setDate(new Date(event.start));
   };
-  // const handleNavigate = event => {
-  //   // setView('day');
-  //   setDate(new Date(event));
-  //   console.log('[navigate]', event);
-  // };
+  const handleNavigate = event => {
+    setDate(new Date(event));
+  };
   // const handleTooltip = event => {
   //   console.log('[tooltip]', event);
   // };
@@ -103,7 +101,7 @@ export default function MyCalendar(props) {
 
   // controls event prop
   const handleEventPropGetter = (event, start, end, isSelected) => {
-    console.log(event);
+    // console.log(event);
 
     var backgroundColor = event.patientId ? '#3174ad' : '#90EE90';
     var style = {
@@ -166,7 +164,7 @@ export default function MyCalendar(props) {
           // tooltipAccessor={handleTooltip}
           onSelectEvent={handleSelectEvent}
           // getDrilldownView={handleDrilldownView}
-          // onNavigate={handleNavigate}
+          onNavigate={handleNavigate}
           eventPropGetter={handleEventPropGetter}
           localizer={localizer}
         />

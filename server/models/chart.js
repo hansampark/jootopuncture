@@ -11,7 +11,8 @@ const chartSchema = new Schema({
   heart: String,
   rhythm: {
     type: String,
-    enum: ['LOW', 'REGULAR', 'HIGH']
+    enum: ['LOW', 'REGULAR', 'HIGH'].concat(['']),
+    default: ''
   },
   lung: String,
   sound: String,
@@ -26,11 +27,15 @@ const chartSchema = new Schema({
     pain: String,
     intensity: {
       type: String,
-      enum: ['MINIMAL', 'SLIGHT', 'MODERATE', 'SEVERE']
+      enum: ['MINIMAL', 'SLIGHT', 'MODERATE', 'SEVERE'].concat([null]),
+      default: null
     },
     frequency: {
       type: String,
-      enum: ['OCCASIONAL', 'INTERMITTENT', 'FREQUENT', 'CONSTANT']
+      enum: ['OCCASIONAL', 'INTERMITTENT', 'FREQUENT', 'CONSTANT'].concat([
+        null
+      ]),
+      default: null
     },
     timing: String,
     cause: String,
@@ -96,7 +101,8 @@ const chartSchema = new Schema({
     leukorrhea: String,
     birthControl: {
       type: String,
-      enum: ['YES', 'NO']
+      enum: ['YES', 'NO'].concat([null]),
+      default: null
     },
     bcUsage: String,
     menstruation: {
@@ -194,7 +200,8 @@ const chartSchema = new Schema({
           'WEAK',
           'HURRIED',
           'INTERMITTENT'
-        ]
+        ].concat(['']),
+        default: ''
       },
       second: {
         type: String,
@@ -217,7 +224,8 @@ const chartSchema = new Schema({
           'WEAK',
           'HURRIED',
           'INTERMITTENT'
-        ]
+        ].concat(['']),
+        default: ''
       },
       third: {
         type: String,
@@ -240,7 +248,8 @@ const chartSchema = new Schema({
           'WEAK',
           'HURRIED',
           'INTERMITTENT'
-        ]
+        ].concat(['']),
+        default: ''
       }
     },
     left: {
@@ -265,7 +274,8 @@ const chartSchema = new Schema({
           'WEAK',
           'HURRIED',
           'INTERMITTENT'
-        ]
+        ].concat(['']),
+        default: ''
       },
       second: {
         type: String,
@@ -288,7 +298,8 @@ const chartSchema = new Schema({
           'WEAK',
           'HURRIED',
           'INTERMITTENT'
-        ]
+        ].concat(['']),
+        default: ''
       },
       third: {
         type: String,
@@ -311,7 +322,8 @@ const chartSchema = new Schema({
           'WEAK',
           'HURRIED',
           'INTERMITTENT'
-        ]
+        ].concat(['']),
+        default: ''
       }
     }
   },

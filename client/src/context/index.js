@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const PatientContext = React.createContext([{}, () => {}]);
 
 const PatientProvider = props => {
-  const [state, setState] = useState({ indexes: [], table: {} });
+  const [state, setState] = useState({
+    indexes: [],
+    table: {}
+  });
   return (
     <PatientContext.Provider value={[state, setState]}>
       {props.children}
@@ -15,9 +18,7 @@ const AppointmentContext = React.createContext({ indexes: [], table: {} });
 
 const AppointmentProvider = props => {
   const [state, setState] = useState({ indexes: [], table: {} });
-  useEffect(() => {
-    console.log('[state]', state);
-  });
+
   return (
     <AppointmentContext.Provider value={[state, setState]}>
       {props.children}
@@ -25,9 +26,23 @@ const AppointmentProvider = props => {
   );
 };
 
+const ChartContext = React.createContext({ indexes: {}, table: {} });
+
+const ChartProvider = props => {
+  const [state, setState] = useState({});
+
+  return (
+    <ChartContext.Provider value={[state, setState]}>
+      {props.children}
+    </ChartContext.Provider>
+  );
+};
+
 export {
   PatientContext,
   PatientProvider,
   AppointmentContext,
-  AppointmentProvider
+  AppointmentProvider,
+  ChartContext,
+  ChartProvider
 };

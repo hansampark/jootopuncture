@@ -74,8 +74,8 @@ export default function ComplaintFormGroup(props) {
     quality: quality || '',
     region: region || '',
     pain: pain || '',
-    intensity: intensity || '',
-    frequency: frequency || '',
+    intensity: intensity || null,
+    frequency: frequency || null,
     timing: timing || '',
     cause: cause || '',
     remarks: remarks || ''
