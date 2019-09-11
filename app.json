@@ -1,0 +1,37 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "description": "",
+  "env": {
+    "API_HOST": {
+      "required": true
+    },
+    "MONGO_DEFAULT_DATABASE": {
+      "required": true
+    },
+    "MONGO_PASSWORD": {
+      "required": true
+    },
+    "MONGO_USER": {
+      "required": true
+    },
+    "SECRET": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "jootopuncture",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
