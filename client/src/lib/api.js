@@ -6,11 +6,10 @@ import { dispatch } from '../store';
 import { sessionExpired } from '../actions';
 import { ApiError } from './errors';
 
-const API_URL = 'https://jootopuncture.herokuapp.com/api';
-const URL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/api'
-    : API_URL;
+const { NODE_ENV, REACT_APP_API_HOST } = process.env;
+
+const API_URL = `${REACT_APP_API_HOST}/api`;
+const URL = NODE_ENV === 'development' ? 'http://localhost:5000/api' : API_URL;
 
 const handleHTTPError = async res => {
   if (res.status < 200 || res.status >= 300) {

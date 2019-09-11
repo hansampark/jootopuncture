@@ -188,7 +188,6 @@ export default function PatientChartPage(props) {
 
     fetchData();
   }, [patientId]);
-  console.log('[charts]', charts);
 
   const expanded = {
     vitalField: true,
