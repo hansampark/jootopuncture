@@ -21,23 +21,13 @@ exports.createAppointment = async (req, res, next) => {
 
   try {
     if (!patientId) {
-      const newPatient = new Patient({
-        firstName: patient.firstName,
-        lastName: patient.lastName,
-        phone: patient.phone
-      });
-
       const appointment = new Appointment({
-        title: `${newPatient.lastName}, ${newPatient.firstName}`,
+        title: `${patient.lastName}, ${patient.firstName} - ${patient.phone}`,
         start,
-        end,
-        patientId: newPatient._id
+        end
       });
 
       await appointment.save();
-      newPatient.appointments.push(appointment);
-
-      await newPatient.save();
       res.status(201).json(appointment);
     } else {
       const appointment = new Appointment({

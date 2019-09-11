@@ -101,9 +101,9 @@ export default function PatientListPage(props) {
       setLoading(true);
       setErrors(null);
       try {
-        const result = await api.get('/patients');
-        const indexes = result.map(patient => patient._id);
-        const table = result.reduce(
+        const data = await api.get('/patients');
+        const indexes = data.map(patient => patient._id);
+        const table = data.reduce(
           (result, patient) => ({ ...result, [patient._id]: patient }),
           {}
         );

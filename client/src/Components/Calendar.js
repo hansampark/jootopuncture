@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useStore } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Fab, Paper, Typography, Button } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Paper, Typography, Button } from '@material-ui/core';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import api from '../lib/api';
 import { dateTime } from '../lib/strings';
-// import { PatientContext } from '../context';
+import { AppointmentContext } from '../context';
 import AppointmentFormModal from './Appointments/AppointmentFormModal';
+import Spinner from './Spinner';
 
 const useStyles = makeStyles(theme => ({
   titleWrapper: {
@@ -40,12 +39,9 @@ const allViews = Object.keys(Views).map(k => Views[k]);
 
 export default function MyCalendar(props) {
   const classes = useStyles();
-  const { session } = useStore().getState();
   const [view, setView] = useState('month');
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useContext(AppointmentContext);
   const [date, setDate] = useState(new Date());
-  // const [test, setTest] = useContext(PatientContext);
-  // console.log('[test]', test);
 
   const [open, setOpen] = useState(false);
 
@@ -54,20 +50,26 @@ export default function MyCalendar(props) {
 
   useEffect(() => {
     const fetchEvents = async () => {
+      setLoading(true);
+      setErrors(null);
       try {
         const data = await api.get('/appointments');
-
-        const e = data.map(e => {
-          return {
+        const indexes = data.map(event => event._id);
+        const table = data
+          .map(e => ({
             ...e,
             title: e.title,
             start: new Date(e.start),
             end: new Date(e.end)
-          };
-        });
+          }))
+          .reduce((result, event) => ({ ...result, [event._id]: event }), {});
 
-        setEvents(e);
-      } catch (err) {}
+        setEvents({ indexes, table });
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setErrors(err);
+      }
     };
     fetchEvents();
   }, []);
@@ -77,10 +79,44 @@ export default function MyCalendar(props) {
   };
   const handleSelectEvent = event => {
     setView('day');
+    console.log('[event]', event);
+
     setDate(new Date(event.start));
   };
-  const handleNavigate = event => {
-    console.log('[navigate]', event);
+  // const handleNavigate = event => {
+  //   // setView('day');
+  //   setDate(new Date(event));
+  //   console.log('[navigate]', event);
+  // };
+  // const handleTooltip = event => {
+  //   console.log('[tooltip]', event);
+  // };
+  // const handleDrilldownView = (
+  //   targetDate,
+  //   currentViewName,
+  //   configuredViewName
+  // ) => {
+  //   console.log('[targetDate]', targetDate);
+  //   console.log('[currentViewName]', currentViewName);
+  //   console.log('[configuredViewName]', configuredViewName);
+  // };
+
+  // controls event prop
+  const handleEventPropGetter = (event, start, end, isSelected) => {
+    console.log(event);
+
+    var backgroundColor = event.patientId ? '#3174ad' : '#90EE90';
+    var style = {
+      backgroundColor: backgroundColor
+      //  borderRadius: '0px',
+      //  opacity: 0.8,
+      //  color: 'white',
+      //  border: '0px',
+      //  display: 'block'
+    };
+    return {
+      style: style
+    };
   };
 
   return (
@@ -105,7 +141,7 @@ export default function MyCalendar(props) {
             variant="contained"
             color="primary"
             className={classes.button}
-            onClick={() => handleModalOpen()}
+            onClick={handleModalOpen}
           >
             {'Appointment'}
           </Button>
@@ -113,9 +149,11 @@ export default function MyCalendar(props) {
       </div>
 
       <Paper className={classes.paper}>
+        {loading && events.indexes.length === 0 && <Spinner />}
+
         <Calendar
           style={{ minHeight: 500, width: '100%' }}
-          events={events}
+          events={events.indexes.map(id => events.table[id])}
           step={60}
           date={date}
           views={allViews}
@@ -124,8 +162,12 @@ export default function MyCalendar(props) {
           endAccessor="end"
           titleAccessor="title"
           onView={handleViewChange}
+          popup={true}
+          // tooltipAccessor={handleTooltip}
           onSelectEvent={handleSelectEvent}
-          onNavigate={handleNavigate}
+          // getDrilldownView={handleDrilldownView}
+          // onNavigate={handleNavigate}
+          eventPropGetter={handleEventPropGetter}
           localizer={localizer}
         />
       </Paper>
@@ -133,9 +175,9 @@ export default function MyCalendar(props) {
       {open && (
         <AppointmentFormModal
           open={open}
-          onClick={handleCreateAppointment}
-          onClose={() => handleModalClose()}
-          events={events}
+          onSubmit={handleSubmit}
+          onClose={handleModalClose}
+          events={events.indexes.map(id => events.table[id])}
         />
       )}
     </div>
@@ -149,8 +191,10 @@ export default function MyCalendar(props) {
     setOpen(false);
   }
 
-  async function handleCreateAppointment(e, appointment, patient) {
+  async function handleSubmit(e, appointment, patient) {
     e.preventDefault();
+    console.log('[event]', appointment);
+    console.log('[patient]', patient);
     const { title, date, allDay, start, end, patientId } = appointment;
     const event = {
       title,
@@ -164,18 +208,20 @@ export default function MyCalendar(props) {
     setErrors(null);
     try {
       const data = await api.post('/appointments', { event, patient });
-
       setLoading(false);
       setOpen(false);
-      setEvents([
-        ...events,
-        {
-          ...data,
-          title: data.title,
-          start: new Date(data.start),
-          end: new Date(data.end)
+      setEvents({
+        indexes: [...events.indexes, data._id],
+        table: {
+          ...events.table,
+          [data._id]: {
+            ...data,
+            title: data.title,
+            start: new Date(data.start),
+            end: new Date(data.end)
+          }
         }
-      ]);
+      });
       return data;
     } catch (err) {
       setLoading(false);
