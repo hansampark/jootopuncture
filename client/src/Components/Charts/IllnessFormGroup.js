@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 export default function IllnessFormGroup(props) {
   const classes = useStyles();
   const { onChange, illnesses, disabled } = props;
-  const { illness, diagnosis } = illnesses;
+  const { illness, diagnosis } = illnesses || {};
   const [values, setValues] = useState({
     illness: illness || '',
     diagnosis: diagnosis || ''

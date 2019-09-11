@@ -5,12 +5,11 @@ const Schema = mongoose.Schema;
 const appointmentSchema = new Schema({
   title: { type: String, required: true },
   allDay: { type: Boolean },
-  start: { type: String, required: true },
-  end: { type: String, required: true },
+  start: { type: Date, required: true, default: Date.now },
+  end: { type: Date, required: true, default: Date.now },
   patientId: {
     type: Schema.Types.ObjectId,
-    ref: 'Patient',
-    required: true
+    ref: 'Patient'
   }
 });
 

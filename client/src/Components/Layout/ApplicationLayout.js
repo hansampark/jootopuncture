@@ -34,7 +34,15 @@ class ApplicationLayout extends React.Component {
     return (
       <div style={styles.container}>
         <Grid container direction="column">
-          <Grid item lg="auto">
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            lg={12}
+            xl={12}
+            style={{ width: '100%' }}
+          >
             <NavBar history={history} />
           </Grid>
           <Grid item xs="auto">

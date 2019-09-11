@@ -70,7 +70,7 @@ export default function WomenFormGroup(props) {
     child: child || '',
     miscarriage: miscarriage || '',
     leukorrhea: leukorrhea || '',
-    birthControl: birthControl || '',
+    birthControl: birthControl || null,
     bcUsage: bcUsage || '',
     menstruation: menstruation || {
       lmp: '',

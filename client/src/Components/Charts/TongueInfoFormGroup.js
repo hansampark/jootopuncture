@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
 export default function TongueInfoFormGroup(props) {
   const classes = useStyles();
   const { onChange, tongue, disabled } = props;
-  const { body, coat, drawings } = tongue;
+  const { body, coat, drawings } = tongue || {};
   const [values, setValues] = useState({
     body: body || {
       color: {

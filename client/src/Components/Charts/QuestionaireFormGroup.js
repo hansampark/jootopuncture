@@ -47,7 +47,7 @@ export default function QuestionaireFormGroup(props) {
     consciousness,
     energy,
     stress
-  } = questionaire;
+  } = questionaire || {};
 
   const [values, setValues] = useState({
     fever: fever || '',

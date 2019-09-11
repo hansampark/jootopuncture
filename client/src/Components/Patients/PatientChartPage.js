@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -13,10 +13,12 @@ import {
   CircularProgress
 } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
+import { ChartContext } from '../../context';
 import api from '../../lib/api';
 import PatientFormModal from '../Patients/PatientFormModal';
 import PatientForm from './PatientForm';
 import ChartForm from '../Charts/ChartForm';
+import Spinner from '../Spinner';
 
 const useStyles = makeStyles(theme => ({
   center: {
@@ -27,6 +29,7 @@ const useStyles = makeStyles(theme => ({
     minHeight: 'min-content'
   },
   paper: {
+    width: '100%',
     boxSizing: 'border-box',
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
@@ -81,6 +84,7 @@ export default function PatientChartPage(props) {
   const { patientId, chartId } = props.match.params;
   const [patient, setPatient] = useState({});
   const [selectedChart, setSelectedChart] = useState({});
+  const [charts, setCharts] = useContext(ChartContext);
 
   const [vitals, setVitals] = useState({});
   const [complaints, setComplaints] = useState({});
@@ -95,7 +99,7 @@ export default function PatientChartPage(props) {
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState(null);
 
   const handleVitalChange = vitals => {
@@ -150,30 +154,51 @@ export default function PatientChartPage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setErrors(null);
       try {
         const data = await api.get(`/patients/${patientId}`);
-        const chart = data.charts.find(c => c._id === chartId);
+
+        const indexes = data.charts.map(chart => chart._id);
+        const table = data.charts.reduce(
+          (result, chart) => ({ ...result, [chart._id]: chart }),
+          {}
+        );
 
         setPatient(data);
-        setSelectedChart(chart);
-        setFetching(false);
+        setSelectedChart(table[chartId]);
+        setCharts(state => ({
+          ...state,
+          indexes: {
+            ...state.indexes,
+            [data._id]: indexes
+          },
+          table: {
+            ...state.table,
+            ...table
+          }
+        }));
+
+        setLoading(false);
       } catch (err) {
-        setFetching(false);
+        setErrors(err);
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [patientId]);
+  console.log('[charts]', charts);
 
   const expanded = {
     vitalField: true,
     complaintField: false,
     illnessField: false,
     infoField: false,
-    questionaireField: true,
+    questionaireField: false,
     reviewField: false,
     womenField: false,
-    tongueField: true,
+    tongueField: false,
     pulseField: false,
     diagnosisField: false
   };
@@ -197,42 +222,44 @@ export default function PatientChartPage(props) {
           </Fab>
         </div>
 
-        <form className={classes.container}>
-          <PatientForm patient={patient} disabled={true} />
+        {loading && isEmpty(patient) && <Spinner />}
 
-          {patient && patient.charts && patient.charts.length > 0 && (
-            <div className={classes.tabsContainer}>
-              <Tabs
-                value={selectedChart._id}
-                indicatorColor="primary"
-                className={classes.tabs}
-                scrollButtons="auto"
-                variant="scrollable"
-                onChange={handleChartChange}
-              >
-                {patient.charts.map((chart, ix) => {
-                  const dateLabel = moment(chart.date).format('l');
+        {!loading && !isEmpty(patient) && (
+          <form className={classes.container}>
+            <PatientForm patient={patient} disabled={true} />
 
-                  return (
-                    <Tab
-                      key={chart._id}
-                      className={classes.tab}
-                      label={dateLabel}
-                      value={chart._id}
-                    />
-                  );
-                })}
-                <Tab
-                  key="create"
-                  className={classes.tab}
-                  label={'New Chart'}
-                  value="create"
-                />
-              </Tabs>
-            </div>
-          )}
+            {patient && patient.charts && patient.charts.length > 0 && (
+              <div className={classes.tabsContainer}>
+                <Tabs
+                  value={selectedChart._id}
+                  indicatorColor="primary"
+                  className={classes.tabs}
+                  scrollButtons="auto"
+                  variant="scrollable"
+                  onChange={handleChartChange}
+                >
+                  {patient.charts.map((chart, ix) => {
+                    const dateLabel = moment(chart.date).format('l');
 
-          {!isEmpty(selectedChart) && (
+                    return (
+                      <Tab
+                        key={chart._id}
+                        className={classes.tab}
+                        label={dateLabel}
+                        value={chart._id}
+                      />
+                    );
+                  })}
+                  <Tab
+                    key="create"
+                    className={classes.tab}
+                    label={'New Chart'}
+                    value="create"
+                  />
+                </Tabs>
+              </div>
+            )}
+
             <Route
               path={'/patients/:patientId/charts/:chartId'}
               render={props => (
@@ -255,25 +282,25 @@ export default function PatientChartPage(props) {
                 />
               )}
             />
-          )}
 
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            disabled={!!errors}
-            onClick={handleSubmit}
-          >
-            {loading ? (
-              <CircularProgress
-                style={{ width: 24, height: 24 }}
-                className={classes.progress}
-              />
-            ) : (
-              'Update Chart'
-            )}
-          </Button>
-        </form>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              disabled={!!errors || saving}
+              onClick={handleSubmit}
+            >
+              {saving ? (
+                <CircularProgress
+                  style={{ width: 24, height: 24 }}
+                  className={classes.progress}
+                />
+              ) : (
+                'Update Chart'
+              )}
+            </Button>
+          </form>
+        )}
 
         {open && (
           <PatientFormModal
@@ -316,7 +343,7 @@ export default function PatientChartPage(props) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
+    setSaving(true);
     setErrors(null);
 
     const selectedChartVitals = {
@@ -385,16 +412,23 @@ export default function PatientChartPage(props) {
     const validationErrors = {};
     if (!isEmpty(validationErrors)) {
       setErrors(validationErrors);
-      setLoading(false);
+      setSaving(false);
     } else {
       try {
         const data = await api.put(`/patients/${patientId}/charts/${chartId}`, {
           chart: params
         });
-        setLoading(false);
+        setSaving(false);
         setSelectedChart(data);
+        setCharts(state => ({
+          ...state,
+          table: {
+            ...state.table,
+            [data._id]: data
+          }
+        }));
       } catch (err) {
-        setLoading(false);
+        setSaving(false);
         setErrors(err);
       }
     }

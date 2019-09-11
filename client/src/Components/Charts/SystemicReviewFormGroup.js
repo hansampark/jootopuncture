@@ -45,7 +45,7 @@ export default function SystemicReviewFormGroup(props) {
     dtr,
     other,
     drawings
-  } = review;
+  } = review || {};
   const [values, setValues] = useState({
     head: head || '',
     eent: eent || '',

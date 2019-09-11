@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Button,
@@ -8,12 +7,7 @@ import {
   DialogContent,
   DialogTitle,
   FormGroup,
-  FormControl,
-  FormLabel,
-  InputLabel,
-  Select,
-  TextField,
-  MenuItem
+  TextField
 } from '@material-ui/core';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
@@ -27,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     position: 'absolute',
-    width: 400,
+    width: 420,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -47,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row',
     paddingBottom: 10,
     marginBottom: 20,
-    maxWidth: '400px'
+    maxWidth: '420px'
   },
   toggleContainer: {
     margin: theme.spacing(2, 0),
@@ -74,11 +68,45 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     width: 120
+  },
+  errors: {
+    color: 'red',
+    width: '100%',
+    maxWidth: 420
   }
 }));
 
+const validate = ({ appointment, events }) => {
+  const { date, start, end } = appointment;
+  let error = null;
+
+  const startTime = new Date(`${date}T${start}`).getTime();
+  const endTime = new Date(`${date}T${end}`).getTime();
+
+  if (startTime === endTime) {
+    error =
+      'Start time cannot be same as end time.  Please select different time interval.';
+  } else if (startTime >= endTime) {
+    error =
+      'Start time must be earlier than end time.  Please select defferent time interval.';
+  } else {
+    for (let e in events) {
+      const compareStart = new Date(events[e].start).getTime();
+      const compareEnd = new Date(events[e].end).getTime();
+      if (
+        (compareStart <= startTime && startTime < compareEnd) ||
+        (compareStart <= endTime && endTime <= compareEnd)
+      ) {
+        error = `You can't make appointment within time range. Please select different time interval.`;
+      }
+    }
+  }
+
+  return error;
+};
+
 export default function AppointmentFormModal(props) {
-  const { open, onClick, onClose, events } = props;
+  const { open, onSubmit, onClose, events } = props;
   const classes = useStyles();
   const [appointment, setAppointment] = useState({
     title: '',
@@ -95,15 +123,19 @@ export default function AppointmentFormModal(props) {
     phone: ''
   });
 
+  const checkEmpty =
+    toggle === 'NEW'
+      ? !patient.firstName || !patient.lastName || !patient.phone
+      : !appointment.patientId;
+
   const [data, setData] = useState(null);
 
-  // To show error message, store error message if there is overlap
   const [errors, setErrors] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await api.get('/patients');
-      setData(result.patients);
+      setData(result);
     };
     fetchData();
   }, []);
@@ -111,12 +143,15 @@ export default function AppointmentFormModal(props) {
   const selectOptions = (data || []).map((patient, index) => {
     return {
       value: patient._id,
-      label: fullName(patient.firstName, patient.lastName)
+      label: `${fullName(patient.firstName, patient.lastName)} - ${
+        patient.phone
+      }`
     };
   });
 
   const handleAppointmentChange = name => event => {
     setAppointment({ ...appointment, [name]: event.target.value });
+    setErrors(null);
   };
 
   const handleToggleChange = (e, value) => {
@@ -143,35 +178,6 @@ export default function AppointmentFormModal(props) {
       patientId: value.value,
       title: value.label
     });
-  };
-
-  // Appointment validation function
-  const handleSubmitModal = (e, appointment, patient) => {
-    e.preventDefault();
-
-    // New appointment time variables (start time and end time)
-    const startTime = moment(`${appointment.date} ${appointment.start}`).unix();
-    const endTime = moment(`${appointment.date} ${appointment.end}`).unix();
-
-    // Find overlapped time (using for in loop)
-    // Time Complexity: worst O(n)
-    let validationError;
-    for (let e in events) {
-      if (
-        (moment(events[e].start).unix() < startTime &&
-          startTime < moment(events[e].end).unix()) ||
-        (moment(events[e].start).unix() < endTime &&
-          endTime < moment(events[e].end).unix())
-      ) {
-        validationError = `You can't make appointment overlapped. Please select different time.`;
-      }
-    }
-    if (validationError) {
-      setErrors(validationError);
-    } else {
-      setErrors(null);
-      onClick(e, appointment, patient);
-    }
   };
 
   return (
@@ -232,8 +238,6 @@ export default function AppointmentFormModal(props) {
               margin="normal"
             />
           </FormGroup>
-
-          {errors && <div style={{ color: 'red' }}>{errors}</div>}
 
           <div className={classes.toggleContainer}>
             <ToggleButtonGroup
@@ -302,6 +306,8 @@ export default function AppointmentFormModal(props) {
               />
             </FormGroup>
           )}
+
+          {errors && <div className={classes.errors}>{errors}</div>}
         </form>
       </DialogContent>
       <DialogActions>
@@ -316,7 +322,14 @@ export default function AppointmentFormModal(props) {
           className={classes.button}
           variant="contained"
           color="primary"
-          onClick={e => handleSubmitModal(e, appointment, patient)}
+          onClick={handleSubmit}
+          disabled={
+            !appointment.date ||
+            !appointment.start ||
+            !appointment.end ||
+            checkEmpty ||
+            !!errors
+          }
           autoFocus
         >
           {'Save'}
@@ -324,4 +337,19 @@ export default function AppointmentFormModal(props) {
       </DialogActions>
     </Dialog>
   );
+
+  // Appointment validation function
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    // Find overlapped time (using for in loop)
+    // Time Complexity: worst O(n)
+    const validationError = validate({ appointment, events });
+    if (validationError) {
+      setErrors(validationError);
+    } else {
+      setErrors(null);
+      onSubmit(e, appointment, patient);
+    }
+  }
 }

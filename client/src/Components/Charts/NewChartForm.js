@@ -1,10 +1,12 @@
 import { isEmpty } from 'lodash';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Paper, Button, CircularProgress } from '@material-ui/core';
+import { ChartContext } from '../../context';
 import api from '../../lib/api';
 import PatientForm from '../Patients/PatientForm';
 import ChartForm from '../Charts/ChartForm';
+import Spinner from '../Spinner';
 
 const useStyles = makeStyles(theme => ({
   center: {
@@ -15,6 +17,7 @@ const useStyles = makeStyles(theme => ({
     minHeight: 'min-content'
   },
   paper: {
+    width: '100%',
     boxSizing: 'border-box',
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
@@ -43,8 +46,8 @@ export default function CreateChartPage(props) {
   const classes = useStyles();
   const { patientId } = props.match.params;
   const [patient, setPatient] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState(null);
+  const [charts, setCharts] = useContext(ChartContext);
+
   const [vitals, setVitals] = useState({});
   const [complaints, setComplaints] = useState({});
   const [illnesses, setIllnesses] = useState({});
@@ -55,6 +58,10 @@ export default function CreateChartPage(props) {
   const [tongue, setTongue] = useState({});
   const [pulse, setPulse] = useState({});
   const [diagnosis, setDiagnosis] = useState({});
+
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [errors, setErrors] = useState(null);
 
   const handleVitalChange = vitals => {
     setVitals(vitals);
@@ -108,10 +115,17 @@ export default function CreateChartPage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await api.get(`/patients/${patientId}`);
+      setLoading(true);
+      setErrors(null);
+      try {
+        const data = await api.get(`/patients/${patientId}`);
 
-      setPatient(data);
-      setLoading(false);
+        setPatient(data);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setErrors(null);
+      }
     };
     fetchData();
   }, [patientId]);
@@ -138,68 +152,72 @@ export default function CreateChartPage(props) {
           </Typography>
         </div>
 
-        <div>
-          <PatientForm patient={patient} disabled={true} />
+        {loading && isEmpty(patient) && <Spinner />}
 
-          <form className={classes.container}>
-            <ChartForm
-              chart={{
-                vitals,
-                complaints,
-                illnesses,
-                info,
-                questionaire,
-                review,
-                women,
-                tongue,
-                pulse,
-                diagnosis
-              }}
-              expanded={expanded}
-              onVitalChange={handleVitalChange}
-              onComplaintChange={handleComplaintChange}
-              onIllnessChange={handleIllnessChange}
-              onInfoChange={handleInfoChange}
-              onQuestionaireChange={handleQuestionaireChange}
-              onReviewChange={handleReviewChange}
-              onWomenChange={handleWomenChange}
-              onTongueChange={handleTongueChange}
-              onPulseChange={handlePulseChange}
-              onDiagnosisChange={handleDiagnosisChange}
-              disabled={false}
-            />
+        {!loading && !isEmpty(patient) && (
+          <div>
+            <PatientForm patient={patient} disabled={true} />
 
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              disabled={!!errors}
-              onClick={handleSubmit}
-            >
-              {loading ? (
-                <CircularProgress
-                  style={{ width: 24, height: 24 }}
-                  className={classes.progress}
-                />
-              ) : (
-                'Create Patient'
-              )}
-            </Button>
-          </form>
-        </div>
+            <form className={classes.container}>
+              <ChartForm
+                chart={{
+                  vitals,
+                  complaints,
+                  illnesses,
+                  info,
+                  questionaire,
+                  review,
+                  women,
+                  tongue,
+                  pulse,
+                  diagnosis
+                }}
+                expanded={expanded}
+                onVitalChange={handleVitalChange}
+                onComplaintChange={handleComplaintChange}
+                onIllnessChange={handleIllnessChange}
+                onInfoChange={handleInfoChange}
+                onQuestionaireChange={handleQuestionaireChange}
+                onReviewChange={handleReviewChange}
+                onWomenChange={handleWomenChange}
+                onTongueChange={handleTongueChange}
+                onPulseChange={handlePulseChange}
+                onDiagnosisChange={handleDiagnosisChange}
+                disabled={false}
+              />
+
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                disabled={!!errors}
+                onClick={handleSubmit}
+              >
+                {loading ? (
+                  <CircularProgress
+                    style={{ width: 24, height: 24 }}
+                    className={classes.progress}
+                  />
+                ) : (
+                  'Create Patient'
+                )}
+              </Button>
+            </form>
+          </div>
+        )}
       </Paper>
     </div>
   );
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
+    setSaving(true);
     setErrors(null);
 
     const params = {
       vitals: {
         ...vitals,
-        height: vitals.feet && vitals.inch ? `${vitals.ft}-${vitals.inch}` : '',
+        height: vitals.ft && vitals.inch ? `${vitals.ft}-${vitals.inch}` : '',
         bp: vitals.bp1 && vitals.bp2 ? `${vitals.bp1}/${vitals.bp2}` : ''
       },
       complaints,
@@ -212,22 +230,34 @@ export default function CreateChartPage(props) {
       pulse,
       diagnosis
     };
+
     const validationErrors = {};
     // Add validation check for new chart creation
     if (!isEmpty(validationErrors)) {
       setErrors(validationErrors);
-      setLoading(false);
+      setSaving(false);
     } else {
       try {
         const data = await api.post(`/patients/${patientId}/charts`, {
           chart: params
         });
 
-        setLoading(false);
+        setSaving(false);
+        setCharts(state => ({
+          ...state,
+          indexes: {
+            ...state.indexes,
+            [patientId]: [...state.indexes[patientId], data._id]
+          },
+          table: {
+            ...state.table,
+            [data._id]: data
+          }
+        }));
         props.history.push(`/patients/${patientId}/charts/${data._id}`);
         return data;
       } catch (err) {
-        setLoading(false);
+        setSaving(false);
         setErrors(err);
       }
     }

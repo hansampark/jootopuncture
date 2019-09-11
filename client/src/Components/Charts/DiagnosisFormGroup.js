@@ -61,7 +61,7 @@ export default function DiagnosisFormGroup(props) {
     heart,
     pulse,
     signature
-  } = diagnosis;
+  } = diagnosis || {};
   const [values, setValues] = useState({
     etiology: etiology || '',
     tcm: tcm || '',

@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 export default function PastHistoryFormGroup(props) {
   const classes = useStyles();
   const { onChange, info, disabled } = props;
-  const { pastHx, medication, familyHx, allergy } = info;
+  const { pastHx, medication, familyHx, allergy } = info || {};
   const [values, setValues] = useState({
     pastHx: pastHx || '',
     medication: medication || '',
